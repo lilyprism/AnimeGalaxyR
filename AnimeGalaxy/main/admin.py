@@ -3,6 +3,11 @@ from django.contrib import admin
 from .models import Anime, CustomUser, Episode, Genre, Quality, Video
 
 
+class VideoInline(admin.TabularInline):
+	model = Video
+	extra = 1
+
+
 @admin.register(Genre)
 class GenreAdmin(admin.ModelAdmin):
 	fieldsets = (
@@ -28,14 +33,16 @@ class AnimeAdmin(admin.ModelAdmin):
 			'fields': ('name', 'image', 'description')
 		}),
 		('Configurações Avançadas', {
-			'classes': ('wide',),
+			'classes': ('wide', 'collapse'),
 			'fields' : ('genres',),
-		}),
+		})
 	)
 
 
 @admin.register(Episode)
 class EpisodeAdmin(admin.ModelAdmin):
+	inlines = [VideoInline, ]
+
 	fieldsets = (
 		('Configurações Gerais', {
 			'fields': ('anime', 'number',)

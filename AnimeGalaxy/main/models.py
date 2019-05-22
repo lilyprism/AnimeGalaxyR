@@ -42,7 +42,7 @@ class Anime(Model):
 		verbose_name = 'Anime'
 
 	# Model relations
-	genres = models.ManyToManyField(Genre, verbose_name="Géneros")
+	genres = models.ManyToManyField(Genre, verbose_name="Géneros", related_name="animes")
 
 	# Model fields
 	name = models.CharField(max_length=200, null=False, blank=False, unique=True, verbose_name="Nome")
@@ -60,7 +60,7 @@ class Episode(Model):
 		verbose_name = 'Episódio'
 
 	# Model relations
-	anime = models.ForeignKey(Anime, on_delete=models.CASCADE, verbose_name="Anime")
+	anime = models.ForeignKey(Anime, on_delete=models.CASCADE, verbose_name="Anime", related_name="episodes")
 
 	# Model fields
 	image = models.ImageField(storage=episode_storage, null=False, blank=False, default='default.jpg', verbose_name="Imagem")
@@ -76,8 +76,8 @@ class Video(Model):
 		unique_together = ['episode', 'quality']
 
 	# Model relations
-	episode = models.ForeignKey(Episode, on_delete=models.CASCADE, verbose_name="Episódio")
-	quality = models.ForeignKey(Quality, on_delete=models.CASCADE, verbose_name="Qualidade")
+	episode = models.ForeignKey(Episode, on_delete=models.CASCADE, verbose_name="Episódio", related_name="videos")
+	quality = models.ForeignKey(Quality, on_delete=models.CASCADE, verbose_name="Qualidade", related_name="videos")
 
 	# Model fields
 	url = models.URLField(null=False, blank=False, unique=True, verbose_name="URL")
