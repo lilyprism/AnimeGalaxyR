@@ -16,6 +16,7 @@ class Genre(Model):
 	class Meta:
 		verbose_name = 'Género'
 
+	# Model fields
 	name = models.CharField(max_length=50, null=False, blank=False, unique=True)
 
 	def __str__(self) -> str:
@@ -27,6 +28,7 @@ class Quality(Model):
 	class Meta:
 		verbose_name = 'Qualidade'
 
+	# Model fields
 	name = models.CharField(max_length=20, null=False, blank=False, unique=True)
 
 	def __str__(self) -> str:
@@ -38,8 +40,10 @@ class Anime(Model):
 	class Meta:
 		verbose_name = 'Anime'
 
+	# Model relations
 	genres = models.ManyToManyField(Genre)
 
+	# Model fields
 	name = models.CharField(max_length=200, null=False, blank=False, unique=True)
 	image = models.ImageField(storage=anime_storage, null=False, blank=False, default='default.jpg')
 	description = models.CharField(max_length=1500, null=False, blank=False)
@@ -54,8 +58,10 @@ class Episode(Model):
 		unique_together = ['anime', 'number']
 		verbose_name = 'Episódio'
 
+	# Model relations
 	anime = models.ForeignKey(Anime, on_delete=models.CASCADE)
 
+	# Model fields
 	image = models.ImageField(storage=episode_storage, null=False, blank=False, default='default.jpg')
 	number = models.IntegerField(default=0, null=False, blank=False)
 
@@ -64,9 +70,11 @@ class Episode(Model):
 
 
 class Video(Model):
+	# Model relations
 	episode = models.ForeignKey(Episode, on_delete=models.CASCADE)
 	quality = models.ForeignKey(Quality, on_delete=models.CASCADE)
 
+	# Model fields
 	url = models.URLField(null=False, blank=False, unique=True)
 
 	def __str__(self) -> str:
