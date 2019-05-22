@@ -7,6 +7,7 @@ from django.core.files.storage import FileSystemStorage
 from django.db import models
 from django.db.models import Model
 
+# File Storage
 anime_storage = FileSystemStorage(location=os.path.join(settings.MEDIA_ROOT, 'animes'), base_url=os.path.join(settings.MEDIA_URL, 'animes'))
 episode_storage = FileSystemStorage(location=os.path.join(settings.MEDIA_ROOT, 'episodes'), base_url=os.path.join(settings.MEDIA_URL, 'episodes'))
 user_storage = FileSystemStorage(location=os.path.join(settings.MEDIA_ROOT, 'users'), base_url=os.path.join(settings.MEDIA_URL, 'users'))
@@ -42,7 +43,7 @@ class Anime(Model):
 		verbose_name = 'Anime'
 
 	# Model relations
-	genres = models.ManyToManyField(Genre, verbose_name="Géneros", related_name="animes")
+	genres = models.ManyToManyField(Genre, verbose_name="Géneros", related_name="animes", blank=False)
 
 	# Model fields
 	name = models.CharField(max_length=200, null=False, blank=False, unique=True, verbose_name="Nome")
@@ -60,7 +61,7 @@ class Episode(Model):
 		verbose_name = 'Episódio'
 
 	# Model relations
-	anime = models.ForeignKey(Anime, on_delete=models.CASCADE, verbose_name="Anime", related_name="episodes")
+	anime = models.ForeignKey(Anime, on_delete=models.CASCADE, verbose_name="Anime", related_name="episodes", null=False, blank=False)
 
 	# Model fields
 	image = models.ImageField(storage=episode_storage, null=False, blank=False, default='default.jpg', verbose_name="Imagem")
@@ -76,8 +77,8 @@ class Video(Model):
 		unique_together = ['episode', 'quality']
 
 	# Model relations
-	episode = models.ForeignKey(Episode, on_delete=models.CASCADE, verbose_name="Episódio", related_name="videos")
-	quality = models.ForeignKey(Quality, on_delete=models.CASCADE, verbose_name="Qualidade", related_name="videos")
+	episode = models.ForeignKey(Episode, on_delete=models.CASCADE, verbose_name="Episódio", related_name="videos", null=False, blank=False)
+	quality = models.ForeignKey(Quality, on_delete=models.CASCADE, verbose_name="Qualidade", related_name="videos", null=False, blank=False)
 
 	# Model fields
 	url = models.URLField(null=False, blank=False, verbose_name="URL")

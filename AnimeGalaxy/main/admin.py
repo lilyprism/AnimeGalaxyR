@@ -30,11 +30,11 @@ class QualityAdmin(admin.ModelAdmin):
 class AnimeAdmin(admin.ModelAdmin):
 	fieldsets = (
 		('Configurações Gerais', {
-			'fields': ('name', 'image', 'description')
+			'fields': ('name', 'description')
 		}),
 		('Configurações Avançadas', {
 			'classes': ('wide', 'collapse'),
-			'fields' : ('genres',),
+			'fields' : ('genres', 'image',),
 		})
 	)
 
