@@ -35,6 +35,8 @@ ALLOWED_HOSTS = [
 INSTALLED_APPS = [
 	'main.apps.MainConfig',
 
+	'precise_bbcode',
+
 	# Security Apps
 	'corsheaders',
 
@@ -123,6 +125,9 @@ USE_TZ = True
 
 # CORS Policy
 CORS_ORIGIN_ALLOW_ALL = True
+
+# BBCode Settings
+BBCODE_ALLOW_SMILIES = False
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
