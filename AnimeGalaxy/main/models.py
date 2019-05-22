@@ -18,7 +18,7 @@ class Genre(Model):
 		verbose_name = 'Género'
 
 	# Model fields
-	name = models.CharField(max_length=50, null=False, blank=False, unique=True)
+	name = models.CharField(max_length=50, null=False, blank=False, unique=True, verbose_name="Nome")
 
 	def __str__(self) -> str:
 		return self.name
@@ -30,7 +30,7 @@ class Quality(Model):
 		verbose_name = 'Qualidade'
 
 	# Model fields
-	name = models.CharField(max_length=20, null=False, blank=False, unique=True)
+	name = models.CharField(max_length=20, null=False, blank=False, unique=True, verbose_name="Nome")
 
 	def __str__(self) -> str:
 		return self.name
@@ -42,12 +42,12 @@ class Anime(Model):
 		verbose_name = 'Anime'
 
 	# Model relations
-	genres = models.ManyToManyField(Genre)
+	genres = models.ManyToManyField(Genre, verbose_name="Géneros")
 
 	# Model fields
-	name = models.CharField(max_length=200, null=False, blank=False, unique=True)
-	image = models.ImageField(storage=anime_storage, null=False, blank=False, default='default.jpg')
-	description = RichTextField(null=False, blank=False)
+	name = models.CharField(max_length=200, null=False, blank=False, unique=True, verbose_name="Nome")
+	image = models.ImageField(storage=anime_storage, null=False, blank=False, default='default.jpg', verbose_name="Imagem")
+	description = RichTextField(null=False, blank=False, verbose_name="Descrição")
 
 	def __str__(self) -> str:
 		return self.name
@@ -60,11 +60,11 @@ class Episode(Model):
 		verbose_name = 'Episódio'
 
 	# Model relations
-	anime = models.ForeignKey(Anime, on_delete=models.CASCADE)
+	anime = models.ForeignKey(Anime, on_delete=models.CASCADE, verbose_name="Anime")
 
 	# Model fields
-	image = models.ImageField(storage=episode_storage, null=False, blank=False, default='default.jpg')
-	number = models.IntegerField(default=0, null=False, blank=False)
+	image = models.ImageField(storage=episode_storage, null=False, blank=False, default='default.jpg', verbose_name="Imagem")
+	number = models.IntegerField(default=0, null=False, blank=False, verbose_name="Número de Episódio")
 
 	def __str__(self) -> str:
 		return f"{self.anime} - {self.number}"
@@ -72,11 +72,11 @@ class Episode(Model):
 
 class Video(Model):
 	# Model relations
-	episode = models.ForeignKey(Episode, on_delete=models.CASCADE)
-	quality = models.ForeignKey(Quality, on_delete=models.CASCADE)
+	episode = models.ForeignKey(Episode, on_delete=models.CASCADE, verbose_name="Episódio")
+	quality = models.ForeignKey(Quality, on_delete=models.CASCADE, verbose_name="Qualidade")
 
 	# Model fields
-	url = models.URLField(null=False, blank=False, unique=True)
+	url = models.URLField(null=False, blank=False, unique=True, verbose_name="URL")
 
 	def __str__(self) -> str:
 		return f"{self.episode} [{self.quality}]"
@@ -84,4 +84,4 @@ class Video(Model):
 
 class CustomUser(AbstractUser):
 	# User custom fields
-	avatar = models.ImageField(storage=user_storage, null=False, blank=False, default='default.jpg')
+	avatar = models.ImageField(storage=user_storage, null=False, blank=False, default='default.jpg', verbose_name="Avatar")
