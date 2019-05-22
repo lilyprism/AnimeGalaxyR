@@ -1,0 +1,60 @@
+@import colors
+@import breakpoints
+
+.topbar
+  height: 65px
+  display: flex
+  align-items: center
+  background-color: $topbar-color
+
+.topbar .icon
+  margin: 0 15px
+  color: $light-textcolor
+  cursor: pointer
+
+.topbar .logo
+  @media (max-width: $breakpoint-sm)
+    display: none
+
+.topbar .search-area
+  flex-grow: 1
+  display: flex
+  justify-content: flex-end
+  margin-right: 15px
+
+.topbar .search-input
+  border: 0
+  -webkit-transition: width 0.5s
+  -moz-transition: width 0.5s
+  -ms-transition: width 0.5s
+  -o-transition: width 0.5s
+  transition: width 0.5s
+  width: 0
+  max-width: 250px
+  font-size: 18px
+  background-color: rgba(255, 255, 255, 0.2)
+  color: $light-textcolor
+  border-radius: 3px 0 0 3px
+
+.topbar .search-input:focus
+  width: 75%
+  outline: none
+  padding: 0 15px
+
+.topbar .search-input:focus + .search-icon
+  background-color: lighten($topbar-color, 10%)
+  border-radius: 0 3px 3px 0
+
+.topbar .search-icon
+  -webkit-transition: background-color 0.5s
+  -moz-transition: background-color 0.5s
+  -ms-transition: background-color 0.5s
+  -o-transition: background-color 0.5s
+  transition: background-color 0.5s
+  margin: 0
+  padding: 8px
+  border-radius: 3px
+
+.topbar .search-icon:hover
+  background-color: lighten($topbar-color, 10%)
+
