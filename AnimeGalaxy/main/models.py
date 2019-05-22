@@ -1,11 +1,11 @@
 import os
 
+from ckeditor.fields import RichTextField
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.core.files.storage import FileSystemStorage
 from django.db import models
 from django.db.models import Model
-from precise_bbcode.fields import BBCodeTextField
 
 anime_storage = FileSystemStorage(location=os.path.join(settings.MEDIA_ROOT, 'animes'), base_url=os.path.join(settings.MEDIA_URL, 'animes'))
 episode_storage = FileSystemStorage(location=os.path.join(settings.MEDIA_ROOT, 'episodes'), base_url=os.path.join(settings.MEDIA_URL, 'episodes'))
@@ -47,7 +47,7 @@ class Anime(Model):
 	# Model fields
 	name = models.CharField(max_length=200, null=False, blank=False, unique=True)
 	image = models.ImageField(storage=anime_storage, null=False, blank=False, default='default.jpg')
-	description = BBCodeTextField(null=False, blank=False)
+	description = RichTextField(null=False, blank=False)
 
 	def __str__(self) -> str:
 		return self.name

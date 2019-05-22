@@ -10,7 +10,7 @@ django = "*"
 mypy = "*"
 django-cors-headers = "*"
 pillow = "*"
-django-precise-bbcode = "*"
+django-ckeditor = "*"
 
 [requires]
 python_version = "3.6"

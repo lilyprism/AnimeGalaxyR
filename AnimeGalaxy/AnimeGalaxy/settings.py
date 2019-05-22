@@ -35,7 +35,8 @@ ALLOWED_HOSTS = [
 INSTALLED_APPS = [
 	'main.apps.MainConfig',
 
-	'precise_bbcode',
+	# CKEditor Support
+	'ckeditor',
 
 	# Security Apps
 	'corsheaders',
@@ -124,10 +125,17 @@ USE_L10N = True
 USE_TZ = True
 
 # CORS Policy
+# https://github.com/ottoyiu/django-cors-headers
 CORS_ORIGIN_ALLOW_ALL = True
 
-# BBCode Settings
-BBCODE_ALLOW_SMILIES = False
+# CKEditor Settings
+# https://github.com/django-ckeditor/django-ckeditor
+CKEDITOR_ALLOW_NONIMAGE_FILES = False
+CKEDITOR_CONFIGS = {
+	'default': {
+		'tabSpaces': 4,
+	}
+}
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
