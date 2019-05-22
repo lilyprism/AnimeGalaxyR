@@ -80,7 +80,7 @@ class Video(Model):
 	quality = models.ForeignKey(Quality, on_delete=models.CASCADE, verbose_name="Qualidade", related_name="videos")
 
 	# Model fields
-	url = models.URLField(null=False, blank=False, unique=True, verbose_name="URL")
+	url = models.URLField(null=False, blank=False, verbose_name="URL")
 
 	def __str__(self) -> str:
 		return f"{self.episode} [{self.quality}]"

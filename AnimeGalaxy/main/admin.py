@@ -54,19 +54,6 @@ class EpisodeAdmin(admin.ModelAdmin):
 	)
 
 
-@admin.register(Video)
-class VideoAdmin(admin.ModelAdmin):
-	fieldsets = (
-		('Configurações Gerais', {
-			'fields': ('url',)
-		}),
-		('Configurações Avançadas', {
-			'classes': ('wide',),
-			'fields' : ('episode', 'quality',),
-		}),
-	)
-
-
 @admin.register(CustomUser)
 class CustomUserAdmin(admin.ModelAdmin):
 	fieldsets = (
