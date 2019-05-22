@@ -71,6 +71,10 @@ class Episode(Model):
 
 
 class Video(Model):
+	# Meta configurations
+	class Meta:
+		unique_together = ['episode', 'quality']
+
 	# Model relations
 	episode = models.ForeignKey(Episode, on_delete=models.CASCADE, verbose_name="Episódio")
 	quality = models.ForeignKey(Quality, on_delete=models.CASCADE, verbose_name="Qualidade")
