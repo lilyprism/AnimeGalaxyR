@@ -1,0 +1,57 @@
+@import page-units
+
+$carousel-prev-width: 20px
+$carousel-prev-height: 20px
+$carousel-next-width: 20px
+$carousel-next-height: 20px
+
+.carousel
+  width: 100%
+  position: relative
+  overflow: hidden
+
+.carousel-prev
+  z-index: 1
+  position: absolute
+  top: calc(50% - #{$carousel-prev-height / 2})
+  left: 5px
+
+.carousel-next
+  position: absolute
+  top: calc(50% - #{$carousel-next-height / 2})
+  right: 5px
+  z-index: 1
+
+.carousel-item-group
+  position: relative
+  left: 0
+  transition: left 0.5s
+  width: 100%
+  display: flex
+  flex: auto
+
+.carousel-item
+  flex-shrink: 0
+  display: block
+  
+  @media (max-width: $breakpoint-sm)
+    margin-right: 0
+
+  @media (min-width: $breakpoint-sm)
+    width: calc(100%)
+    margin-right: 0
+
+  @media (min-width: $breakpoint-md)
+    width: calc(50% - 20px)
+    margin-right: 20px * 2 / 1
+
+  @media (min-width: $breakpoint-l)
+    width: calc(25% - 20px)
+    margin-right: 20px * 4 / 3
+
+  @media (min-width: $breakpoint-xl)
+    width: calc(100% / 5 - 20px)
+    margin-right: 20px * 5 / 4
+
+.carousel-item .carousel-img
+  width: 100%
