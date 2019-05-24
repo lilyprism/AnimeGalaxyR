@@ -4,8 +4,10 @@ from ckeditor.fields import RichTextField
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.core.files.storage import FileSystemStorage
+from django.core.validators import MinValueValidator
 from django.db import models
 from django.db.models import Model
+from django.utils import timezone
 
 # File Storage
 anime_storage = FileSystemStorage(location=os.path.join(settings.MEDIA_ROOT, 'animes'), base_url=os.path.join(settings.MEDIA_URL, 'animes'))
@@ -65,7 +67,11 @@ class Episode(Model):
 
 	# Model fields
 	image = models.ImageField(storage=episode_storage, null=False, blank=False, default='default.jpg', verbose_name="Imagem")
-	number = models.IntegerField(default=0, null=False, blank=False, verbose_name="Número de Episódio")
+	number = models.IntegerField(default=0, null=False, blank=False, validators=[MinValueValidator(0)], verbose_name="Número de Episódio")
+	views = models.IntegerField(default=0, null=False, validators=[MinValueValidator(0)], verbose_name="Visualizações")
+
+	# Hidden Model fields
+	added = models.DateTimeField(default=timezone.now, editable=False)
 
 	def __str__(self) -> str:
 		return f"{self.anime} - {self.number}"
@@ -81,7 +87,7 @@ class Video(Model):
 	quality = models.ForeignKey(Quality, on_delete=models.CASCADE, verbose_name="Qualidade", related_name="videos", null=False, blank=False)
 
 	# Model fields
-	url = models.URLField(null=False, blank=False, verbose_name="URL")
+	url = models.URLField(max_length=1500, null=False, blank=False, verbose_name="URL")
 
 	def __str__(self) -> str:
 		return f"{self.episode} [{self.quality}]"
