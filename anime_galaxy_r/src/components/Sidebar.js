@@ -2,8 +2,17 @@ import React from 'react';
 
 import './sass/sidebar.sass';
 import {Link} from "react-router-dom";
+import * as ReactDOM from "react-dom";
 
 export default class Sidebar extends React.Component {
+
+    componentDidMount() {
+        let sidebar_links = ReactDOM.findDOMNode(this).querySelectorAll("a");
+
+        for (let i = 0; i < sidebar_links.length; i++) {
+            sidebar_links[i].tabIndex = -1;
+        }
+    }
 
     render() {
         return (
