@@ -30,6 +30,23 @@ class CarouselItem extends React.Component {
 
 }
 
+class CarouselItemEpisode extends React.Component {
+
+    render() {
+        return (
+            <div className="carousel-item">
+                <div className="carousel-body">
+                    <div className="carousel-title">
+                        <span>{this.props.item.title}</span>
+                    </div>
+                </div>
+                <img className="carousel-img" src={`http://via.placeholder.com/298x428?text=${this.props.index}`} alt=""/>
+            </div>
+        );
+    }
+
+}
+
 class Carousel extends React.Component {
 
     constructor(props) {
@@ -240,5 +257,6 @@ class Carousel extends React.Component {
 
 export {
     Carousel,
-    CarouselItem
+    CarouselItem,
+    CarouselItemEpisode
 }

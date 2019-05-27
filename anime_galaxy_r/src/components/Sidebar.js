@@ -37,26 +37,6 @@ export default class Sidebar extends React.Component {
                         <i className="fas fa-random fa-fw"/> Aleatório
                     </div>
                 </Link>
-                <Link to="/random">
-                    <div className="sidebar-item">
-                        <i className="fas fa-random fa-fw"/> Aleatório
-                    </div>
-                </Link>
-                <Link to="/random">
-                    <div className="sidebar-item">
-                        <i className="fas fa-random fa-fw"/> Aleatório
-                    </div>
-                </Link>
-                <Link to="/random">
-                    <div className="sidebar-item">
-                        <i className="fas fa-random fa-fw"/> Aleatório
-                    </div>
-                </Link>
-                <Link to="/random">
-                    <div className="sidebar-item">
-                        <i className="fas fa-random fa-fw"/> Aleatório
-                    </div>
-                </Link>
             </div>
         );
     }
