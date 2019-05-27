@@ -11,7 +11,7 @@ class CarouselItem extends React.Component {
         return (
             <div className="carousel-item">
                 <div className="carousel-body">
-                    <div className="carousel-title" tabIndex={0}>
+                    <div className="carousel-title">
                         <span>{this.props.item.title}</span>
                     </div>
                     <div className="carousel-desc">
@@ -23,14 +23,14 @@ class CarouselItem extends React.Component {
                         <div className="carousel-desc-text" dangerouslySetInnerHTML={desc_html}/>
                     </div>
                 </div>
-                <img className="carousel-img" src={`http://via.placeholder.com/298x428?text=${this.props.index}`} alt="" tabIndex={0}/>
+                <img className="carousel-img" src={`http://via.placeholder.com/298x428?text=${this.props.index}`} alt=""/>
             </div>
         );
     }
 
 }
 
-export default class Carousel extends React.Component {
+class Carousel extends React.Component {
 
     constructor(props) {
         super(props);
@@ -224,9 +224,10 @@ export default class Carousel extends React.Component {
                     <i className="fas fa-arrow-left fa-fw"/>
                 </div>
                 <div className="carousel-item-group">
-                    {this.state.items.map(function (value, index) {
-                        return <CarouselItem item={value} index={index + 1} key={index}/>
-                    })}
+                    {/*{this.state.items.map(function (value, index) {*/}
+                    {/*    return <CarouselItem item={value} index={index + 1} key={index}/>*/}
+                    {/*})}*/}
+                    {this.props.children}
                 </div>
                 <div className="carousel-next" onClick={this.moveLeft}>
                     <i className="fas fa-arrow-right fa-fw"/>
@@ -235,4 +236,9 @@ export default class Carousel extends React.Component {
         );
     }
 
-};
+}
+
+export {
+    Carousel,
+    CarouselItem
+}

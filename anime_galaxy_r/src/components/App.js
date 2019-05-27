@@ -27,6 +27,28 @@ export default class extends React.Component {
         }
     }
 
+    componentDidMount() {
+        this.handleScroll();
+    }
+
+    handleScroll() {
+        document.addEventListener("scroll", function (event) {
+            let topbar_el = document.querySelector(".topbar");
+            let sidebar_el = document.querySelector(".sidebar");
+            let banner_el = document.querySelector(".banner-top");
+            let container_el = document.querySelector(".container");
+            if (window.pageYOffset > banner_el.offsetTop + banner_el.clientHeight) {
+                topbar_el.classList.add("sticky");
+                sidebar_el.classList.add("sticky");
+                container_el.classList.add("sticky");
+            } else {
+                topbar_el.classList.remove("sticky");
+                sidebar_el.classList.remove("sticky");
+                container_el.classList.remove("sticky");
+            }
+        });
+    }
+
     render() {
         return (
             <Router>
