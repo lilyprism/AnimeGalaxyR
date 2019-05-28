@@ -16,7 +16,7 @@ export default class Sidebar extends React.Component {
 
     render() {
         return (
-            <div className="sidebar">
+            <div className="sidebar sidebar-transition">
                 <Link to="/anime">
                     <div className="sidebar-item">
                         <i className="fas fa-list fa-fw"/> Anime
@@ -37,6 +37,13 @@ export default class Sidebar extends React.Component {
                         <i className="fas fa-random fa-fw"/> Aleatório
                     </div>
                 </Link>
+                <div className="login-container">
+                    <Link to="/random">
+                        <div className="sidebar-item">
+                            <i className="fas fa-sign-in-alt fa-fw"/> Login
+                        </div>
+                    </Link>
+                </div>
             </div>
         );
     }

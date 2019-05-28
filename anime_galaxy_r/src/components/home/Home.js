@@ -1,16 +1,44 @@
 import React from 'react';
-import CardLayout from "../CardLayout";
-import {Carousel} from "../Carousel";
-import {CarouselItem} from "../Carousel";
-import {CarouselItemEpisode} from "../Carousel";
+import axios from 'axios';
+
+import CardLayout from "./CardLayout";
+import {Carousel} from "./Carousel";
+import {CarouselItem} from "./Carousel";
+import {CarouselItemEpisode} from "./Carousel";
 
 export default class Home extends React.Component {
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            latest_episodes: []
+        };
+        this.getLatestEpisodes();
+        console.log("Constructor");
+    }
+
+    getLatestEpisodes(){
+        console.log(`${process.env.REACT_APP_API_URL}/episodes`);
+        axios.get(`${process.env.REACT_APP_API_URL}/episodes`).then(res => {
+            this.setState({
+                latest_episodes: res.data
+            });
+        }).catch(res => {
+            console.log("Error getting the episode");
+            setTimeout(() => this.getLatestEpisodes(), 2000);
+        });
+    }
+
+    componentDidMount() {
+
+    }
 
     render() {
         return (
             <div>
                 <h1 className="title"><span><i className="fas fa-newspaper"/>  Episódios:</span></h1>
-                <CardLayout/>
+                <CardLayout items={this.state.latest_episodes}/>
                 <h1 className="title"><span><i className="fas fa-newspaper"/>  Últimos Animes:</span></h1>
                 <Carousel>
                     <CarouselItem item={{

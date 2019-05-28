@@ -23,9 +23,30 @@ img
 
 .banner-top
   width: 100%
+  background-image: url("/images/top_banner.png")
+  background-size: cover
+  background-position: center center
+  background-repeat: no-repeat
+  //-webkit-transition: height 0.5s
+  //-moz-transition: height 0.5s
+  //-ms-transition: height 0.5s
+  //-o-transition: height 0.5s
+  //transition: height 0.5s
 
-  @media (max-width: $breakpoint-sm)
+  @media (max-width: $breakpoint-sm - 1)
     height: 0
+
+  @media (min-width: $breakpoint-sm)
+    height: 80px
+
+  @media (min-width: $breakpoint-md)
+    height: 120px
+
+  @media (min-width: $breakpoint-l)
+    height: 180px
+
+  @media (min-width: $breakpoint-xl)
+    height: 240px
 
 a
   text-decoration: none
@@ -83,7 +104,7 @@ a
 
 .title
   color: $title-text-color
-  padding: 40px 0 20px 0
+  padding: 40px 0
 
 .title span
   border-bottom: 3px solid $title-border-color

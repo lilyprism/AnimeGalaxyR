@@ -1,20 +1,20 @@
 import React from 'react';
 
-import "./sass/cardlayout.sass"
+import "./cardlayout.sass"
 import {Link} from "react-router-dom";
 
-class Card extends React.Component {
+class LatestEpisodeCard extends React.Component {
 
     render() {
         return (
             <div className="card">
-                <Link>
+                <Link to={`/v/${this.props.item.id}`}>
                     <div className="card-body">
                         <div className="card-title">
-                            <span>Card Title</span>
+                            <span>{this.props.item.anime.name} - {this.props.item.number}</span>
                         </div>
                     </div>
-                    <img className="card-image" src="http://via.placeholder.com/298x428" alt="Card"/>
+                    <img className="card-image" src={this.props.item.anime.image} alt="Card"/>
                 </Link>
             </div>
         );
@@ -25,13 +25,12 @@ class Card extends React.Component {
 export default class CardLayout extends React.Component {
 
     render() {
-        let array = new Array(12);
-        array.fill(1, 0, 12);
+        let array = this.props.items;
 
         return (
             <div className="card-layout">
-                {array.map(function (value, index) {
-                    return <Card key={index}/>
+                {array.map(function (item, index) {
+                    return <LatestEpisodeCard item={item} key={item.id}/>
                 })}
             </div>
         );

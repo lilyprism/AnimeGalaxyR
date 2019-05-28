@@ -1,5 +1,5 @@
-@import colors
-@import page-units
+@import ../sass/colors
+@import ../sass/page-units
 
 .card-layout
   display: flex
@@ -9,6 +9,7 @@
 
 .card
   margin-bottom: 20px
+  position: relative
 
   @media (max-width: $breakpoint-sm)
     margin-right: 0
@@ -55,14 +56,19 @@
 
 .card-body
   width: 100%
+  position: absolute
   padding: 5px
   border-radius: 5px 5px 0 0
   background-color: $card-bg-color
 
 .card-title
   text-align: center
+  white-space: nowrap
+  overflow: hidden
+  text-overflow: ellipsis
+  width: 100%
   color: $light-textcolor
 
 .card-image
   width: 100%
-  border-radius: 0 0 5px 5px
+  border-radius: 6px 6px 5px 5px

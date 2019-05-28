@@ -1,5 +1,5 @@
-@import page-units
-@import colors
+@import ../sass/page-units
+@import ../sass/colors
 
 $carousel-prev-width: 20px
 $carousel-prev-height: 20px
@@ -42,13 +42,6 @@ $visible-slides-sm: 1
   display: flex
   flex: auto
 
-  @media (max-width: $breakpoint-md - 1)
-    -webkit-transform: translateX(calc(-1 * (100% / #{$visible-slides-sm})))
-    -moz-transform: translateX(calc(-1 * (100% / #{$visible-slides-sm})))
-    -ms-transform: translateX(calc(-1 * (100% / #{$visible-slides-sm})))
-    -o-transform: translateX(calc(-1 * (100% / #{$visible-slides-sm})))
-    transform: translateX(calc(-1 * (100% / #{$visible-slides-sm})))
-
   @media (min-width: $breakpoint-md)
     -webkit-transform: translateX(calc(-1 * (100% / #{$visible-slides-md} - 20px + 20px * #{$visible-slides-md} / #{$visible-slides-md - 1})))
     -moz-transform: translateX(calc(-1 * (100% / #{$visible-slides-md} - 20px + 20px * #{$visible-slides-md} / #{$visible-slides-md - 1})))
@@ -80,6 +73,7 @@ $visible-slides-sm: 1
   user-select: none
 
   @media (max-width: $breakpoint-sm)
+    width: calc(100%)
     margin-right: 0
 
   @media (min-width: $breakpoint-sm)
@@ -195,7 +189,7 @@ $visible-slides-sm: 1
 
 .carousel-item .carousel-img
   width: 100%
-  border-radius: 15px 15px 0 0
+  border-radius: 17px 17px 0 0
 
 .carousel-title:hover ~ .carousel-desc
   height: 100%
@@ -211,14 +205,13 @@ $visible-slides-sm: 1
 
 .carousel-tags
   display: flex
+  justify-content: center
   flex-wrap: wrap
   padding: 5px
 
 .carousel-tag
   padding: 5px
-  border-radius: 15px
   margin: 2px
-  background-color: $carousel-tag-color
 
 .carousel-desc-text::-webkit-scrollbar
   width: 5px

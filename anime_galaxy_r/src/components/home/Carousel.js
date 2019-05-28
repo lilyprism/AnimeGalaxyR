@@ -1,6 +1,6 @@
 import React from 'react';
 
-import './sass/carousel.sass';
+import './carousel.sass';
 import * as ReactDOM from "react-dom";
 
 class CarouselItem extends React.Component {
