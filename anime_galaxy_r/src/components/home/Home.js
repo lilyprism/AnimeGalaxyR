@@ -113,12 +113,12 @@ export default class Home extends React.Component {
                     <CarouselItemEpisode item={{
                         title: "Konosuba"
                     }}/>
-                    {/*<CarouselItemEpisode item={{*/}
-                    {/*    title: "Konosuba"*/}
-                    {/*}}/>*/}
-                    {/*<CarouselItemEpisode item={{*/}
-                    {/*    title: "Konosuba"*/}
-                    {/*}}/>*/}
+                    <CarouselItemEpisode item={{
+                        title: "Konosuba"
+                    }}/>
+                    <CarouselItemEpisode item={{
+                        title: "Konosuba"
+                    }}/>
                     {/*<CarouselItemEpisode item={{*/}
                     {/*    title: "Konosuba"*/}
                     {/*}}/>*/}
