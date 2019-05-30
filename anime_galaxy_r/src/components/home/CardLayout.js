@@ -15,6 +15,7 @@ class LatestEpisodeCard extends React.Component {
                         </div>
                     </div>
                     <img className="card-image" src={this.props.item.anime.image} alt="Card"/>
+                    <i className="fas fa-play play-icon"/>
                 </Link>
             </div>
         );

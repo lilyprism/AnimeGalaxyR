@@ -23,7 +23,7 @@ class CarouselItem extends React.Component {
                         <div className="carousel-desc-text" dangerouslySetInnerHTML={desc_html}/>
                     </div>
                 </div>
-                <img className="carousel-img" src={`http://via.placeholder.com/298x428?text=${this.props.index}`} alt=""/>
+                <img className="carousel-img" src={`http://via.placeholder.com/298x428?text=${this.props.item.title}`} alt=""/>
             </div>
         );
     }
@@ -40,7 +40,7 @@ class CarouselItemEpisode extends React.Component {
                         <span>{this.props.item.title}</span>
                     </div>
                 </div>
-                <img className="carousel-img" src={`http://via.placeholder.com/298x428?text=${this.props.index}`} alt=""/>
+                <img className="carousel-img" src={`http://via.placeholder.com/298x428?text=${this.props.item.title}`} alt=""/>
             </div>
         );
     }
@@ -155,11 +155,13 @@ class Carousel extends React.Component {
             }
         }
 
-        //this.addAutomaticCycle();
+        if (this.props.children.length > 0) {
+            this.addAutomaticCycle();
+        }
     }
 
     componentWillUnmount() {
-        if (this.state.integrity !== null) {
+        if (this.state.interval !== null) {
             this.removeAutomaticCycle();
         }
     }
@@ -229,28 +231,48 @@ class Carousel extends React.Component {
     };
 
     render() {
-        return (
-            <div className="carousel"
-                 onMouseEnter={event => {
-                     this.setState({mouseOver: true});
-                 }}
-                 onMouseLeave={event => {
-                     this.setState({mouseOver: false});
-                 }}>
-                <div className="carousel-prev" onClick={this.moveRight}>
-                    <i className="fas fa-arrow-left fa-fw"/>
+        if (this.props.children.length > 5) {
+
+            return (
+                <div className="carousel"
+                     onMouseEnter={event => {
+                         this.setState({mouseOver: true});
+                     }}
+                     onMouseLeave={event => {
+                         this.setState({mouseOver: false});
+                     }}>
+                    <div className="carousel-prev" onClick={this.moveRight}>
+                        <i className="fas fa-arrow-left fa-fw"/>
+                    </div>
+                    <div className="carousel-item-group cyclable">
+                        {/*{this.state.items.map(function (value, index) {*/}
+                        {/*    return <CarouselItem item={value} index={index + 1} key={index}/>*/}
+                        {/*})}*/}
+                        {this.props.children}
+                    </div>
+                    <div className="carousel-next" onClick={this.moveLeft}>
+                        <i className="fas fa-arrow-right fa-fw"/>
+                    </div>
                 </div>
-                <div className="carousel-item-group">
-                    {/*{this.state.items.map(function (value, index) {*/}
-                    {/*    return <CarouselItem item={value} index={index + 1} key={index}/>*/}
-                    {/*})}*/}
-                    {this.props.children}
+            );
+        } else {
+            return (
+                <div className="carousel"
+                     onMouseEnter={event => {
+                         this.setState({mouseOver: true});
+                     }}
+                     onMouseLeave={event => {
+                         this.setState({mouseOver: false});
+                     }}>
+                    <div className="carousel-item-group">
+                        {/*{this.state.items.map(function (value, index) {*/}
+                        {/*    return <CarouselItem item={value} index={index + 1} key={index}/>*/}
+                        {/*})}*/}
+                        {this.props.children}
+                    </div>
                 </div>
-                <div className="carousel-next" onClick={this.moveLeft}>
-                    <i className="fas fa-arrow-right fa-fw"/>
-                </div>
-            </div>
-        );
+            );
+        }
     }
 
 }

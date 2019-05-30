@@ -57,6 +57,7 @@
 .card-body
   width: 100%
   position: absolute
+  z-index: 1
   padding: 5px
   border-radius: 5px 5px 0 0
   background-color: $card-bg-color
@@ -72,3 +73,20 @@
 .card-image
   width: 100%
   border-radius: 6px 6px 5px 5px
+
+.play-icon
+  position: absolute
+  left: 50%
+  top: 50%
+  color: $light-textcolor
+  transform: translate(-50%, -50%)
+  display: none
+
+.card-image:hover
+  filter: brightness(50%)
+
+.play-icon:hover ~ .card-image
+  filter: brightness(50%)
+
+.card-image:hover ~ .play-icon, .play-icon:hover
+  display: block

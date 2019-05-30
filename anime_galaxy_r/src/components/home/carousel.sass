@@ -42,6 +42,8 @@ $visible-slides-sm: 1
   display: flex
   flex: auto
 
+
+.cyclable
   @media (min-width: $breakpoint-md)
     -webkit-transform: translateX(calc(-1 * (100% / #{$visible-slides-md} - 20px + 20px * #{$visible-slides-md} / #{$visible-slides-md - 1})))
     -moz-transform: translateX(calc(-1 * (100% / #{$visible-slides-md} - 20px + 20px * #{$visible-slides-md} / #{$visible-slides-md - 1})))
