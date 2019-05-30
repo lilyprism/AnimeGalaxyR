@@ -73,6 +73,11 @@
 .card-image
   width: 100%
   border-radius: 6px 6px 5px 5px
+  -webkit-transition: filter 0.5s
+  -moz-transition: filter 0.5s
+  -ms-transition: filter 0.5s
+  -o-transition: filter 0.5s
+  transition: filter 0.5s
 
 .play-icon
   position: absolute
@@ -80,7 +85,12 @@
   top: 50%
   color: $light-textcolor
   transform: translate(-50%, -50%)
-  display: none
+  -webkit-transition: opacity 0.5s
+  -moz-transition: opacity 0.5s
+  -ms-transition: opacity 0.5s
+  -o-transition: opacity 0.5s
+  transition: opacity 0.5s
+  opacity: 0
 
 .card-image:hover
   filter: brightness(50%)
@@ -89,4 +99,4 @@
   filter: brightness(50%)
 
 .card-image:hover ~ .play-icon, .play-icon:hover
-  display: block
+  opacity: 1

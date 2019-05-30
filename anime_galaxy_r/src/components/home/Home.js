@@ -30,6 +30,10 @@ export default class Home extends React.Component {
         });
     }
 
+    componentDidMount() {
+        this.getLatestEpisodes();
+    }
+
     render() {
         return (
             <div>
@@ -119,21 +123,21 @@ export default class Home extends React.Component {
                     <CarouselItemEpisode item={{
                         title: "Konosuba"
                     }}/>
-                    {/*<CarouselItemEpisode item={{*/}
-                    {/*    title: "Konosuba"*/}
-                    {/*}}/>*/}
-                    {/*<CarouselItemEpisode item={{*/}
-                    {/*    title: "Konosuba"*/}
-                    {/*}}/>*/}
-                    {/*<CarouselItemEpisode item={{*/}
-                    {/*    title: "Konosuba"*/}
-                    {/*}}/>*/}
-                    {/*<CarouselItemEpisode item={{*/}
-                    {/*    title: "Konosuba"*/}
-                    {/*}}/>*/}
-                    {/*<CarouselItemEpisode item={{*/}
-                    {/*    title: "Konosuba"*/}
-                    {/*}}/>*/}
+                    <CarouselItemEpisode item={{
+                        title: "Konosuba"
+                    }}/>
+                    <CarouselItemEpisode item={{
+                        title: "Konosuba"
+                    }}/>
+                    <CarouselItemEpisode item={{
+                        title: "Konosuba"
+                    }}/>
+                    <CarouselItemEpisode item={{
+                        title: "Konosuba"
+                    }}/>
+                    <CarouselItemEpisode item={{
+                        title: "Konosuba"
+                    }}/>
                 </Carousel>
             </div>
         );

@@ -5,6 +5,7 @@ import "./episodepage.sass";
 import axios from 'axios';
 import ReactJWPlayer from 'react-jw-player';
 import EpisodeList from "./EpisodeList";
+import EpisodeOptions from "./EpisodeOptions";
 
 export default class EpisodePage extends React.Component {
 
@@ -14,7 +15,7 @@ export default class EpisodePage extends React.Component {
         this.state = {
             episode: null,
             id: null,
-            count: 0
+            has_player: false
         };
         this.getEpisode();
         console.log("Start ------------------------------");
@@ -30,21 +31,16 @@ export default class EpisodePage extends React.Component {
         console.log(`${process.env.REACT_APP_API_URL}/videos/${this.props.match.params.id}`);
         axios.get(`${process.env.REACT_APP_API_URL}/videos/${this.props.match.params.id}`).then(res => {
             this.setState({episode: res.data});
-            console.log(res.data)
+            console.log(res.data);
             console.log("Getting episode info");
         });
     }
 
-    addPlaylistChangeEvent(id) {
-        window.jwplayer(`player-container-${id}`).on('playlistItem', event => {
-            console.log(event);
-            this.removePlayer(id);
-        });
-    }
-
     removePlayer = () => {
-        console.log("Video Removed");
-        window.jwplayer("player-container").remove();
+        if (this.state.has_player) {
+            console.log("Video Removed");
+            window.jwplayer("player-container").remove();
+        }
     };
 
     componentWillUnmount() {
@@ -60,6 +56,11 @@ export default class EpisodePage extends React.Component {
                         <div className="player-misc-wrapper">
                             <div className="player-desc-wrapper">
                                 <ReactJWPlayer playerId={`player-container`} playerScript="https://cdn.jwplayer.com/libraries/7OxfLofq.js" playlist={`${process.env.REACT_APP_API_URL}/playlist/${this.state.episode.id}`}
+                                               onReady={
+                                                   event => {
+                                                       this.setState({has_player: true});
+                                                   }
+                                               }
                                                onVideoLoad={
                                                    event => {
                                                        if (parseInt(event.item.id) !== parseInt(this.props.match.params.id)) {
@@ -83,11 +84,11 @@ export default class EpisodePage extends React.Component {
                                                    }
                                                }
                                 />
-                                <h1 className="title"><span>{this.state.episode.anime.name} - Episode {this.state.episode.number}</span></h1>
+                                <EpisodeOptions episode={this.state.episode}/>
                             </div>
                         </div>
                         <div className="episode-list-container">
-                            <EpisodeList/>
+                            {/*<EpisodeList/>*/}
                         </div>
                     </div>
                 </div>
