@@ -54,7 +54,6 @@ class Carousel extends React.Component {
 
         this.state = {
             moving: false,
-            cyclable: false,
             items: [
                 {
                     title: "Konosuba",
@@ -156,30 +155,15 @@ class Carousel extends React.Component {
             }
         }
 
-        this.updateCyclable();
-        window.addEventListener("resize", event => {
-            this.updateCyclable();
-        });
+        if (this.props.children.length > 0) {
+            this.addAutomaticCycle();
+        }
     }
 
     componentWillUnmount() {
         if (this.state.interval !== null) {
             this.removeAutomaticCycle();
         }
-    }
-
-    updateCyclable() {
-        let cyclable = ((window.innerWidth >= 1210 && this.props.children.length > 5) || (window.innerWidth < 1210 && this.props.children.length > 4) || (window.innerWidth < 850 && this.props.children.length > 2) || (window.innerWidth < 580 && this.props.children.length > 1));
-
-        if (cyclable !== this.state.cyclable) {
-            if (cyclable) {
-                this.addAutomaticCycle();
-            } else {
-                this.removeAutomaticCycle();
-            }
-        }
-
-        this.setState({cyclable: cyclable});
     }
 
     addAutomaticCycle() {
@@ -247,7 +231,8 @@ class Carousel extends React.Component {
     };
 
     render() {
-        if (this.state.cyclable) {
+        if (this.props.children.length > 5) {
+
             return (
                 <div className="carousel"
                      onMouseEnter={event => {
