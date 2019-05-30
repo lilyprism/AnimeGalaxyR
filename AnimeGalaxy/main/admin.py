@@ -34,7 +34,7 @@ class AnimeAdmin(admin.ModelAdmin):
 		}),
 		('Configurações Avançadas', {
 			'classes': ('wide', 'collapse'),
-			'fields' : ('genres', 'image',),
+			'fields' : ('genres', 'image', 'thumbnail'),
 		})
 	)
 
@@ -43,13 +43,12 @@ class AnimeAdmin(admin.ModelAdmin):
 class EpisodeAdmin(admin.ModelAdmin):
 	inlines = [VideoInline, ]
 
+	list_filter = ['anime']
+	list_per_page = 24
+
 	fieldsets = (
 		('Configurações Gerais', {
 			'fields': ('anime', 'number',)
-		}),
-		('Configurações Avançadas', {
-			'classes': ('wide',),
-			'fields' : ('image',),
 		}),
 	)
 

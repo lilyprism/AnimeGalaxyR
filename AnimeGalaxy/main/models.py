@@ -11,7 +11,8 @@ from django.utils import timezone
 
 # File Storage
 anime_storage = FileSystemStorage(location=os.path.join(settings.MEDIA_ROOT, 'animes'), base_url=os.path.join(settings.MEDIA_URL, 'animes'))
-episode_storage = FileSystemStorage(location=os.path.join(settings.MEDIA_ROOT, 'episodes'), base_url=os.path.join(settings.MEDIA_URL, 'episodes'))
+video_storage = FileSystemStorage(location=os.path.join(settings.MEDIA_ROOT, 'video'), base_url=os.path.join(settings.MEDIA_URL, 'video'))
+thumb_storage = FileSystemStorage(location=os.path.join(settings.MEDIA_ROOT, 'thumbs'), base_url=os.path.join(settings.MEDIA_URL, 'thumbs'))
 user_storage = FileSystemStorage(location=os.path.join(settings.MEDIA_ROOT, 'users'), base_url=os.path.join(settings.MEDIA_URL, 'users'))
 
 
@@ -50,6 +51,7 @@ class Anime(Model):
 	# Model fields
 	name = models.CharField(max_length=200, null=False, blank=False, unique=True, verbose_name="Nome")
 	image = models.ImageField(storage=anime_storage, null=False, blank=False, default='default.jpg', verbose_name="Imagem")
+	thumbnail = models.ImageField(storage=thumb_storage, null=False, blank=False, default='default.jpg', verbose_name="Thumbnail")
 	description = RichTextField(null=False, blank=False, verbose_name="Descrição")
 
 	def __str__(self) -> str:
@@ -66,7 +68,6 @@ class Episode(Model):
 	anime = models.ForeignKey(Anime, on_delete=models.CASCADE, verbose_name="Anime", related_name="episodes", null=False, blank=False)
 
 	# Model fields
-	image = models.ImageField(storage=episode_storage, null=False, blank=False, default='default.jpg', verbose_name="Imagem")
 	number = models.IntegerField(default=0, null=False, blank=False, validators=[MinValueValidator(0)], verbose_name="Número de Episódio")
 	views = models.IntegerField(default=0, null=False, validators=[MinValueValidator(0)], verbose_name="Visualizações")
 
@@ -87,7 +88,8 @@ class Video(Model):
 	quality = models.ForeignKey(Quality, on_delete=models.CASCADE, verbose_name="Qualidade", related_name="videos", null=False, blank=False)
 
 	# Model fields
-	url = models.URLField(max_length=1500, null=False, blank=False, verbose_name="URL")
+	# url = models.URLField(max_length=1500, null=False, blank=False, verbose_name="URL")
+	video = models.FileField(storage=video_storage, blank=False, null=False)
 
 	def __str__(self) -> str:
 		return f"{self.episode} [{self.quality}]"
