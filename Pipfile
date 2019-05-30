@@ -11,6 +11,7 @@ mypy = "*"
 django-cors-headers = "*"
 pillow = "*"
 django-ckeditor = "*"
+djangorestframework = "*"
 
 [requires]
 python_version = "3.6"

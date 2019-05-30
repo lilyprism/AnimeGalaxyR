@@ -25,9 +25,8 @@ SECRET_KEY = 'i1q=0s0hx)f*aysw)z8clqul%8-^+cp%vtn6vb1r0itlx2d_sg'
 DEBUG = True
 
 ALLOWED_HOSTS = [
-	'localhost',
-	'127.0.0.1',
-	'172.16.0.36'
+	'172.16.0.62',
+	'localhost'
 ]
 
 # Application definition
@@ -35,11 +34,15 @@ ALLOWED_HOSTS = [
 INSTALLED_APPS = [
 	'main.apps.MainConfig',
 
+	# Security Apps
+	'corsheaders',
+
 	# CKEditor Support
 	'ckeditor',
 
-	# Security Apps
-	'corsheaders',
+	# Rest Framework Apps
+	'rest_framework',
+	'rest_framework.authtoken',
 
 	# Django Apps
 	'django.contrib.admin',
@@ -51,6 +54,9 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+	# Security Middleware
+	'corsheaders.middleware.CorsMiddleware',
+
 	'django.middleware.security.SecurityMiddleware',
 	'django.contrib.sessions.middleware.SessionMiddleware',
 	'django.middleware.common.CommonMiddleware',
