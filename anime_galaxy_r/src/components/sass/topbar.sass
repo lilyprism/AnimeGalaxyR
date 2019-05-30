@@ -1,0 +1,88 @@
+@import colors
+@import page-units
+
+.topbar
+  height: 65px
+  display: flex
+  justify-content: center
+  align-items: center
+  width: 100%
+  background-color: $background-color
+
+.topbar-container
+  height: 65px
+  display: flex
+  justify-content: center
+  align-items: center
+  background-color: $background-color
+
+.topbar.sticky
+  z-index: 20
+  position: fixed
+  top: 0
+
+.topbar .icon
+  margin: 0 15px
+  padding: 8px
+  border-radius: 3px
+  color: $light-textcolor
+  cursor: pointer
+  -webkit-transition: background-color 0.5s
+  -moz-transition: background-color 0.5s
+  -ms-transition: background-color 0.5s
+  -o-transition: background-color 0.5s
+  transition: background-color 0.5s
+
+.topbar .icon:hover, .topbar .icon:focus
+  background-color: $icon-hover-color
+  transition-delay: 0s
+
+
+.topbar .logo
+  @media (max-width: $breakpoint-md)
+    display: none
+
+.topbar .logo-burger-container
+  display: flex
+  align-items: center
+
+.topbar .search-area
+  flex-grow: 1
+  display: flex
+  justify-content: flex-end
+
+.topbar .search-input
+  border: 0
+  color: transparent
+  -webkit-transition: width 0.75s
+  -moz-transition: width 0.75s
+  -ms-transition: width 0.75s
+  -o-transition: width 0.75s
+  transition: width 0.75s
+  width: 0
+  max-width: 250px
+  font-size: 18px
+  background-color: rgba(255, 255, 255, 0.2)
+  border-radius: 3px 0 0 3px
+
+.topbar .search-input:focus
+  color: $light-textcolor
+  width: 75%
+  outline: none
+  padding: 0 15px
+
+  @media (max-width: $breakpoint-sm)
+    width: calc(100% - 48px)
+
+.topbar .search-input:focus + .search-icon
+  background-color: $icon-hover-color
+  border-radius: 0 3px 3px 0
+
+.topbar .search-icon
+  -webkit-transition: background-color 0.5s, border-radius 0.5s
+  -moz-transition: background-color 0.5s, border-radius 0.5s
+  -ms-transition: background-color 0.5s, border-radius 0.5s
+  -o-transition: background-color 0.5s, border-radius 0.5s
+  transition: background-color 0.5s, border-radius 0.5s
+  margin-left: 0
+  transition-delay: 0.3s

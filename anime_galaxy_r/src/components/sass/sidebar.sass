@@ -1,0 +1,58 @@
+@import colors
+@import page-units
+
+.sidebar
+  display: flex
+  flex-direction: column
+  position: fixed
+  bottom: 0
+  left: -$sidebar-width
+  z-index: 10
+  width: $sidebar-width
+  background-color: $background-color
+  overflow: auto
+
+  @media (max-width: $breakpoint-sm - 1)
+    top: 0
+
+  @media (min-width: $breakpoint-sm)
+    top: $banner-height-sm + $topbar-height
+
+  @media (min-width: $breakpoint-md)
+    top: $banner-height-md + $topbar-height
+
+  @media (min-width: $breakpoint-l)
+    top: $banner-height-l + $topbar-height
+
+  @media (min-width: $breakpoint-xl)
+    top: $banner-height-xl + $topbar-height
+
+.sidebar.open
+  left: 0
+
+.sidebar-transition
+  -webkit-transition: left 0.5s
+  -moz-transition: left 0.5s
+  -ms-transition: left 0.5s
+  -o-transition: left 0.5s
+  transition: left 0.5s
+
+.sidebar .sidebar-item
+  display: block
+  padding: 15px 23px
+  color: $light-textcolor
+  transition: background-color 0.2s
+  font-size: 18px
+
+.sidebar .sidebar-item:hover
+  background-color: lighten($background-color, 5%)
+
+.sidebar a:focus .sidebar-item
+  background-color: lighten($background-color, 5%)
+
+.login-container
+  flex-grow: 1
+  display: flex
+  flex-direction: column
+  justify-content: flex-end
+

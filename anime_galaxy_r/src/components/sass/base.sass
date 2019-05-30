@@ -1,0 +1,120 @@
+@import colors
+@import page-units
+@import utilities
+
+*
+  box-sizing: border-box
+  margin: 0
+  padding: 0
+  font-family: 'Roboto', sans-serif
+  word-wrap: break-word
+
+html, body, #app
+  min-width: $min-page-width
+  height: 100%
+  background-color: $background-color
+
+#app
+  display: flex
+  flex-direction: column
+
+img
+  display: block
+
+.banner-top
+  width: 100%
+  background-image: url("/images/top_banner.png")
+  background-size: cover
+  background-position: center center
+  background-repeat: no-repeat
+  //-webkit-transition: height 0.5s
+  //-moz-transition: height 0.5s
+  //-ms-transition: height 0.5s
+  //-o-transition: height 0.5s
+  //transition: height 0.5s
+
+  @media (max-width: $breakpoint-sm - 1)
+    height: 0
+
+  @media (min-width: $breakpoint-sm)
+    height: 80px
+
+  @media (min-width: $breakpoint-md)
+    height: 120px
+
+  @media (min-width: $breakpoint-l)
+    height: 180px
+
+  @media (min-width: $breakpoint-xl)
+    height: 240px
+
+a
+  text-decoration: none
+
+.breakpoint-container
+  @media (max-width: $breakpoint-md - 1)
+    width: 100%
+
+  @media (min-width: $breakpoint-md)
+    width: 500px
+
+  @media (min-width: $breakpoint-l)
+    width: 820px
+
+  @media (min-width: $breakpoint-xl)
+    width: 1150px
+  
+  -webkit-transition: width 0.5s
+  -moz-transition: width 0.5s
+  -ms-transition: width 0.5s
+  -o-transition: width 0.5s
+  transition: width 0.5s
+  margin: 0 auto
+
+.page-header
+  background-color: $background-color
+
+.container
+  position: relative
+  flex-grow: 1
+
+.container.sticky
+  padding-top: $topbar-height
+
+.content-wrapper
+  position: relative
+  background: $content-gradient
+  color: $light-textcolor
+
+.overlay
+  width: 0
+  opacity: 0
+  z-index: 2
+  background-color: rgba(0, 0, 0, 0.75)
+  transition: opacity 0.5s, width 0s ease 0.5s, height 0.5s
+
+.content-wrapper.dimmed .overlay
+  transition: opacity 0.5s, width 0s, height 0.5s
+  height: 100%
+  width: 100%
+  opacity: 1
+
+.content
+  padding: 0 23px 23px 23px
+
+.title
+  color: $title-text-color
+  padding: 40px 0
+
+.title span
+  border-bottom: 3px solid $title-border-color
+
+::-webkit-scrollbar
+  width: 5px
+
+::-webkit-scrollbar-thumb
+  background: $scrollbar-thumb-color
+  border-radius: 10px
+
+::-webkit-scrollbar-thumb:hover
+  background: $scrollbar-hover-color
