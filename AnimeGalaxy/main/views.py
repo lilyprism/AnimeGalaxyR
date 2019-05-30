@@ -3,7 +3,7 @@ from typing import List
 from rest_framework import status, viewsets
 from rest_framework.exceptions import ValidationError
 from rest_framework.generics import get_object_or_404
-from rest_framework.permissions import AllowAny, BasePermission
+from rest_framework.permissions import BasePermission, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework.throttling import AnonRateThrottle, UserRateThrottle
 
@@ -13,7 +13,7 @@ from .serializers import EpisodeCreateSerializer, EpisodeSerializer, PlaylistSer
 
 class BaseMVS(viewsets.ModelViewSet):
 	# View Permissions
-	permission_classes: List[BasePermission] = [AllowAny]
+	permission_classes: List[BasePermission] = [IsAuthenticatedOrReadOnly]
 	throttle_classes = [UserRateThrottle, AnonRateThrottle]
 
 	# Serializers

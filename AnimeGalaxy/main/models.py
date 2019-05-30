@@ -11,7 +11,6 @@ from django.utils import timezone
 
 # File Storage
 anime_storage = FileSystemStorage(location=os.path.join(settings.MEDIA_ROOT, 'animes'), base_url=os.path.join(settings.MEDIA_URL, 'animes'))
-video_storage = FileSystemStorage(location=os.path.join(settings.MEDIA_ROOT, 'video'), base_url=os.path.join(settings.MEDIA_URL, 'video'))
 thumb_storage = FileSystemStorage(location=os.path.join(settings.MEDIA_ROOT, 'thumbs'), base_url=os.path.join(settings.MEDIA_URL, 'thumbs'))
 user_storage = FileSystemStorage(location=os.path.join(settings.MEDIA_ROOT, 'users'), base_url=os.path.join(settings.MEDIA_URL, 'users'))
 
@@ -74,6 +73,8 @@ class Episode(Model):
 	# Hidden Model fields
 	added = models.DateTimeField(default=timezone.now, editable=False)
 
+	# blogger_url = models.URLField(max_length=1500, null=False, blank=False, verbose_name="URL de Blogger")
+
 	def __str__(self) -> str:
 		return f"{self.anime} - {self.number}"
 
@@ -88,8 +89,9 @@ class Video(Model):
 	quality = models.ForeignKey(Quality, on_delete=models.CASCADE, verbose_name="Qualidade", related_name="videos", null=False, blank=False)
 
 	# Model fields
-	# url = models.URLField(max_length=1500, null=False, blank=False, verbose_name="URL")
-	video = models.FileField(storage=video_storage, blank=False, null=False)
+	url = models.URLField(max_length=1500, null=False, blank=False, verbose_name="URL")
+
+	# video = models.FileField(storage=video_storage, blank=False, null=False)
 
 	def __str__(self) -> str:
 		return f"{self.episode} [{self.quality}]"
@@ -98,3 +100,16 @@ class Video(Model):
 class CustomUser(AbstractUser):
 	# User custom fields
 	avatar = models.ImageField(storage=user_storage, null=False, blank=False, default='default.jpg', verbose_name="Avatar")
+	episodes = models.ManyToManyField(Episode, through='UserEpisodes', related_name='users', verbose_name='Episódios')
+
+
+class UserEpisodes(Model):
+	class Meta:
+		verbose_name = "Episódio de Utilizador"
+		verbose_name_plural = "Episódios de Utilizador"
+		unique_together = ['episode', 'user']
+
+	episode = models.ForeignKey(Episode, related_name='user_episodes', on_delete=models.CASCADE)
+	user = models.ForeignKey(CustomUser, related_name='user_episodes', on_delete=models.CASCADE)
+
+	liked = models.BooleanField(default=None, null=True, blank=True, verbose_name='Video Gostado')

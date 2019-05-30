@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Anime, CustomUser, Episode, Genre, Quality, Video
+from .models import Anime, CustomUser, Episode, Genre, Quality, UserEpisodes, Video
 
 
 class VideoInline(admin.TabularInline):
@@ -53,8 +53,18 @@ class EpisodeAdmin(admin.ModelAdmin):
 	)
 
 
+class EpisodeInline(admin.TabularInline):
+	model = UserEpisodes
+	extra = 1
+
+	def get_queryset(self, request):
+		return UserEpisodes.objects.filter(user=request.user.id)
+
+
 @admin.register(CustomUser)
 class CustomUserAdmin(admin.ModelAdmin):
+	inlines = [EpisodeInline]
+
 	fieldsets = (
 		('Configurações Gerais', {
 			'fields': ('username', 'first_name', 'last_name', 'email', 'avatar', 'password')

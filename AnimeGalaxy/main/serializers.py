@@ -1,6 +1,21 @@
+from rest_auth.registration.serializers import RegisterSerializer
 from rest_framework import serializers
 
-from .models import Anime, Episode, Genre, Quality, Video
+from .models import Anime, CustomUser, Episode, Genre, Quality, Video
+
+
+class CustomRegisterSerializer(RegisterSerializer):
+	email = serializers.EmailField(required=True)
+	username = serializers.CharField(required=True)
+	password1 = serializers.CharField(write_only=True, required=True)
+	password2 = serializers.CharField(write_only=True, required=True)
+
+
+class UserSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = CustomUser
+		fields = ['id', 'username', 'first_name', 'last_name', 'email', 'avatar']
+		read_only_fields = ['id', 'username']
 
 
 class GenreSerializer(serializers.ModelSerializer):
@@ -42,7 +57,7 @@ class QualitySerializer(serializers.ModelSerializer):
 class VideoCreateSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Video
-		fields = ["id", "quality", "video", "episode"]
+		fields = ["id", "quality", "url", "episode"]
 
 	quality = serializers.PrimaryKeyRelatedField(queryset=Quality.objects.all())
 	episode = serializers.PrimaryKeyRelatedField(queryset=Episode.objects.all())
@@ -51,7 +66,7 @@ class VideoCreateSerializer(serializers.ModelSerializer):
 class VideoSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Video
-		fields = ['id', 'quality', 'video']
+		fields = ['id', 'quality', 'url']
 
 	quality = QualitySerializer()
 

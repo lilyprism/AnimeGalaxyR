@@ -43,9 +43,16 @@ INSTALLED_APPS = [
 	# Rest Framework Apps
 	'rest_framework',
 	'rest_framework.authtoken',
+	'rest_auth',
+	'allauth',
+	'allauth.account',
+	'allauth.socialaccount',
+	'rest_auth.registration',
+	'django_filters',
 
 	# Django Apps
 	'django.contrib.admin',
+	'django.contrib.sites',
 	'django.contrib.auth',
 	'django.contrib.contenttypes',
 	'django.contrib.sessions',
@@ -116,6 +123,30 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # User Model
 AUTH_USER_MODEL = 'main.CustomUser'
+
+# Rest Framework settings
+REST_FRAMEWORK = {
+	'DEFAULT_AUTHENTICATION_CLASSES': (
+		'rest_framework.authentication.TokenAuthentication',
+	),
+	'DEFAULT_RENDERER_CLASSES'      : (
+		'rest_framework.renderers.JSONRenderer',
+	),
+	'DEFAULT_FILTER_BACKENDS'       : ('django_filters.rest_framework.DjangoFilterBackend',),
+	'DEFAULT_THROTTLE_RATES'        : {
+		'anon': '30/min',
+		'user': '60/min'
+	}
+}
+
+REST_AUTH_SERIALIZERS = {
+	"USER_DETAILS_SERIALIZER": "main.serializers.UserSerializer",
+}
+REST_AUTH_REGISTER_SERIALIZERS = {
+	"REGISTER_SERIALIZER": "main.serializers.CustomRegisterSerializer",
+}
+
+SITE_ID = 1
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
