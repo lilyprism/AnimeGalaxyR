@@ -1,7 +1,7 @@
 from rest_auth.registration.serializers import RegisterSerializer
 from rest_framework import serializers
 
-from .models import Anime, CustomUser, Episode, Genre, Quality, Video
+from .models import Anime, CustomUser, Episode, Genre, Report, UserEpisodes
 
 
 class CustomRegisterSerializer(RegisterSerializer):
@@ -30,45 +30,57 @@ class AnimeSerializer(serializers.ModelSerializer):
 		fields = ('id', 'name', 'genres', 'image', 'thumbnail', 'description')
 
 	genres = GenreSerializer(many=True)
+	image = serializers.SerializerMethodField()
+
+	def get_image(self, instance):
+		request = self.context.get('request')
+		image_url = instance.image.url
+		return request.build_absolute_uri(image_url)
+
+	def get_thumbnail(self, instance):
+		request = self.context.get('request')
+		image_url = instance.thumbnail.url
+		return request.build_absolute_uri(image_url)
 
 
-class EpisodeSerializer(serializers.ModelSerializer):
+class SingleEpisodeSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Episode
-		fields = ['id', 'anime', 'number', 'views']
+		fields = ['id', 'anime', 'number', 'views', 'liked']
 
 	anime = AnimeSerializer()
+	liked = serializers.SerializerMethodField()
+
+	def get_liked(self, instance):
+
+		request = self.context.get("request", None)
+		if request and request.user and request.user.id:
+			print("Single video request from USER")
+			obj = UserEpisodes.objects.get_or_create(user_id=request.user.id, episode_id=instance.id)[0]
+			return obj.liked
+		return None
+
+
+class MultiEpisodeSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = Episode
+		fields = ['id', 'anime', 'number']
+
+	anime = AnimeSerializer()
+
+
+class SimpleMultiEpisodeSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = Episode
+		fields = ['id', 'number']
 
 
 class EpisodeCreateSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Episode
-		fields = ['id', 'anime', 'number']
+		fields = ['id', 'anime', 'number', 'blogger_url']
 
 	anime = serializers.PrimaryKeyRelatedField(queryset=Anime.objects.all())
-
-
-class QualitySerializer(serializers.ModelSerializer):
-	class Meta:
-		model = Quality
-		fields = ['id', 'name']
-
-
-class VideoCreateSerializer(serializers.ModelSerializer):
-	class Meta:
-		model = Video
-		fields = ["id", "quality", "url", "episode"]
-
-	quality = serializers.PrimaryKeyRelatedField(queryset=Quality.objects.all())
-	episode = serializers.PrimaryKeyRelatedField(queryset=Episode.objects.all())
-
-
-class VideoSerializer(serializers.ModelSerializer):
-	class Meta:
-		model = Video
-		fields = ['id', 'quality', 'url']
-
-	quality = QualitySerializer()
 
 
 class PlaylistSerializer(serializers.ModelSerializer):
@@ -79,13 +91,24 @@ class PlaylistSerializer(serializers.ModelSerializer):
 	description = serializers.CharField(max_length=5000, source='anime.description')
 	title = serializers.CharField(max_length=250, source='__str__')
 	image = serializers.SerializerMethodField()
-	sources = serializers.SerializerMethodField()
-
-	def get_sources(self, episode):
-		request = self.context.get('request')
-		return [{"file": request.build_absolute_uri(e.video.url), "label": e.quality.name, "default": True if e.quality.name == "HD" else False, "type": "video/mp4"} for e in episode.videos.all()]
 
 	def get_image(self, episode):
 		request = self.context.get('request')
 		image_url = episode.anime.thumbnail.url
 		return request.build_absolute_uri(image_url)
+
+
+class LikeSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = UserEpisodes
+		fields = ['episode', 'liked']
+		read_only_fields = ['episode']
+
+	episode = serializers.PrimaryKeyRelatedField(queryset=Episode.objects.all())
+	liked = serializers.BooleanField(required=False, allow_null=True)
+
+
+class ReportSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = Report
+		fields = '__all__'

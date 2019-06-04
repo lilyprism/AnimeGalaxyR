@@ -64,6 +64,7 @@ MIDDLEWARE = [
 	# Security Middleware
 	'corsheaders.middleware.CorsMiddleware',
 
+	# Default Security Middleware
 	'django.middleware.security.SecurityMiddleware',
 	'django.contrib.sessions.middleware.SessionMiddleware',
 	'django.middleware.common.CommonMiddleware',
@@ -71,6 +72,11 @@ MIDDLEWARE = [
 	'django.contrib.auth.middleware.AuthenticationMiddleware',
 	'django.contrib.messages.middleware.MessageMiddleware',
 	'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+	# Cache Middleware
+	# 'django.middleware.cache.UpdateCacheMiddleware',
+	# 'django.middleware.common.CommonMiddleware',
+	# 'django.middleware.cache.FetchFromCacheMiddleware',
 ]
 
 ROOT_URLCONF = 'AnimeGalaxy.urls'
@@ -147,6 +153,14 @@ REST_AUTH_REGISTER_SERIALIZERS = {
 }
 
 SITE_ID = 1
+
+CACHES = {
+	'default': {
+		'BACKEND' : 'django.core.cache.backends.memcached.MemcachedCache',
+		'LOCATION': '127.0.0.1:11211',
+		'TIMEOUT' : 30
+	}
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/

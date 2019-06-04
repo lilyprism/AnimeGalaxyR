@@ -1,15 +1,20 @@
 import os
+from typing import List
 
 from ckeditor.fields import RichTextField
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
+from django.core.cache import cache
 from django.core.files.storage import FileSystemStorage
 from django.core.validators import MinValueValidator
 from django.db import models
 from django.db.models import Model
 from django.utils import timezone
 
+from .helpers import get_sources_from_url
+
 # File Storage
+
 anime_storage = FileSystemStorage(location=os.path.join(settings.MEDIA_ROOT, 'animes'), base_url=os.path.join(settings.MEDIA_URL, 'animes'))
 thumb_storage = FileSystemStorage(location=os.path.join(settings.MEDIA_ROOT, 'thumbs'), base_url=os.path.join(settings.MEDIA_URL, 'thumbs'))
 user_storage = FileSystemStorage(location=os.path.join(settings.MEDIA_ROOT, 'users'), base_url=os.path.join(settings.MEDIA_URL, 'users'))
@@ -22,18 +27,6 @@ class Genre(Model):
 
 	# Model fields
 	name = models.CharField(max_length=50, null=False, blank=False, unique=True, verbose_name="Nome")
-
-	def __str__(self) -> str:
-		return self.name
-
-
-class Quality(Model):
-	# Meta configurations
-	class Meta:
-		verbose_name = 'Qualidade'
-
-	# Model fields
-	name = models.CharField(max_length=20, null=False, blank=False, unique=True, verbose_name="Nome")
 
 	def __str__(self) -> str:
 		return self.name
@@ -73,28 +66,18 @@ class Episode(Model):
 	# Hidden Model fields
 	added = models.DateTimeField(default=timezone.now, editable=False)
 
-	# blogger_url = models.URLField(max_length=1500, null=False, blank=False, verbose_name="URL de Blogger")
+	blogger_url = models.URLField(max_length=1500, null=False, blank=False, verbose_name="URL de Blogger")
 
 	def __str__(self) -> str:
 		return f"{self.anime} - {self.number}"
 
-
-class Video(Model):
-	# Meta configurations
-	class Meta:
-		unique_together = ['episode', 'quality']
-
-	# Model relations
-	episode = models.ForeignKey(Episode, on_delete=models.CASCADE, verbose_name="Episódio", related_name="videos", null=False, blank=False)
-	quality = models.ForeignKey(Quality, on_delete=models.CASCADE, verbose_name="Qualidade", related_name="videos", null=False, blank=False)
-
-	# Model fields
-	url = models.URLField(max_length=1500, null=False, blank=False, verbose_name="URL")
-
-	# video = models.FileField(storage=video_storage, blank=False, null=False)
-
-	def __str__(self) -> str:
-		return f"{self.episode} [{self.quality}]"
+	@property
+	def sources(self) -> List:
+		sources = cache.get(f"episode{self.pk}")
+		if not sources:
+			sources = get_sources_from_url(self.blogger_url)
+			cache.set(f"episode{self.pk}", sources, timeout=60 * 60 * 6)
+		return sources
 
 
 class CustomUser(AbstractUser):
@@ -113,3 +96,14 @@ class UserEpisodes(Model):
 	user = models.ForeignKey(CustomUser, related_name='user_episodes', on_delete=models.CASCADE)
 
 	liked = models.BooleanField(default=None, null=True, blank=True, verbose_name='Video Gostado')
+
+	def __str__(self):
+		return self.episode.__str__()
+
+
+class Report(Model):
+	classifier = models.CharField(max_length=20, null=False, blank=False, verbose_name="Classificador")
+	info = models.CharField(max_length=250, null=False, blank=False, verbose_name="Informação")
+
+	def __str__(self):
+		return f"{self.pk} - {self.classifier} [{self.info}]"
