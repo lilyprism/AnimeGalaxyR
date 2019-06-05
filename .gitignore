@@ -103,6 +103,6 @@ venv.bak/
 
 /AnimeGalaxy/static/
 /AnimeGalaxy/media/
-/nginx/
+/nginx/logs/
 anime_galaxy_r/node_modules
 .idea

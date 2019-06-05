@@ -12,6 +12,9 @@ django-cors-headers = "*"
 pillow = "*"
 django-ckeditor = "*"
 djangorestframework = "*"
+django-rest-auth = {extras = ["with_social"],version = "==0.9.5"}
+django-filter = "*"
+python-memcached = "*"
 
 [requires]
 python_version = "3.6"
