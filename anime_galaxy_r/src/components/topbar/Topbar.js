@@ -48,7 +48,7 @@ export default class Topbar extends React.Component {
                     console.log("Toggle with results open");
                     setTimeout(function () {
                         this_el.querySelector(".search-area").classList.toggle("open");
-                    }, 500);
+                    }, 300);
                 } else {
                     this.toggleSearchResults("hide");
                     this_el.querySelector(".search-area").classList.toggle("open");
@@ -59,7 +59,7 @@ export default class Topbar extends React.Component {
                     console.log("Hide searchbar with results open");
                     setTimeout(function () {
                         this_el.querySelector(".search-area").classList.remove("open");
-                    }, 500);
+                    }, 300);
                 } else {
                     console.log(this.state.results_open);
                     this.toggleSearchResults("hide");
@@ -93,7 +93,7 @@ export default class Topbar extends React.Component {
     };
 
     searchAnime = search_term => {
-        if (search_term.length >= 1) {
+        if (search_term.length >= 3) {
             this.toggleSearchResults("show");
             App.sendGetRequest(`anime/search?text=${search_term}`, false).then(res => {
                 console.log(res);
@@ -104,6 +104,8 @@ export default class Topbar extends React.Component {
             }).catch(err => {
                 // this.toggleSearchResults("hide");
             });
+        } else {
+            this.toggleSearchResults("hide");
         }
     };
 
