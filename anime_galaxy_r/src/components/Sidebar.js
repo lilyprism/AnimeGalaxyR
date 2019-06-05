@@ -17,10 +17,10 @@ class Sidebar extends React.Component {
         }
     }
 
-    handleNavItemClick() {
+    handleNavItemClick = () => {
         App.hideSidebar();
         App.loseFocus();
-    }
+    };
 
     goToRandomAnime() {
         App.sendGetRequest("anime/random", false).then(res => {

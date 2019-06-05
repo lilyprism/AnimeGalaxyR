@@ -7,7 +7,7 @@ import './sass/base.sass';
 
 import Home from "./home/Home";
 import Sidebar from "./Sidebar";
-import Topbar from "./Topbar";
+import Topbar from "./topbar/Topbar";
 import EpisodePage from "./episodepage/EpisodePage";
 import Login from "./login/Login";
 import AnimePage from "./animepage/AnimePage";
