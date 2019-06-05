@@ -44,6 +44,14 @@ export default class AnimeEpisodeList extends React.Component {
         });
     };
 
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (prevProps.anime !== this.props.anime) {
+            this.setState({current_page: 1}, () => {
+                this.getEpisodes();
+            });
+        }
+    }
+
     render() {
         if (this.state.pagination !== null) {
             let cur_page = this.state.current_page;
