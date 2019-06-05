@@ -1,5 +1,5 @@
-@import ../sass/colors
-@import ../sass/page-units
+@import sass/colors
+@import sass/page-units
 
 .card-layout
   display: flex
@@ -42,17 +42,17 @@
   @media (min-width: $breakpoint-xl)
     margin-right: 0
 
-.card:nth-of-type(n+5)
-  @media (max-width: $breakpoint-md - 1)
-    display: none
-
-.card:nth-of-type(n+7)
-  @media (min-width: $breakpoint-md) and (max-width: $breakpoint-l - 1)
-    display: none
-
-.card:nth-of-type(n+9)
-  @media (min-width: $breakpoint-l) and (max-width: $breakpoint-xl - 1)
-    display: none
+//.card:nth-of-type(n+5)
+//  @media (max-width: $breakpoint-md - 1)
+//    display: none
+//
+//.card:nth-of-type(n+7)
+//  @media (min-width: $breakpoint-md) and (max-width: $breakpoint-l - 1)
+//    display: none
+//
+//.card:nth-of-type(n+9)
+//  @media (min-width: $breakpoint-l) and (max-width: $breakpoint-xl - 1)
+//    display: none
 
 .card-body
   width: 100%
@@ -95,8 +95,8 @@
 .card-image:hover
   filter: brightness(50%)
 
-.play-icon:hover ~ .card-image
+.card-image-container:hover .card-image
   filter: brightness(50%)
 
-.card-image:hover ~ .play-icon, .play-icon:hover
+.card-image-container:hover .play-icon
   opacity: 1
