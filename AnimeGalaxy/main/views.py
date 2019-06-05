@@ -1,3 +1,4 @@
+from random import randint
 from typing import List
 
 from django.core.cache import cache
@@ -79,11 +80,13 @@ class EpisodesView(BaseMVS):
 			return Response(serializer.data, status=status.HTTP_200_OK)
 
 
+# noinspection PyMethodMayBeStatic
 class AnimeView(BaseMVS):
 	# Query options
 	queryset = Anime.objects.all()
 	serializer_class = AnimeSerializer
 	throttle_classes: List[BaseThrottle] = []
+	permission_classes: List[BasePermission] = []
 	pagination_class = StandardResultsSetPagination
 
 	def watched(self, request, *args, **kwargs):
@@ -112,6 +115,12 @@ class AnimeView(BaseMVS):
 		serializer = SimpleMultiEpisodeSerializer(queryset, context={"request": request}, many=True)
 		return Response(serializer.data, status.HTTP_200_OK)
 
+	def random(self, request, *args, **kwargs):
+		count = Anime.objects.count()
+		random_object = Anime.objects.all()[randint(0, count - 1)]
+
+		return Response({"id": random_object.pk}, status.HTTP_200_OK)
+
 
 class UrlView(BaseMVS):
 	# Query Options
@@ -124,7 +133,7 @@ class UrlView(BaseMVS):
 		if not requested_episode:
 			return Response(status=status.HTTP_404_NOT_FOUND)
 		else:
-			episodes = Episode.objects.filter(anime=requested_episode.anime, number__gte=requested_episode.number).order_by("number")[:2]
+			episodes = Episode.objects.filter(anime=requested_episode.anime, number__gte=requested_episode.number).order_by("number")[:12]
 			serializer = PlaylistSerializer(episodes, many=True, context={"request": request})
 			return Response(serializer.data, status=status.HTTP_200_OK)
 

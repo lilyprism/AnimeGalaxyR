@@ -20,6 +20,7 @@ urlpatterns = [
 	path('episode/<int:pk>', views.EpisodesView.as_view({"get": "retrieve"}), name='retrieve-episode'),
 
 	# Anime
+	path('anime/random', views.AnimeView.as_view({"get": "random"}), name="random-anime"),
 	path('anime/watched', views.AnimeView.as_view({"get": "watched"}), name="watched-anime"),
 	path('anime/latest', views.AnimeView.as_view({"get": "latest"}), name="latest-anime"),
 	path('anime/<int:pk>', views.AnimeView.as_view({"get": "retrieve"}), name="get-anime"),

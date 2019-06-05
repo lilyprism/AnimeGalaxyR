@@ -103,3 +103,5 @@ venv.bak/
 /AnimeGalaxy/static/
 /AnimeGalaxy/media/
 /nginx/
+!/nginx/
+/nginx/logs/

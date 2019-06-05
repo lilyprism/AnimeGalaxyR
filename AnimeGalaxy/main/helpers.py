@@ -22,8 +22,11 @@ def get_sources_from_url(url: str) -> List:
 
 	CONFIG_REGEX = r"VIDEO_CONFIG = .+\}"
 	response = requests.get(url)
+	try:
+		match = re.findall(CONFIG_REGEX, response.text, re.DOTALL)[0]
+	except:
+		return [{"file": url, "type": "video/mp4", "label": "SD"}]
 
-	match = re.findall(CONFIG_REGEX, response.text, re.DOTALL)[0]
 	js = json.loads(match[15:])
 
 	sources = []
