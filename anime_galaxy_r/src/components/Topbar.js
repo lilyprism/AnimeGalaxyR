@@ -1,6 +1,7 @@
 import React from 'react';
 import './sass/topbar.sass';
 import {Link} from "react-router-dom";
+import App from "./App";
 
 export default class Topbar extends React.Component {
 
@@ -30,7 +31,13 @@ export default class Topbar extends React.Component {
                 <div className="topbar-container breakpoint-container">
                     <div className="logo-burger-container">
                         <i className="fas fa-bars fa-17x icon" role="button" onClick={this.toggleSidebar} tabIndex="1"/>
-                        <Link to="/" tabIndex="3">
+                        <Link to="/" tabIndex="3"
+                              onClick={
+                                  event => {
+                                      App.hideSidebar();
+                                      App.loseFocus();
+                                  }
+                              }>
                             <img className="logo" src="/images/logo.png" alt="Logo" height="50"/>
                         </Link>
                     </div>

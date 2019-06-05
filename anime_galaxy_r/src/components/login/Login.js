@@ -1,7 +1,7 @@
 import React from 'react';
 
 import "./login.sass";
-import App from "../App";
+import {ToastsStore} from "react-toasts";
 
 export default class Login extends React.Component {
 
@@ -17,8 +17,12 @@ export default class Login extends React.Component {
     handleSubmit = event => {
         event.preventDefault();
 
-        App.login(this.state.username, this.state.password).then(res => {
-            console.log(res);
+        this.props.login(this.state.username, this.state.password).then(res => {
+            if (res) {
+                console.log(res);
+                ToastsStore.success("Entrou com sucesso");
+                this.props.history.push("/");
+            }
         });
     };
 

@@ -1,6 +1,7 @@
 import React from "react";
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import axios from 'axios';
+import {ToastsContainer, ToastsStore} from "react-toasts";
 
 import './sass/base.sass';
 
@@ -9,45 +10,67 @@ import Sidebar from "./Sidebar";
 import Topbar from "./Topbar";
 import EpisodePage from "./episodepage/EpisodePage";
 import Login from "./login/Login";
+import AnimePage from "./animepage/AnimePage";
+import ModalWindow from "./modalwindow/ModalWindow";
+import LoginModal from "./login/LoginModal";
 
 export default class App extends React.Component {
+
+    app = this;
 
     constructor(props) {
         super(props);
 
         this.state = {
-            is_logged_in: false
+            is_logged_in: App.isLoggedIn()
         };
-        App.sendGetRequest("login", true, {}).then();
     }
 
     static isLoggedIn() {
-        return this.getAuthToken() !== undefined && this.getAuthToken() !== null;
+        return this.getAuthToken() !== undefined && this.getAuthToken() !== null && this.getAuthToken() !== "Token ";
     }
 
     static getAuthToken() {
-        return localStorage.getItem("anime_galaxy_auth_token");
+        let token = localStorage.getItem("anime_galaxy_auth_token");
+
+        if (token !== null) {
+            return `Token ${localStorage.getItem("anime_galaxy_auth_token")}`;
+        } else {
+            return null;
+        }
     }
 
     static setAuthToken(value) {
         localStorage.setItem("anime_galaxy_auth_token", value);
     }
 
-    static login(username, password) {
-        return this.sendPostRequest("auth/login", {username: username, password: password}, false).then(res => {
-            console.log(res.data);
-            this.setAuthToken(res.data.key);
-            return true;
-        }).catch(res => {
-            return false;
-        });
+    static removeAuthToken() {
+        localStorage.removeItem("anime_galaxy_auth_token");
     }
 
-    static logout() {
-        this.sendGetRequest("logout", ).then(function (res) {
+    login = (username, password) => {
+        return App.sendPostRequest("auth/login", {username: username, password: password}, false).then(res => {
             console.log(res.data);
+            App.setAuthToken(res.data.key);
+            this.setState({is_logged_in: true});
+            return App.isLoggedIn();
+        }).catch(res => {
+            this.setState({is_logged_in: false});
+            return App.isLoggedIn();
         });
-    }
+    };
+
+    logout = () => {
+        return App.sendPostRequest("auth/logout", {}, true).then(res => {
+            App.removeAuthToken();
+            this.setState({is_logged_in: false});
+            return App.isLoggedIn();
+        }).catch(res => {
+            App.removeAuthToken();
+            this.setState({is_logged_in: false});
+            return App.isLoggedIn();
+        });
+    };
 
     static sendGetRequest(endpoint, authorized, config) {
         if (authorized) {
@@ -117,6 +140,10 @@ export default class App extends React.Component {
         }
     }
 
+    static loseFocus() {
+        document.activeElement.blur();
+    }
+
     //Handles Enter key presses and clicks the target element
     keyToClick(event) {
         if (event.which === 13) {
@@ -158,19 +185,31 @@ export default class App extends React.Component {
                     <div className="banner-top"/>
                     <Topbar/>
                 </header>
-                <Sidebar/>
+                <Sidebar is_logged_in={this.state.is_logged_in} logout={this.logout}/>
                 <div className="container w-100" onKeyPress={event => this.keyToClick(event)}>
                     <div className="content-wrapper h-100 w-100" onClick={App.hideSidebar}>
                         <div className="h-100 w-100 overlay position-absolute"/>
                         <section className="breakpoint-container content">
                             <Switch>
                                 <Route exact path="/" component={Home}/>
-                                <Route path="/v/:id" component={EpisodePage}/>
-                                <Route path="/login" component={Login}/>
+                                <Route path="/v/:id" render={
+                                    props =>
+                                        <EpisodePage {...props} is_logged_in={this.state.is_logged_in}/>
+                                }/>
+                                <Route path="/anime/:id" render={
+                                    props =>
+                                        <AnimePage {...props}/>
+                                }/>
+                                {/*<Route path="/login" render={*/}
+                                {/*    props =>*/}
+                                {/*        <Login {...props} login={this.login} is_logged_in={this.state.is_logged_in}/>*/}
+                                {/*}/>*/}
                             </Switch>
                         </section>
                     </div>
                 </div>
+                <ToastsContainer store={ToastsStore}/>
+                {!this.state.is_logged_in ? <LoginModal element_id={"login-modal"} login={this.login}/> : ""}
             </Router>
         );
     }
