@@ -100,8 +100,9 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
 /AnimeGalaxy/static/
 /AnimeGalaxy/media/
-/nginx/
-!/nginx/
 /nginx/logs/
+anime_galaxy_r/node_modules
+.idea

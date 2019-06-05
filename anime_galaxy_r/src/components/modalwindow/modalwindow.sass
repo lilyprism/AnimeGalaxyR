@@ -1,0 +1,78 @@
+@import ../sass/page-units
+@import ../sass/colors
+
+.modal-container
+  display: none
+  position: fixed
+  top: 0
+  right: 0
+  bottom: 0
+  left: 0
+  z-index: 18
+
+.modal-container.open
+  display: flex
+  justify-content: center
+  align-items: center
+
+.modal-overlay
+  position: absolute
+  top: 0
+  right: 0
+  bottom: 0
+  left: 0
+  background-color: rgba(0, 0, 0, 0.7)
+  z-index: 19
+
+.modal
+  color: $light-textcolor
+  position: relative
+  top: -100px
+  display: flex
+  flex-direction: column
+  max-height: 500px
+  padding: 10px
+  background-color: $background-color
+  border-radius: 10px
+  z-index: 20
+  box-shadow: 0 0 5px black
+  transition: width 0.5s
+
+  @media (max-width: $breakpoint-sm - 1)
+    max-width: 250px
+
+  @media (min-width: $breakpoint-sm)
+    max-width: 300px
+
+  @media (min-width: $breakpoint-md)
+    max-width: 500px
+
+  @media (min-width: $breakpoint-l)
+    max-width: 750px
+
+  .title
+    padding: 5px 0
+
+    span
+      border: none
+
+.modal-close-btn
+  position: absolute
+  top: 0
+  right: 0
+  margin: 20px
+  cursor: pointer
+
+.modal-close-btn:hover
+  color: lighten($background-color, 35%)
+
+.modal-header
+  padding: 5px 0
+
+.modal-body
+  border-top: 2px solid $title-border-color
+  padding: 5px 0
+
+.modal-footer
+  border-top: 2px solid $title-border-color
+  padding: 5px 0
