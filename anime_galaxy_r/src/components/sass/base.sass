@@ -27,11 +27,6 @@ img
   background-size: cover
   background-position: center center
   background-repeat: no-repeat
-  //-webkit-transition: height 0.5s
-  //-moz-transition: height 0.5s
-  //-ms-transition: height 0.5s
-  //-o-transition: height 0.5s
-  //transition: height 0.5s
 
   @media (max-width: $breakpoint-sm - 1)
     height: 0
@@ -70,6 +65,7 @@ a
   -o-transition: width 0.5s
   transition: width 0.5s
   margin: 0 auto
+  overflow: hidden
 
 .page-header
   background-color: $background-color
@@ -118,3 +114,6 @@ a
 
 ::-webkit-scrollbar-thumb:hover
   background: $scrollbar-hover-color
+  
+input[type="submit"]
+  cursor: pointer

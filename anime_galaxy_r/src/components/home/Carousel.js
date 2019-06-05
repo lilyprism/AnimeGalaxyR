@@ -2,6 +2,7 @@ import React from 'react';
 
 import './carousel.sass';
 import * as ReactDOM from "react-dom";
+import {Link} from "react-router-dom";
 
 class CarouselItem extends React.Component {
 
@@ -10,20 +11,22 @@ class CarouselItem extends React.Component {
 
         return (
             <div className="carousel-item">
-                <div className="carousel-body">
-                    <div className="carousel-title">
-                        <span>{this.props.item.title}</span>
-                    </div>
-                    <div className="carousel-desc">
-                        <div className="carousel-tags">
-                            {this.props.item.tags.map(function (tag, index) {
-                                return <span className="carousel-tag" key={index}>{tag}</span>
-                            })}
+                <Link to={`anime/${this.props.item.id}`}>
+                    <div className="carousel-body">
+                        <div className="carousel-title">
+                            <span>{this.props.item.name}</span>
                         </div>
-                        <div className="carousel-desc-text" dangerouslySetInnerHTML={desc_html}/>
+                        <div className="carousel-desc">
+                            <div className="carousel-tags">
+                                {this.props.item.genres.map(function (tag, index) {
+                                    return <span className="carousel-tag" key={index}>{tag.name}</span>
+                                })}
+                            </div>
+                            <div className="carousel-desc-text" dangerouslySetInnerHTML={desc_html}/>
+                        </div>
                     </div>
-                </div>
-                <img className="carousel-img" src={`http://via.placeholder.com/298x428?text=${this.props.index}`} alt=""/>
+                    <img className="carousel-img" src={this.props.item.image} alt=""/>
+                </Link>
             </div>
         );
     }
@@ -35,12 +38,14 @@ class CarouselItemEpisode extends React.Component {
     render() {
         return (
             <div className="carousel-item">
-                <div className="carousel-body">
-                    <div className="carousel-title">
-                        <span>{this.props.item.title}</span>
+                <Link to={`anime/${this.props.item.id}`}>
+                    <div className="carousel-body">
+                        <div className="carousel-title">
+                            <span>{this.props.item.name}</span>
+                        </div>
                     </div>
-                </div>
-                <img className="carousel-img" src={`http://via.placeholder.com/298x428?text=${this.props.index}`} alt=""/>
+                    <img className="carousel-img" src={this.props.item.image} alt=""/>
+                </Link>
             </div>
         );
     }
@@ -54,88 +59,6 @@ class Carousel extends React.Component {
 
         this.state = {
             moving: false,
-            items: [
-                {
-                    title: "Konosuba",
-                    description: "<p>After dying a laughable and pathetic death on his way back from buying a game, high school student and recluse Kazuma Satou finds himself sitting before a beautiful but obnoxious goddess named <strong>Aqua</strong>. She provides the NEET with two options: continue on to heaven or reincarnate in every gamer&#39;s dream&mdash;a real fantasy world! Choosing to start a new life, Kazuma is quickly tasked with defeating a Demon King who is terrorizing villages. But before he goes, he can choose one item of any kind to aid him in his quest, and the future hero selects Aqua. But Kazuma has made a grave mistake&mdash;<strong>Aqua </strong>is completely useless!<br /><br />Unfortunately, their troubles don&#39;t end here; it turns out that living in such a world is far different from how it plays out in a game. Instead of going on a thrilling adventure, the duo must first work to pay for their living expenses. Indeed, their misfortunes have only just begun!</p>",
-                    tags: [
-                        "Shounen",
-                        "Ecchi",
-                        "Magic",
-                        "Fantasy"
-                    ]
-                },
-                {
-                    title: "Fairy Tail",
-                    description: "An anime about a fire wizard looking for his dragon father",
-                    tags: [
-                        "Shounen",
-                        "Ecchi",
-                        "Magic",
-                        "Fantasy"
-                    ]
-                },
-                {
-                    title: "Fairy Tail",
-                    description: "An anime about a fire wizard looking for his dragon father",
-                    tags: [
-                        "Shounen",
-                        "Ecchi",
-                        "Magic",
-                        "Fantasy"
-                    ]
-                },
-                {
-                    title: "Fairy Tail",
-                    description: "An anime about a fire wizard looking for his dragon father (yes, it's an actual dragon) but ends up finding a stupid annoying bitch called Lucy",
-                    tags: [
-                        "Shounen",
-                        "Ecchi",
-                        "Magic",
-                        "Fantasy"
-                    ]
-                },
-                {
-                    title: "Fairy Tail",
-                    description: "An anime about a fire wizard looking for his dragon father",
-                    tags: [
-                        "Shounen",
-                        "Ecchi",
-                        "Magic",
-                        "Fantasy"
-                    ]
-                },
-                {
-                    title: "Fairy Tail",
-                    description: "An anime about a fire wizard looking for his dragon father",
-                    tags: [
-                        "Shounen",
-                        "Ecchi",
-                        "Magic",
-                        "Fantasy"
-                    ]
-                },
-                {
-                    title: "Fairy Tail",
-                    description: "An anime about a fire wizard looking for his dragon father",
-                    tags: [
-                        "Shounen",
-                        "Ecchi",
-                        "Magic",
-                        "Fantasy"
-                    ]
-                },
-                {
-                    title: "Fairy Tail",
-                    description: "An anime about a fire wizard looking for his dragon father",
-                    tags: [
-                        "Shounen",
-                        "Ecchi",
-                        "Magic",
-                        "Fantasy"
-                    ]
-                },
-            ],
             interval: null,
             mouseOver: false
         };
@@ -155,11 +78,13 @@ class Carousel extends React.Component {
             }
         }
 
-        //this.addAutomaticCycle();
+        if (this.props.items.length > 0) {
+            this.addAutomaticCycle();
+        }
     }
 
     componentWillUnmount() {
-        if (this.state.integrity !== null) {
+        if (this.state.interval !== null) {
             this.removeAutomaticCycle();
         }
     }
@@ -229,28 +154,53 @@ class Carousel extends React.Component {
     };
 
     render() {
-        return (
-            <div className="carousel"
-                 onMouseEnter={event => {
-                     this.setState({mouseOver: true});
-                 }}
-                 onMouseLeave={event => {
-                     this.setState({mouseOver: false});
-                 }}>
-                <div className="carousel-prev" onClick={this.moveRight}>
-                    <i className="fas fa-arrow-left fa-fw"/>
+        let carousel_items;
+        if (this.props.item_type === "CarouselItem") {
+            carousel_items = this.props.items.map(function (value, index) {
+                return <CarouselItem item={value} index={index + 1} key={index}/>
+            });
+        } else {
+            carousel_items = this.props.items.map(function (value, index) {
+                return <CarouselItemEpisode item={value} index={index + 1} key={index}/>
+            });
+        }
+        if (this.props.items.length === 0) {
+            return <div>Nada para ver aqui...</div>
+        } else if (this.props.items.length > 5) {
+            return (
+                <div className="carousel"
+                     onMouseEnter={event => {
+                         this.setState({mouseOver: true});
+                     }}
+                     onMouseLeave={event => {
+                         this.setState({mouseOver: false});
+                     }}>
+                    <div className="carousel-prev" onClick={this.moveRight}>
+                        <i className="fas fa-arrow-left fa-fw"/>
+                    </div>
+                    <div className="carousel-item-group cyclable">
+                        {carousel_items}
+                    </div>
+                    <div className="carousel-next" onClick={this.moveLeft}>
+                        <i className="fas fa-arrow-right fa-fw"/>
+                    </div>
                 </div>
-                <div className="carousel-item-group">
-                    {/*{this.state.items.map(function (value, index) {*/}
-                    {/*    return <CarouselItem item={value} index={index + 1} key={index}/>*/}
-                    {/*})}*/}
-                    {this.props.children}
+            );
+        } else {
+            return (
+                <div className="carousel"
+                     onMouseEnter={event => {
+                         this.setState({mouseOver: true});
+                     }}
+                     onMouseLeave={event => {
+                         this.setState({mouseOver: false});
+                     }}>
+                    <div className="carousel-item-group">
+                        {carousel_items}
+                    </div>
                 </div>
-                <div className="carousel-next" onClick={this.moveLeft}>
-                    <i className="fas fa-arrow-right fa-fw"/>
-                </div>
-            </div>
-        );
+            );
+        }
     }
 
 }

@@ -1,5 +1,5 @@
-@import ../sass/colors
-@import ../sass/page-units
+@import colors
+@import page-units
 
 .card-layout
   display: flex
@@ -13,9 +13,10 @@
 
   @media (max-width: $breakpoint-sm)
     margin-right: 0
+    width: 100%
 
   @media (min-width: $breakpoint-sm)
-    width: calc(100%)
+    width: 100%
     margin-right: 0
 
   @media (min-width: $breakpoint-md)
@@ -42,21 +43,22 @@
   @media (min-width: $breakpoint-xl)
     margin-right: 0
 
-.card:nth-of-type(n+5)
-  @media (max-width: $breakpoint-md - 1)
-    display: none
-
-.card:nth-of-type(n+7)
-  @media (min-width: $breakpoint-md) and (max-width: $breakpoint-l - 1)
-    display: none
-
-.card:nth-of-type(n+9)
-  @media (min-width: $breakpoint-l) and (max-width: $breakpoint-xl - 1)
-    display: none
+//.card:nth-of-type(n+5)
+//  @media (max-width: $breakpoint-md - 1)
+//    display: none
+//
+//.card:nth-of-type(n+7)
+//  @media (min-width: $breakpoint-md) and (max-width: $breakpoint-l - 1)
+//    display: none
+//
+//.card:nth-of-type(n+9)
+//  @media (min-width: $breakpoint-l) and (max-width: $breakpoint-xl - 1)
+//    display: none
 
 .card-body
   width: 100%
   position: absolute
+  z-index: 1
   padding: 5px
   border-radius: 5px 5px 0 0
   background-color: $card-bg-color
@@ -72,3 +74,30 @@
 .card-image
   width: 100%
   border-radius: 6px 6px 5px 5px
+  -webkit-transition: filter 0.5s
+  -moz-transition: filter 0.5s
+  -ms-transition: filter 0.5s
+  -o-transition: filter 0.5s
+  transition: filter 0.5s
+
+.play-icon
+  position: absolute
+  left: 50%
+  top: 50%
+  color: $light-textcolor
+  transform: translate(-50%, -50%)
+  -webkit-transition: opacity 0.5s
+  -moz-transition: opacity 0.5s
+  -ms-transition: opacity 0.5s
+  -o-transition: opacity 0.5s
+  transition: opacity 0.5s
+  opacity: 0
+
+.card-image:hover
+  filter: brightness(50%)
+
+.card-image-container:hover .card-image
+  filter: brightness(50%)
+
+.card-image-container:hover .play-icon
+  opacity: 1
