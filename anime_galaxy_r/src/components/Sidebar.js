@@ -1,13 +1,13 @@
 import React from 'react';
 
 import './sass/sidebar.sass';
-import {Link} from "react-router-dom";
+import {Link, withRouter} from "react-router-dom";
 import * as ReactDOM from "react-dom";
 import App from "./App";
 import {ToastsStore} from "react-toasts";
 import ModalWindow from "./modalwindow/ModalWindow";
 
-export default class Sidebar extends React.Component {
+class Sidebar extends React.Component {
 
     componentDidMount() {
         let sidebar_links = ReactDOM.findDOMNode(this).querySelectorAll("a");
@@ -17,9 +17,15 @@ export default class Sidebar extends React.Component {
         }
     }
 
-    handleNavItemClick() {
+    handleNavItemClick = () => {
         App.hideSidebar();
         App.loseFocus();
+    };
+
+    goToRandomAnime() {
+        App.sendGetRequest("anime/random", false).then(res => {
+            this.props.history.push(`/anime/${res.data.id}`);
+        });
     }
 
     render() {
@@ -27,14 +33,14 @@ export default class Sidebar extends React.Component {
         let register = "";
         if (!this.props.is_logged_in) {
             login_logout =
-                    <div className="sidebar-item cursor-pointer" onClick={() => {
-                        ModalWindow.openModal("login-modal");
-                        App.hideSidebar();
-                    }}>
-                        <i className="fas fa-sign-in-alt fa-fw"/> Entrar
-                    </div>;
+                <div className="sidebar-item cursor-pointer" onClick={() => {
+                    ModalWindow.openModal("login-modal");
+                    App.hideSidebar();
+                }}>
+                    <i className="fas fa-sign-in-alt fa-fw"/> Entrar
+                </div>;
             register =
-                <Link to="/register" onClick={App.handleNavItemClick}>
+                <Link to="/register" onClick={this.handleNavItemClick}>
                     <div className="sidebar-item">
                         <i className="fas fa-user-plus fa-fw"/> Registar
                     </div>
@@ -59,26 +65,27 @@ export default class Sidebar extends React.Component {
 
         return (
             <div className="sidebar sidebar-transition">
-                <Link to="/anime" onClick={App.handleNavItemClick}>
+                <Link to="/anime" onClick={this.handleNavItemClick}>
                     <div className="sidebar-item">
                         <i className="fas fa-list fa-fw"/> Anime
                     </div>
                 </Link>
-                <Link to="/top" onClick={App.handleNavItemClick}>
+                <Link to="/top" onClick={this.handleNavItemClick}>
                     <div className="sidebar-item">
                         <i className="fas fa-trophy fa-fw"/> Top
                     </div>
                 </Link>
-                <Link to="/calendar" onClick={App.handleNavItemClick}>
+                <Link to="/calendar" onClick={this.handleNavItemClick}>
                     <div className="sidebar-item">
                         <i className="fas fa-calendar-alt fa-fw"/> Calendário
                     </div>
                 </Link>
-                <Link to="/random" onClick={App.handleNavItemClick}>
-                    <div className="sidebar-item">
-                        <i className="fas fa-random fa-fw"/> Aleatório
-                    </div>
-                </Link>
+                <div className="sidebar-item" onClick={() => {
+                    this.handleNavItemClick();
+                    this.goToRandomAnime();
+                }}>
+                    <i className="fas fa-random fa-fw"/> Aleatório
+                </div>
                 <div className="login-item-container">
                     {login_logout}
                     {register}
@@ -87,4 +94,6 @@ export default class Sidebar extends React.Component {
         );
     }
 
-};
+}
+
+export default withRouter(Sidebar);

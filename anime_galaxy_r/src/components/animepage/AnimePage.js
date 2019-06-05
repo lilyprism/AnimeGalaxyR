@@ -1,7 +1,6 @@
 import React from 'react';
 import AnimeDetails from "./AnimeDetails";
 import App from "../App";
-import CardLayout from "../CardLayout";
 import AnimeEpisodeList from "./AnimeEpisodeList";
 
 export default class AnimePage extends React.Component {
@@ -22,11 +21,15 @@ export default class AnimePage extends React.Component {
         });
     };
 
-    componentDidMount() {
-
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (prevProps.match.params.id !== this.props.match.params.id) {
+            this.getEpisodeDetails();
+        }
     }
 
     render() {
+
+
         if (this.state.anime !== null) {
             return (
                 <div className="anime-page-container">

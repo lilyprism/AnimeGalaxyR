@@ -7,7 +7,7 @@ import './sass/base.sass';
 
 import Home from "./home/Home";
 import Sidebar from "./Sidebar";
-import Topbar from "./Topbar";
+import Topbar from "./topbar/Topbar";
 import EpisodePage from "./episodepage/EpisodePage";
 import Login from "./login/Login";
 import AnimePage from "./animepage/AnimePage";
@@ -196,7 +196,7 @@ export default class App extends React.Component {
                                     props =>
                                         <EpisodePage {...props} is_logged_in={this.state.is_logged_in}/>
                                 }/>
-                                <Route path="/anime/:id" render={
+                                <Route exact path="/anime/:id" render={
                                     props =>
                                         <AnimePage {...props}/>
                                 }/>

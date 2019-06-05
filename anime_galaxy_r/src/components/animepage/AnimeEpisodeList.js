@@ -44,6 +44,14 @@ export default class AnimeEpisodeList extends React.Component {
         });
     };
 
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (prevProps.anime !== this.props.anime) {
+            this.setState({current_page: 1}, () => {
+                this.getEpisodes();
+            });
+        }
+    }
+
     render() {
         if (this.state.pagination !== null) {
             let cur_page = this.state.current_page;
@@ -63,13 +71,14 @@ export default class AnimeEpisodeList extends React.Component {
                     <h1 className="title"><span>Episódios</span></h1>
                     <CardLayout card_type="EpisodeListCard" items={this.state.pagination.results} image={this.props.anime.image}/>
                     <div className="spacer"/>
-                    <div className="pagination-controls">
-                        {cur_page > 1 ? <div className="pagination-control previous-page-control" onClick={() => this.setPage(1)} tabIndex={0}><i className="fas fa-backward fa-fw"/></div> : <div className="pagination-control previous-page-control pagination-control-disabled"><i className="fas fa-backward fa-fw"/></div>}
-                        {this.state.pagination.previous !== null && this.state.pagination.previous !== undefined ? <div className="pagination-control previous-page-control" tabIndex={0} onClick={this.previousPage}><i className="fas fa-caret-left fa-fw"/></div> : <div className="pagination-control previous-page-control pagination-control-disabled"><i className="fas fa-caret-left fa-fw"/></div>}
-                        {page_controls}
-                        {this.state.pagination.next !== null && this.state.pagination.next !== undefined ? <div className="pagination-control next-page-control" tabIndex={0} onClick={this.nextPage}><i className="fas fa-caret-right fa-fw"/></div> : <div className="pagination-control next-page-control pagination-control-disabled"><i className="fas fa-caret-right fa-fw"/></div>}
-                        {cur_page < max_pages ? <div className="pagination-control previous-page-control" tabIndex={0} onClick={() => this.setPage(max_pages)}><i className="fas fa-forward fa-fw"/></div> : <div className="pagination-control previous-page-control pagination-control-disabled"><i className="fas fa-forward fa-fw"/></div>}
-                    </div>
+                    {max_pages !== 1 ?
+                        <div className="pagination-controls">
+                            {cur_page > 1 ? <div className="pagination-control previous-page-control" onClick={() => this.setPage(1)} tabIndex={0}><i className="fas fa-backward fa-fw"/></div> : <div className="pagination-control previous-page-control pagination-control-disabled"><i className="fas fa-backward fa-fw"/></div>}
+                            {this.state.pagination.previous !== null && this.state.pagination.previous !== undefined ? <div className="pagination-control previous-page-control" tabIndex={0} onClick={this.previousPage}><i className="fas fa-caret-left fa-fw"/></div> : <div className="pagination-control previous-page-control pagination-control-disabled"><i className="fas fa-caret-left fa-fw"/></div>}
+                            {page_controls}
+                            {this.state.pagination.next !== null && this.state.pagination.next !== undefined ? <div className="pagination-control next-page-control" tabIndex={0} onClick={this.nextPage}><i className="fas fa-caret-right fa-fw"/></div> : <div className="pagination-control next-page-control pagination-control-disabled"><i className="fas fa-caret-right fa-fw"/></div>}
+                            {cur_page < max_pages ? <div className="pagination-control previous-page-control" tabIndex={0} onClick={() => this.setPage(max_pages)}><i className="fas fa-forward fa-fw"/></div> : <div className="pagination-control previous-page-control pagination-control-disabled"><i className="fas fa-forward fa-fw"/></div>}
+                        </div> : ""}
                 </div>
             );
         } else {
