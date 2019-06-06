@@ -1,4 +1,5 @@
 import React from 'react';
+import {Link} from "react-router-dom";
 
 export default class SearchResultBox extends React.Component {
 
@@ -6,20 +7,11 @@ export default class SearchResultBox extends React.Component {
         return (
             <div className={this.props.results_open ? "search-result-box open" : "search-result-box"}>
                 <ul className="search-result-list">
-                    {/*{*/}
-                    {/*    this.props.results.map(function (result, index) {*/}
-                    {/*        return <li className="search-result-list-item">{result.name}</li>*/}
-                    {/*    })*/}
-                    {/*}*/}
-                    <li>Fairy Tail</li>
-                    <li>Fairy Tail</li>
-                    <li>Fairy Tail</li>
-                    <li>Fairy Tail</li>
-                    <li>Fairy Tail</li>
-                    <li>Fairy Tail</li>
-                    <li>Fairy Tail</li>
-                    <li>Fairy Tail</li>
-                    <li>Fairy Tail</li>
+                    {
+                        this.props.results.map(function (result, index) {
+                            return <Link to={`/anime/${result.id}`}><li className="search-result-list-item" key={result.id}>{result.name}</li></Link>
+                        })
+                    }
                 </ul>
             </div>
         );
