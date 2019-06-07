@@ -2,6 +2,7 @@ import React from 'react';
 // import axios from 'axios';
 
 import "./episodelist.sass";
+import {Link} from "react-router-dom";
 
 class EpisodeListItem extends React.Component {
 
@@ -15,15 +16,17 @@ class EpisodeListItem extends React.Component {
     render() {
         return (
             <li className="episode-list-item">
-                <div className="episode-list-item-body">
-                    <img className="episode-list-item-img" src={this.props.episode.thumbnail} alt="Anime thumbnail"/>
-                    {/*{this.props.selected ? <i className="fas fa-play playing-icon fa-fw"/> : ""}*/}
-                    <div className="episode-list-item-text">
-                        <p>
-                            {this.props.episode.title}
-                        </p>
+                <Link to={`/v/${this.props.episode.id}`}>
+                    <div className="episode-list-item-body">
+                        <img className="episode-list-item-img" src={this.props.episode.thumbnail} alt="Anime thumbnail"/>
+                        {/*{this.props.selected ? <i className="fas fa-play playing-icon fa-fw"/> : ""}*/}
+                        <div className="episode-list-item-text">
+                            <p>
+                                {this.props.episode.title}
+                            </p>
+                        </div>
                     </div>
-                </div>
+                </Link>
             </li>
         );
     }

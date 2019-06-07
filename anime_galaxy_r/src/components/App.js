@@ -1,6 +1,6 @@
 import React from "react";
-import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import axios from 'axios';
+import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import {ToastsContainer, ToastsStore} from "react-toasts";
 
 import './sass/base.sass';
@@ -11,11 +11,8 @@ import Topbar from "./topbar/Topbar";
 import EpisodePage from "./episodepage/EpisodePage";
 import AnimePage from "./animepage/AnimePage";
 import LoginModal from "./login/LoginModal";
-import ModalWindow from "./modalwindow/ModalWindow";
 
 export default class App extends React.Component {
-
-    app = this;
 
     constructor(props) {
         super(props);

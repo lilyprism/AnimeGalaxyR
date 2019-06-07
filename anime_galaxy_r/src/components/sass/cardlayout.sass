@@ -90,6 +90,11 @@
   background-color: $card-episode-bg-color
   color: $card-episode-color
   border: 2px solid $card-episode-border-color
+  -webkit-transition: all 0.5s
+  -moz-transition: all 0.5s
+  -ms-transition: all 0.5s
+  -o-transition: all 0.5s
+  transition: all 0.5s
 
 .play-icon
   position: absolute
@@ -104,7 +109,7 @@
   transition: opacity 0.5s
   opacity: 0
 
-.card-image-container:hover
+.card-image-container:hover, .card a:focus
   .card-image
     filter: brightness(50%)
 
@@ -114,8 +119,8 @@
     border: 2px solid $card-episode-hover-border-color
     font-weight: bold
 
-.card-image-container:hover .play-icon
+.card-image-container:hover .play-icon, .card a:focus .play-icon
   opacity: 1
 
-.card-image-container:hover
+.card-image-container:hover, .card a:focus
   opacity: 1

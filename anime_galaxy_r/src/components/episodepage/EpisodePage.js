@@ -91,6 +91,12 @@ export default class EpisodePage extends React.Component {
         this.removePlayer();
     }
 
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (prevProps.match.params.id !== this.props.match.params.id) {
+            this.getEpisode();
+        }
+    }
+
     render() {
         if (this.state.episode !== null) {
             return (
@@ -105,7 +111,7 @@ export default class EpisodePage extends React.Component {
                                                    event => {
                                                        this.setState({has_player: true});
                                                        console.log("Hey");
-                                                       window.jwplayer().addButton("http://via.placeholder.com/500.svg", "Theater Mode", function () {
+                                                       window.jwplayer().addButton("https://cdn.discordapp.com/attachments/579408811085791233/586509868408635412/Playlist.svg", "Modo de Downs", function () {
                                                            console.log("Button Clicked");
                                                            document.getElementById("player-container").classList.toggle("theater-mode");
                                                            window.jwplayer().resize();

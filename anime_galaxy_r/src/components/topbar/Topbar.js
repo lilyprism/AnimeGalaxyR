@@ -115,11 +115,8 @@ export default class Topbar extends React.Component {
             let search_icon = this_el.querySelector(".search-icon");
             let search_result_box = this_el.querySelector(".search-result-box");
 
-            document.body.addEventListener("click", event => {
-                if (!search_input_container.contains(event.target) && !search_icon.contains(event.target)) {
-                    this.toggleSearchBar("hide");
-                }
-                if (search_result_box.contains(event.target)) {
+            document.addEventListener("mousedown", event => {
+                if (!search_input_container.contains(event.target) && !search_icon.contains(event.target) && !search_result_box.contains(event.target)) {
                     this.toggleSearchBar("hide");
                 }
             });
