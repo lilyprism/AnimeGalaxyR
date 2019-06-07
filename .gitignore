@@ -50,7 +50,6 @@ coverage.xml
 *.pot
 
 # Django stuff:
-*.log
 local_settings.py
 db.sqlite3
 
@@ -106,3 +105,4 @@ venv.bak/
 !/nginx/
 /nginx/logs/
 /AnimeGalaxy/whoosh_index/
+/.idea/inspectionProfiles/Project_Default.xml

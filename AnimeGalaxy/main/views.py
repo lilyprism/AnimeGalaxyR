@@ -13,7 +13,7 @@ from rest_framework.response import Response
 from rest_framework.throttling import AnonRateThrottle, BaseThrottle, UserRateThrottle
 
 from .models import Anime, Episode, UserEpisodes
-from .paginator import StandardResultsSetPagination
+from .paginators import StandardResultsSetPagination
 from .serializers import AnimeSearchSerializer, AnimeSerializer, EpisodeCreateSerializer, LikeSerializer, MultiEpisodeSerializer, PlaylistSerializer, ReportSerializer, SimpleMultiEpisodeSerializer, SingleEpisodeSerializer
 from .throttles import LikeUserRateThrottle, ReportAnonRateThrottle, ReportUserRateThrottle
 
@@ -126,16 +126,20 @@ class AnimeView(BaseMVS):
 
 class AnimeSearchView(HaystackViewSet):
 	index_models = [Anime]
+	throttle_classes = [UserRateThrottle, AnonRateThrottle]
 
 	serializer_class = AnimeSearchSerializer
 
 	def search(self, request, *args, **kwargs):
 		text = request.query_params.get('text', None)
 
-		if not text or len(text) < 3:
+		if not text or 20 <= len(text) < 3:
 			return Response({"details": "Invalid request!"}, status.HTTP_400_BAD_REQUEST)
 
-		query = SearchQuerySet().all().autocomplete(name__fuzzy=text).models(Anime)
+		query = SearchQuerySet().all().models(Anime)
+		query1 = query.autocomplete(name__fuzzy=text)
+		query2 = query.autocomplete(genres__fuzzy=text)
+		query = query1 | query2
 
 		serializer = AnimeSearchSerializer(query, many=True, context={"request": request})
 		return Response(serializer.data, status.HTTP_200_OK)

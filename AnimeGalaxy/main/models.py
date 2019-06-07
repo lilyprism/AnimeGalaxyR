@@ -46,6 +46,10 @@ class Anime(Model):
 	thumbnail = models.ImageField(storage=thumb_storage, null=False, blank=False, default='default.jpg', verbose_name="Thumbnail")
 	description = RichTextField(null=False, blank=False, verbose_name="Descrição")
 
+	@property
+	def genre_list(self):
+		return " ".join([genre.name for genre in self.genres.all()])
+
 	def __str__(self) -> str:
 		return self.name
 
