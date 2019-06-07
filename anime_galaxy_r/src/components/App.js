@@ -9,10 +9,9 @@ import Home from "./home/Home";
 import Sidebar from "./Sidebar";
 import Topbar from "./topbar/Topbar";
 import EpisodePage from "./episodepage/EpisodePage";
-import Login from "./login/Login";
 import AnimePage from "./animepage/AnimePage";
-import ModalWindow from "./modalwindow/ModalWindow";
 import LoginModal from "./login/LoginModal";
+import ModalWindow from "./modalwindow/ModalWindow";
 
 export default class App extends React.Component {
 

@@ -16,7 +16,7 @@ export default class Home extends React.Component {
             ],
             watched_anime: []
         };
-        this.getLatestEpisodes();
+        // this.getLatestEpisodes();
         // console.log("Constructor");
     }
 
@@ -28,7 +28,7 @@ export default class Home extends React.Component {
             });
         }).catch(res => {
             console.log("Error getting the episode");
-            setTimeout(() => this.getLatestEpisodes(), 2000);
+            setTimeout(() => this.getLatestEpisodes(), 5000);
         });
     }
 
@@ -39,7 +39,7 @@ export default class Home extends React.Component {
             });
         }).catch(res => {
             console.log("Error getting the episode");
-            setTimeout(() => this.getLatestEpisodes(), 2000);
+            setTimeout(() => this.getLatestAnime(), 5000);
         });
     }
 
@@ -50,7 +50,7 @@ export default class Home extends React.Component {
             });
         }).catch(res => {
             console.log("Error getting the episode");
-            setTimeout(() => this.getLatestEpisodes(), 2000);
+            setTimeout(() => this.getWatchedAnime(), 5000);
         });
     }
 

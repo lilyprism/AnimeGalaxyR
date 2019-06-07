@@ -61,7 +61,6 @@ export default class Topbar extends React.Component {
                         this_el.querySelector(".search-area").classList.remove("open");
                     }, 300);
                 } else {
-                    console.log(this.state.results_open);
                     this.toggleSearchResults("hide");
                     this_el.querySelector(".search-area").classList.remove("open");
                 }

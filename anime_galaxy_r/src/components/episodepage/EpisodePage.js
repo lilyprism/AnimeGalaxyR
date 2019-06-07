@@ -6,6 +6,7 @@ import "./episodepage.sass";
 
 import EpisodeOptions from "./EpisodeOptions";
 import App from "../App";
+import EpisodeList from "./EpisodeList";
 
 export default class EpisodePage extends React.Component {
 
@@ -16,7 +17,7 @@ export default class EpisodePage extends React.Component {
             episode: null,
             id: null,
             has_player: false,
-            back_listener: false
+            playlist: null
         };
         this.getEpisode();
     }
@@ -39,12 +40,10 @@ export default class EpisodePage extends React.Component {
     getEpisode() {
         let url = `episode/${this.props.match.params.id}`;
         App.sendGetRequest(url, this.props.is_logged_in).then(res => {
-            this.setState({episode: res.data, id: res.data.id});
+            this.setState({episode: res.data, id: res.data.id}, () => {
+                this.getPlaylist();
+            });
         });
-    }
-
-    reloadPlaylist() {
-        window.jwplayer("player-container").load(`${process.env.REACT_APP_API_URL}/playlist/${this.state.episode.id}`);
     }
 
     getEpisodeInfo() {
@@ -56,6 +55,20 @@ export default class EpisodePage extends React.Component {
             });
             console.log(res.data);
             console.log("Getting episode info");
+        });
+    }
+
+    getPlaylist() {
+        return App.sendGetRequest(`playlist/${this.state.episode.id}`, false).then(res => {
+            this.setState({playlist: res.data}, () => {
+                return res.data;
+            });
+        });
+    }
+
+    reloadPlaylist() {
+        this.getPlaylist().then(res => {
+            window.jwplayer("player-container").load(res);
         });
     }
 
@@ -86,7 +99,7 @@ export default class EpisodePage extends React.Component {
                     <div className="player-episodes-container">
                         <div className="player-misc-wrapper">
                             <div className="player-left-wrapper">
-                                <div className="video-loading-container"></div>
+                                <div className="video-loading-container"/>
                                 <ReactJWPlayer playerId={`player-container`} playerScript="https://cdn.jwplayer.com/libraries/7OxfLofq.js" playlist={`${process.env.REACT_APP_API_URL}/playlist/${this.state.id}`}
                                                onReady={
                                                    event => {
@@ -129,7 +142,7 @@ export default class EpisodePage extends React.Component {
                             </div>
                         </div>
                         <div className="episode-list-container">
-                            {/*<EpisodeList/>*/}
+                            <EpisodeList playlist={this.state.playlist} episode={this.state.episode}/>
                         </div>
                     </div>
                 </div>

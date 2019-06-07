@@ -108,6 +108,7 @@ export default class EpisodeOptions extends React.Component {
                 <div className="options-container">
                     {this.props.is_logged_in ? <LikeDislike episode={this.props.episode} sendLike={this.props.sendLike}/> : ""}
                     <Report episode={this.props.episode}/>
+                    <span className="episode-option">{this.props.episode.views} Views</span>
                 </div>
             </div>
         );

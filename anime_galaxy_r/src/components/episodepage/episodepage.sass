@@ -1,3 +1,5 @@
+@import ../sass/page-units
+
 .player-episodes-container
   flex-shrink: 1
   display: flex
@@ -7,9 +9,21 @@
   width: 75%
   height: 100%
 
+  @media (max-width: $breakpoint-l - 1)
+    width: 100%
+    padding: 0
+
 .episode-list-container
+  position: relative
   width: 25%
-  padding-left: 25px
+  padding-bottom: calc(9/(16/3) * 25%)
+  height: 0
+
+  @media (max-width: $breakpoint-l - 1)
+    width: 100%
+    padding: 0
+    margin-top: 20px
+    height: 500px
 
 .video-loading-container
   width: 100%
@@ -18,6 +32,7 @@
 
 #player-container.theater-mode
   position: fixed
+  z-index: 9
   top: 0
   bottom: 0
   left: 0
