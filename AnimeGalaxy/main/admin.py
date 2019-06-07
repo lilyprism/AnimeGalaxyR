@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Anime, CustomUser, Episode, Genre, Report, UserEpisodes
+from .models import Anime, CustomUser, Episode, Genre, Report
 
 
 @admin.register(Genre)
@@ -44,20 +44,8 @@ class EpisodeAdmin(admin.ModelAdmin):
 	)
 
 
-class EpisodeInline(admin.TabularInline):
-	model = UserEpisodes
-	extra = 1
-
-	def get_queryset(self, request):
-		queryset = UserEpisodes.objects.order_by("episode__anime", "-episode__number")
-		if not self.has_view_or_change_permission(request):
-			queryset = queryset.none()
-		return queryset
-
-
 @admin.register(CustomUser)
 class CustomUserAdmin(admin.ModelAdmin):
-	inlines = [EpisodeInline]
 
 	fieldsets = (
 		('Configurações Gerais', {

@@ -105,3 +105,4 @@ venv.bak/
 /nginx/
 !/nginx/
 /nginx/logs/
+/AnimeGalaxy/whoosh_index/

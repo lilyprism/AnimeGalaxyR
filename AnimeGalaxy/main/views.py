@@ -2,6 +2,8 @@ from random import randint
 from typing import List
 
 from django.core.cache import cache
+from drf_haystack.viewsets import HaystackViewSet
+from haystack.query import SearchQuerySet
 from rest_framework import status, viewsets
 from rest_framework.decorators import api_view, permission_classes, throttle_classes
 from rest_framework.exceptions import ValidationError
@@ -12,7 +14,7 @@ from rest_framework.throttling import AnonRateThrottle, BaseThrottle, UserRateTh
 
 from .models import Anime, Episode, UserEpisodes
 from .paginator import StandardResultsSetPagination
-from .serializers import AnimeSerializer, EpisodeCreateSerializer, LikeSerializer, MultiEpisodeSerializer, PlaylistSerializer, ReportSerializer, SimpleMultiEpisodeSerializer, SingleEpisodeSerializer
+from .serializers import AnimeSearchSerializer, AnimeSerializer, EpisodeCreateSerializer, LikeSerializer, MultiEpisodeSerializer, PlaylistSerializer, ReportSerializer, SimpleMultiEpisodeSerializer, SingleEpisodeSerializer
 from .throttles import LikeUserRateThrottle, ReportAnonRateThrottle, ReportUserRateThrottle
 
 
@@ -120,6 +122,23 @@ class AnimeView(BaseMVS):
 		random_object = Anime.objects.all()[randint(0, count - 1)]
 
 		return Response({"id": random_object.pk}, status.HTTP_200_OK)
+
+
+class AnimeSearchView(HaystackViewSet):
+	index_models = [Anime]
+
+	serializer_class = AnimeSearchSerializer
+
+	def search(self, request, *args, **kwargs):
+		text = request.query_params.get('text', None)
+
+		if not text or len(text) < 3:
+			return Response({"details": "Invalid request!"}, status.HTTP_400_BAD_REQUEST)
+
+		query = SearchQuerySet().all().autocomplete(name__fuzzy=text).models(Anime)
+
+		serializer = AnimeSearchSerializer(query, many=True, context={"request": request})
+		return Response(serializer.data, status.HTTP_200_OK)
 
 
 class UrlView(BaseMVS):

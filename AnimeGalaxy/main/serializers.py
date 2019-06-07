@@ -1,3 +1,4 @@
+from drf_haystack.serializers import HaystackSerializerMixin
 from rest_auth.registration.serializers import RegisterSerializer
 from rest_framework import serializers
 
@@ -86,15 +87,21 @@ class EpisodeCreateSerializer(serializers.ModelSerializer):
 class PlaylistSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Episode
-		fields = ['id', 'title', 'description', 'image', 'sources']
+		fields = ['id', 'title', 'description', 'image', 'thumbnail', 'sources']
 
 	description = serializers.CharField(max_length=5000, source='anime.description')
 	title = serializers.CharField(max_length=250, source='__str__')
 	image = serializers.SerializerMethodField()
+	thumbnail = serializers.SerializerMethodField()
 
 	def get_image(self, episode):
 		request = self.context.get('request')
 		image_url = episode.anime.thumbnail.url
+		return request.build_absolute_uri(image_url)
+
+	def get_thumbnail(self, episode):
+		request = self.context.get('request')
+		image_url = episode.anime.image.url
 		return request.build_absolute_uri(image_url)
 
 
@@ -112,3 +119,16 @@ class ReportSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Report
 		fields = '__all__'
+
+
+class SimpleAnimeSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = Anime
+		fields = ["id", "name", "genres", "image"]
+
+	genres = GenreSerializer(many=True)
+
+
+class AnimeSearchSerializer(HaystackSerializerMixin, SimpleAnimeSerializer):
+	class Meta(SimpleAnimeSerializer.Meta):
+		search_fields = ("name",)
