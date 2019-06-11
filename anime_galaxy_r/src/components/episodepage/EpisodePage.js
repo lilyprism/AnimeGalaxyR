@@ -7,6 +7,7 @@ import "./episodepage.sass";
 import EpisodeOptions from "./EpisodeOptions";
 import App from "../App";
 import EpisodeList from "./EpisodeList";
+import CommentSection from "./CommentSection";
 
 export default class EpisodePage extends React.Component {
 
@@ -17,7 +18,8 @@ export default class EpisodePage extends React.Component {
             episode: null,
             id: null,
             has_player: false,
-            playlist: null
+            playlist: null,
+            comments: []
         };
         this.getEpisode();
     }
@@ -42,6 +44,7 @@ export default class EpisodePage extends React.Component {
         App.sendGetRequest(url, this.props.is_logged_in).then(res => {
             this.setState({episode: res.data, id: res.data.id}, () => {
                 this.getPlaylist();
+                this.getComments();
             });
         });
     }
@@ -52,6 +55,7 @@ export default class EpisodePage extends React.Component {
         App.sendGetRequest(url, this.props.is_logged_in).then(res => {
             this.setState({episode: res.data}, () => {
                 this.reloadPlaylist();
+                this.getComments();
             });
             console.log(res.data);
             console.log("Getting episode info");
@@ -77,6 +81,12 @@ export default class EpisodePage extends React.Component {
             console.log("Video Removed");
             window.jwplayer("player-container").remove();
         }
+    };
+
+    getComments = () => {
+        App.sendGetRequest(`episode/${this.state.episode.id}/comments`, false).then(res => {
+            this.setState({comments: res.data});
+        });
     };
 
     componentDidMount() {
@@ -110,10 +120,10 @@ export default class EpisodePage extends React.Component {
                                                onReady={
                                                    event => {
                                                        this.setState({has_player: true});
-                                                       console.log("Hey");
-                                                       window.jwplayer().addButton("https://cdn.discordapp.com/attachments/579408811085791233/586509868408635412/Playlist.svg", "Modo de Downs", function () {
+                                                       window.jwplayer().addButton("/images/cortinas_down.svg", "Modo de Downs", function () {
                                                            console.log("Button Clicked");
                                                            document.getElementById("player-container").classList.toggle("theater-mode");
+                                                           document.getElementById("app").classList.toggle("overflow-hidden");
                                                            window.jwplayer().resize();
                                                        });
 
@@ -132,15 +142,7 @@ export default class EpisodePage extends React.Component {
                                                }
                                                onError={
                                                    event => {
-                                                       if (event.code === 224003) {
-                                                           if (localStorage.getItem("jwplayer.qualityLabel") === "HD") {
-                                                               localStorage.setItem("jwplayer.qualityLabel", "SD");
-                                                           } else if (localStorage.getItem("jwplayer.qualityLabel") === "SD") {
-                                                               localStorage.setItem("jwplayer.qualityLabel", "HD");
-                                                           } else {
-                                                               localStorage.setItem("jwplayer.qualityLabel", "SD");
-                                                           }
-                                                       }
+                                                       console.log("Error Loading the Video");
                                                    }
                                                }
                                 />
@@ -151,6 +153,7 @@ export default class EpisodePage extends React.Component {
                             <EpisodeList playlist={this.state.playlist} episode={this.state.episode}/>
                         </div>
                     </div>
+                    <CommentSection getComments={this.getComments} episode={this.state.episode} comments={this.state.comments} is_logged_in={this.props.is_logged_in}/>
                 </div>
             );
         } else {

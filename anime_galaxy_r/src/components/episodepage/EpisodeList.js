@@ -35,10 +35,6 @@ class EpisodeListItem extends React.Component {
 
 export default class EpisodeList extends React.Component {
 
-    constructor(props) {
-        super(props);
-    }
-
     render() {
         if (this.props.playlist !== null) {
             return (

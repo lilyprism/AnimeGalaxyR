@@ -17,12 +17,17 @@ $item-margin-bottom: 10px
 
   @media (max-width: $breakpoint-l - 1)
     padding-left: 0
+    position: static
+    overflow-y: auto
 
 .episode-list-item
   height: calc((100% - #{$item-margin-bottom} * #{$visible-episodes - 1}) / #{$visible-episodes})
   margin-bottom: $item-margin-bottom
   display: block
   list-style-type: none
+
+  @media (max-width: $breakpoint-l - 1)
+    height: calc((500px - #{$item-margin-bottom} * #{$visible-episodes - 1}) / #{$visible-episodes})
 
 .episode-list-item:last-child
   margin-bottom: 0

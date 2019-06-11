@@ -80,8 +80,9 @@ class Sidebar extends React.Component {
                         <i className="fas fa-calendar-alt fa-fw"/> Calendário
                     </div>
                 </Link>
-                <a
-                    onClick={() => {
+                <a href={"/random"}
+                    onClick={event => {
+                        event.preventDefault();
                         this.handleNavItemClick();
                         this.goToRandomAnime();
                     }}
