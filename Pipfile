@@ -17,6 +17,8 @@ django-filter = "*"
 python-memcached = "*"
 drf-haystack = "*"
 pysolr = "*"
+django-mptt = "*"
+djangorestframework-recursive = "*"
 
 [requires]
 python_version = "3.6"

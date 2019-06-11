@@ -10,6 +10,8 @@ from django.core.validators import MinValueValidator
 from django.db import models
 from django.db.models import Model
 from django.utils import timezone
+from mptt.fields import TreeForeignKey
+from mptt.models import MPTTModel
 
 from .helpers import get_sources_from_url
 
@@ -111,3 +113,15 @@ class Report(Model):
 
 	def __str__(self):
 		return f"{self.pk} - {self.classifier} [{self.info}]"
+
+
+class Comment(MPTTModel):
+	episode = models.ForeignKey(Episode, related_name="comments", on_delete=models.CASCADE)
+
+	user = models.ForeignKey(CustomUser, related_name="comments", on_delete=models.CASCADE)
+	text = models.CharField(max_length=2500, null=False, blank=False, verbose_name="Conteudo")
+
+	parent = TreeForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name="children")
+
+	def __str__(self):
+		return f"{self.user} - {self.id}"

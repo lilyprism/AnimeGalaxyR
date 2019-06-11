@@ -1,8 +1,9 @@
 from drf_haystack.serializers import HaystackSerializerMixin
 from rest_auth.registration.serializers import RegisterSerializer
 from rest_framework import serializers
+from rest_framework_recursive.fields import RecursiveField
 
-from .models import Anime, CustomUser, Episode, Genre, Report, UserEpisodes
+from .models import Anime, Comment, CustomUser, Episode, Genre, Report, UserEpisodes
 
 
 class CustomRegisterSerializer(RegisterSerializer):
@@ -132,3 +133,11 @@ class SimpleAnimeSerializer(serializers.ModelSerializer):
 class AnimeSearchSerializer(HaystackSerializerMixin, SimpleAnimeSerializer):
 	class Meta(SimpleAnimeSerializer.Meta):
 		search_fields = ("name",)
+
+
+class CommentSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = Comment
+		fields = ['id', 'user', 'text', 'replies']
+
+	replies = serializers.ListSerializer(child=RecursiveField(), source="children", read_only=True)

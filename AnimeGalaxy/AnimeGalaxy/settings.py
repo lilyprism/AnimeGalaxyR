@@ -46,8 +46,11 @@ INSTALLED_APPS = [
 	'django.contrib.messages',
 	'django.contrib.staticfiles',
 
+	'mptt',
+
 	# Rest Framework Apps
 	'rest_framework',
+	'rest_framework_recursive',
 	'rest_framework.authtoken',
 	'rest_auth',
 	'allauth',

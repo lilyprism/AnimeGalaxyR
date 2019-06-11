@@ -14,7 +14,7 @@ from rest_framework.throttling import AnonRateThrottle, BaseThrottle, UserRateTh
 
 from .models import Anime, Episode, UserEpisodes
 from .paginators import StandardResultsSetPagination
-from .serializers import AnimeSearchSerializer, AnimeSerializer, EpisodeCreateSerializer, LikeSerializer, MultiEpisodeSerializer, PlaylistSerializer, ReportSerializer, SimpleMultiEpisodeSerializer, SingleEpisodeSerializer
+from .serializers import AnimeSearchSerializer, AnimeSerializer, CommentSerializer, EpisodeCreateSerializer, LikeSerializer, MultiEpisodeSerializer, PlaylistSerializer, ReportSerializer, SimpleMultiEpisodeSerializer, SingleEpisodeSerializer
 from .throttles import LikeUserRateThrottle, ReportAnonRateThrottle, ReportUserRateThrottle
 
 
@@ -79,6 +79,15 @@ class EpisodesView(BaseMVS):
 
 			# Send episode information
 			serializer = SingleEpisodeSerializer(queryset, many=False, context={'request': request})
+			return Response(serializer.data, status=status.HTTP_200_OK)
+
+	def comments(self, request, pk=None, *args, **kwargs):
+		queryset = get_object_or_404(Episode, id=pk)
+		if not queryset:
+			return Response(status=status.HTTP_400_BAD_REQUEST)
+		else:
+			# Send episode information
+			serializer = CommentSerializer(queryset.comments.filter(parent=None), many=True)
 			return Response(serializer.data, status=status.HTTP_200_OK)
 
 
