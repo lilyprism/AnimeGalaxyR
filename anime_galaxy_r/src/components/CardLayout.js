@@ -11,12 +11,15 @@ class LatestEpisodeCard extends React.Component {
                 <Link to={`/v/${this.props.item.id}`}>
                     <div className="card-body">
                         <div className="card-title">
-                            <span>{this.props.item.anime.name} - {this.props.item.number}</span>
+                            <span>{this.props.item.anime.name}</span>
                         </div>
                     </div>
                     <div className="card-image-container">
                         <img className="card-image" src={this.props.item.anime.image} alt="Card"/>
-                        <i className="fas fa-play play-icon"/>
+                        <span className="card-episode-number">
+                            EP {this.props.item.number}
+                        </span>
+                        <i className="fas fa-play play-icon fa-fw"/>
                     </div>
                 </Link>
             </div>

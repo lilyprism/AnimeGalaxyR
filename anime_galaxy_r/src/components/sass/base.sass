@@ -45,13 +45,14 @@ img
 
 a
   text-decoration: none
+  color: $light-text-color
 
 .breakpoint-container
   @media (max-width: $breakpoint-md - 1)
     width: 100%
 
   @media (min-width: $breakpoint-md)
-    width: 500px
+    width: 550px
 
   @media (min-width: $breakpoint-l)
     width: 820px
@@ -80,7 +81,7 @@ a
 .content-wrapper
   position: relative
   background: $content-gradient
-  color: $light-textcolor
+  color: $light-text-color
 
 .overlay
   width: 0
@@ -117,3 +118,20 @@ a
   
 input[type="submit"]
   cursor: pointer
+
+
+.btn
+  padding: 10px 20px
+  background: $icon-hover-color
+  width: 100%
+  border: 0
+  border-radius: 5px
+  color: $light-text-color
+
+.mini-btn
+  padding: 5px 10px
+  background: $icon-hover-color
+  width: 100%
+  border: 0
+  border-radius: 5px
+  color: $light-text-color

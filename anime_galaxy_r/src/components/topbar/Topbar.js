@@ -61,7 +61,6 @@ export default class Topbar extends React.Component {
                         this_el.querySelector(".search-area").classList.remove("open");
                     }, 300);
                 } else {
-                    console.log(this.state.results_open);
                     this.toggleSearchResults("hide");
                     this_el.querySelector(".search-area").classList.remove("open");
                 }
@@ -83,29 +82,28 @@ export default class Topbar extends React.Component {
             } else if (value === "hide") {
                 this.setState({results_open: false});
                 search_result_box.classList.remove("open");
-                search_result_box.style.height = "0";
             } else if (value === "show") {
                 this.setState({results_open: true});
                 search_result_box.classList.add("open");
-                search_result_box.style.height = `${search_result_box.scrollHeight}px`;
             }
         }
     };
 
     searchAnime = search_term => {
         if (search_term.length >= 3) {
-            this.toggleSearchResults("show");
+            // this.toggleSearchResults("hide", false);
             App.sendGetRequest(`anime/search?text=${search_term}`, false).then(res => {
-                console.log(res);
                 this.setState({search_results: res.data}, () => {
                     this.toggleSearchResults("show");
                 });
                 console.log(res.data);
             }).catch(err => {
-                // this.toggleSearchResults("hide");
+                this.setState({search_results: []});
+                this.toggleSearchResults("hide");
             });
         } else {
             this.toggleSearchResults("hide");
+            this.setState({search_results: []});
         }
     };
 
@@ -115,9 +113,10 @@ export default class Topbar extends React.Component {
         if (this_el instanceof HTMLElement) {
             let search_input_container = this_el.querySelector(".search-input-container");
             let search_icon = this_el.querySelector(".search-icon");
+            let search_result_box = this_el.querySelector(".search-result-box");
 
-            document.body.addEventListener("click", event => {
-                if (!search_input_container.contains(event.target) && !search_icon.contains(event.target)) {
+            document.addEventListener("mousedown", event => {
+                if (!search_input_container.contains(event.target) && !search_icon.contains(event.target) && !search_result_box.contains(event.target)) {
                     this.toggleSearchBar("hide");
                 }
             });

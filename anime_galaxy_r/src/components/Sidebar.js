@@ -80,12 +80,22 @@ class Sidebar extends React.Component {
                         <i className="fas fa-calendar-alt fa-fw"/> Calendário
                     </div>
                 </Link>
-                <div className="sidebar-item" onClick={() => {
-                    this.handleNavItemClick();
-                    this.goToRandomAnime();
-                }}>
-                    <i className="fas fa-random fa-fw"/> Aleatório
-                </div>
+                <a href={"/random"}
+                    onClick={event => {
+                        event.preventDefault();
+                        this.handleNavItemClick();
+                        this.goToRandomAnime();
+                    }}
+                    onKeyPress={event => {
+                        if (event.which === 13) {
+                            event.target.click();
+                        }
+                    }}
+                >
+                    <div className="sidebar-item">
+                        <i className="fas fa-random fa-fw"/> Aleatório
+                    </div>
+                </a>
                 <div className="login-item-container">
                     {login_logout}
                     {register}

@@ -19,10 +19,15 @@
     padding-left: 0
     padding-right: 25px
 
+.episode-option:hover
+  color: $icon-hover-color
+
+.episode-option.chosen
+  color: $secondary-color
+
 .episode-options-container .title
   flex-grow: 1
   padding: 0 0 20px 0
-
 
 .option-dropdown-container
   display: none
@@ -46,12 +51,6 @@
 
 .option-dropdown > .episode-option
   padding: 5px
-
-.episode-option:hover
-  color: $icon-hover-color
-
-.episode-option.chosen
-  color: $secondary-color
 
 .like-dislike-container
   display: flex

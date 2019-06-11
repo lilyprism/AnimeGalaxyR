@@ -6,6 +6,8 @@ import "./episodepage.sass";
 
 import EpisodeOptions from "./EpisodeOptions";
 import App from "../App";
+import EpisodeList from "./EpisodeList";
+import CommentSection from "./CommentSection";
 
 export default class EpisodePage extends React.Component {
 
@@ -16,7 +18,8 @@ export default class EpisodePage extends React.Component {
             episode: null,
             id: null,
             has_player: false,
-            back_listener: false
+            playlist: null,
+            comments: []
         };
         this.getEpisode();
     }
@@ -39,12 +42,11 @@ export default class EpisodePage extends React.Component {
     getEpisode() {
         let url = `episode/${this.props.match.params.id}`;
         App.sendGetRequest(url, this.props.is_logged_in).then(res => {
-            this.setState({episode: res.data, id: res.data.id});
+            this.setState({episode: res.data, id: res.data.id}, () => {
+                this.getPlaylist();
+                this.getComments();
+            });
         });
-    }
-
-    reloadPlaylist() {
-        window.jwplayer("player-container").load(`${process.env.REACT_APP_API_URL}/playlist/${this.state.episode.id}`);
     }
 
     getEpisodeInfo() {
@@ -53,9 +55,24 @@ export default class EpisodePage extends React.Component {
         App.sendGetRequest(url, this.props.is_logged_in).then(res => {
             this.setState({episode: res.data}, () => {
                 this.reloadPlaylist();
+                this.getComments();
             });
             console.log(res.data);
             console.log("Getting episode info");
+        });
+    }
+
+    getPlaylist() {
+        return App.sendGetRequest(`playlist/${this.state.episode.id}`, false).then(res => {
+            this.setState({playlist: res.data}, () => {
+                return res.data;
+            });
+        });
+    }
+
+    reloadPlaylist() {
+        this.getPlaylist().then(res => {
+            window.jwplayer("player-container").load(res);
         });
     }
 
@@ -64,6 +81,12 @@ export default class EpisodePage extends React.Component {
             console.log("Video Removed");
             window.jwplayer("player-container").remove();
         }
+    };
+
+    getComments = () => {
+        App.sendGetRequest(`episode/${this.state.episode.id}/comments`, false).then(res => {
+            this.setState({comments: res.data});
+        });
     };
 
     componentDidMount() {
@@ -78,6 +101,12 @@ export default class EpisodePage extends React.Component {
         this.removePlayer();
     }
 
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (prevProps.match.params.id !== this.props.match.params.id) {
+            this.getEpisode();
+        }
+    }
+
     render() {
         if (this.state.episode !== null) {
             return (
@@ -86,15 +115,15 @@ export default class EpisodePage extends React.Component {
                     <div className="player-episodes-container">
                         <div className="player-misc-wrapper">
                             <div className="player-left-wrapper">
-                                <div className="video-loading-container"></div>
+                                <div className="video-loading-container"/>
                                 <ReactJWPlayer playerId={`player-container`} playerScript="https://cdn.jwplayer.com/libraries/7OxfLofq.js" playlist={`${process.env.REACT_APP_API_URL}/playlist/${this.state.id}`}
                                                onReady={
                                                    event => {
                                                        this.setState({has_player: true});
-                                                       console.log("Hey");
-                                                       window.jwplayer().addButton("http://via.placeholder.com/500.svg", "Theater Mode", function () {
+                                                       window.jwplayer().addButton("/images/cortinas_down.svg", "Modo de Downs", function () {
                                                            console.log("Button Clicked");
                                                            document.getElementById("player-container").classList.toggle("theater-mode");
+                                                           document.getElementById("app").classList.toggle("overflow-hidden");
                                                            window.jwplayer().resize();
                                                        });
 
@@ -113,15 +142,7 @@ export default class EpisodePage extends React.Component {
                                                }
                                                onError={
                                                    event => {
-                                                       if (event.code === 224003) {
-                                                           if (localStorage.getItem("jwplayer.qualityLabel") === "HD") {
-                                                               localStorage.setItem("jwplayer.qualityLabel", "SD");
-                                                           } else if (localStorage.getItem("jwplayer.qualityLabel") === "SD") {
-                                                               localStorage.setItem("jwplayer.qualityLabel", "HD");
-                                                           } else {
-                                                               localStorage.setItem("jwplayer.qualityLabel", "SD");
-                                                           }
-                                                       }
+                                                       console.log("Error Loading the Video");
                                                    }
                                                }
                                 />
@@ -129,9 +150,10 @@ export default class EpisodePage extends React.Component {
                             </div>
                         </div>
                         <div className="episode-list-container">
-                            {/*<EpisodeList/>*/}
+                            <EpisodeList playlist={this.state.playlist} episode={this.state.episode}/>
                         </div>
                     </div>
+                    <CommentSection getComments={this.getComments} episode={this.state.episode} comments={this.state.comments} is_logged_in={this.props.is_logged_in}/>
                 </div>
             );
         } else {

@@ -1,8 +1,10 @@
 import React from "react";
-import ModalWindow from "../modalwindow/ModalWindow";
+import {ToastsStore} from "react-toasts";
 
 import "../modalwindow/modalwindow.sass";
-import {ToastsStore} from "react-toasts";
+import "./login.sass";
+
+import ModalWindow from "../modalwindow/ModalWindow";
 
 export default class LoginModal extends ModalWindow {
 
