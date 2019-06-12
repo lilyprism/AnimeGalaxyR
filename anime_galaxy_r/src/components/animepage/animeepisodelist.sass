@@ -1,0 +1,24 @@
+@import ../sass/colors
+
+.pagination-controls
+  display: flex
+  justify-content: center
+
+.pagination-control
+  padding: 5px
+  background-color: $page-control-color
+  color: $light-text-color
+  cursor: pointer
+  margin: 1px
+  border-radius: 5px
+  border: 2px solid $page-control-border-color
+  min-width: 33px
+  text-align: center
+
+.pagination-control-disabled
+  color: darken($light-text-color, 35%)
+  background-color: lighten($page-control-color, 15%)
+  cursor: initial
+
+.current-page
+  background: $current-page-color
