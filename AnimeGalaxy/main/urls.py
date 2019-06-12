@@ -18,11 +18,14 @@ urlpatterns = [
 	path('episode/like', views.LikeView.as_view({"post": "update"}), name="like-video"),
 	path('episode/latest', views.EpisodesView.as_view({"get": "list", "post": "create"}), name='list-episodes'),
 	path('episode/<int:pk>', views.EpisodesView.as_view({"get": "retrieve"}), name='retrieve-episode'),
+	path('episode/<int:pk>/comments', views.EpisodesView.as_view({"get": "comments"}), name="episode-comments"),
+	path('episode/<int:pk>/comment', views.EpisodesView.as_view({"post": "comment"}), name="episode-comment"),
 
 	# Anime
+	path('anime/search', views.AnimeSearchView.as_view({"get": "search"}), name="search-anime"),
 	path('anime/random', views.AnimeView.as_view({"get": "random"}), name="random-anime"),
-	path('anime/watched', views.AnimeView.as_view({"get": "watched"}), name="watched-anime"),
 	path('anime/latest', views.AnimeView.as_view({"get": "latest"}), name="latest-anime"),
+	path('anime/watched', views.AnimeView.as_view({"get": "watched"}), name="watched-anime"),
 	path('anime/<int:pk>', views.AnimeView.as_view({"get": "retrieve"}), name="get-anime"),
 	path('anime/<int:pk>/episodes', views.AnimeView.as_view({"get": "episodes"}), name="episodes/anime"),
 

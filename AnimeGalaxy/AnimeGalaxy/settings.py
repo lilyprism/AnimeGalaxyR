@@ -25,30 +25,17 @@ SECRET_KEY = 'i1q=0s0hx)f*aysw)z8clqul%8-^+cp%vtn6vb1r0itlx2d_sg'
 DEBUG = True
 
 ALLOWED_HOSTS = [
-	'172.16.0.62',
-	'localhost'
+	'*'
 ]
 
 # Application definition
 
 INSTALLED_APPS = [
-	'main.apps.MainConfig',
-
 	# Security Apps
 	'corsheaders',
 
 	# CKEditor Support
 	'ckeditor',
-
-	# Rest Framework Apps
-	'rest_framework',
-	'rest_framework.authtoken',
-	'rest_auth',
-	'allauth',
-	'allauth.account',
-	'allauth.socialaccount',
-	'rest_auth.registration',
-	'django_filters',
 
 	# Django Apps
 	'django.contrib.admin',
@@ -58,6 +45,24 @@ INSTALLED_APPS = [
 	'django.contrib.sessions',
 	'django.contrib.messages',
 	'django.contrib.staticfiles',
+
+	'mptt',
+
+	# Rest Framework Apps
+	'rest_framework',
+	'rest_framework_recursive',
+	'rest_framework.authtoken',
+	'rest_auth',
+	'allauth',
+	'allauth.account',
+	'allauth.socialaccount',
+	'rest_auth.registration',
+	'django_filters',
+
+	# Haystack
+	'haystack',
+
+	'main.apps.MainConfig',
 ]
 
 MIDDLEWARE = [
@@ -154,12 +159,26 @@ REST_AUTH_REGISTER_SERIALIZERS = {
 
 SITE_ID = 1
 
+# Cache configuration
 CACHES = {
 	'default': {
 		'BACKEND' : 'django.core.cache.backends.memcached.MemcachedCache',
 		'LOCATION': '127.0.0.1:11211',
 		'TIMEOUT' : 30
 	}
+}
+
+# Haystack configuration
+HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
+HAYSTACK_FUZZY_MIN_SIM = 0.2
+HAYSTACK_CONNECTIONS = {
+	'default': {
+		'INCLUDE_SPELLING': True,
+		'ENGINE'          : 'haystack.backends.solr_backend.SolrEngine',
+		'URL'             : 'http://127.0.0.1:8983/solr/tester',
+		'ADMIN_URL'       : 'http://127.0.0.1:8983/solr/admin/cores',
+		'INDEX_NAME'      : 'haystack',
+	},
 }
 
 # Internationalization
