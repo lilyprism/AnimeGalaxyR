@@ -11,8 +11,11 @@ import Topbar from "./topbar/Topbar";
 import EpisodePage from "./episodepage/EpisodePage";
 import AnimePage from "./animepage/AnimePage";
 import LoginModal from "./login/LoginModal";
+import RequestUtilities from "../util/RequestUtilities";
 
 export default class App extends React.Component {
+
+    static app_instance;
 
     constructor(props) {
         super(props);
@@ -20,10 +23,12 @@ export default class App extends React.Component {
         this.state = {
             is_logged_in: App.isLoggedIn()
         };
+        App.app_instance = this;
+        RequestUtilities.setAppInstance(this);
     }
 
     static isLoggedIn() {
-        return this.getAuthToken() !== undefined && this.getAuthToken() !== null && this.getAuthToken() !== "Token ";
+        return this.getAuthToken() !== undefined && this.getAuthToken() !== "Token ";
     }
 
     static getAuthToken() {
@@ -45,7 +50,7 @@ export default class App extends React.Component {
     }
 
     login = (username, password) => {
-        return App.sendPostRequest("auth/login", {username: username, password: password}, false).then(res => {
+        return RequestUtilities.sendPostRequest("auth/login", {username: username, password: password}, false).then(res => {
             console.log(res.data);
             App.setAuthToken(res.data.key);
             this.setState({is_logged_in: true});
@@ -57,7 +62,7 @@ export default class App extends React.Component {
     };
 
     logout = () => {
-        return App.sendPostRequest("auth/logout", {}, true).then(res => {
+        return RequestUtilities.sendPostRequest("auth/logout", {}, true).then(res => {
             App.removeAuthToken();
             this.setState({is_logged_in: false});
             return App.isLoggedIn();
@@ -67,63 +72,6 @@ export default class App extends React.Component {
             return App.isLoggedIn();
         });
     };
-
-    static sendGetRequest(endpoint, authorized, config) {
-        if (authorized) {
-            if (config !== undefined) {
-                if (config.headers === undefined) {
-                    config.headers = {};
-                }
-                config.headers.Authorization = this.getAuthToken();
-            } else {
-                config = {};
-                config.headers = {};
-            }
-            config.headers.Authorization = this.getAuthToken();
-        }
-
-        return axios.get(`${process.env.REACT_APP_API_URL}/${endpoint}`, config).then(function (res) {
-            return res;
-        });
-    }
-
-    static sendPostRequest(endpoint, data = {}, authorized = false, config) {
-        if (authorized) {
-            if (config !== undefined) {
-                if (config.headers === undefined) {
-                    config.headers = {};
-                }
-                config.headers.Authorization = this.getAuthToken();
-            } else {
-                config = {};
-                config.headers = {};
-            }
-            config.headers.Authorization = this.getAuthToken();
-        }
-
-        return axios.post(`${process.env.REACT_APP_API_URL}/${endpoint}`, data, config).then(res => {
-            return res;
-        });
-    }
-
-    static sendPutRequest(endpoint, data, authorized, config) {
-        if (authorized) {
-            if (config !== undefined) {
-                if (config.headers === undefined) {
-                    config.headers = {};
-                }
-                config.headers.Authorization = this.getAuthToken();
-            } else {
-                config = {};
-                config.headers = {};
-            }
-            config.headers.Authorization = this.getAuthToken();
-        }
-
-        return axios.put(`${process.env.REACT_APP_API_URL}/${endpoint}`, data, config).then(res => {
-            return res.data;
-        });
-    }
 
     static hideSidebar() {
         document.querySelector(".sidebar").classList.remove("open");
@@ -141,11 +89,11 @@ export default class App extends React.Component {
     }
 
     //Handles Enter key presses and clicks the target element
-    keyToClick(event) {
+    keyToClick = event => {
         if (event.which === 13) {
             event.target.click();
         }
-    }
+    };
 
     componentDidMount() {
         this.handleScrollAndResize();

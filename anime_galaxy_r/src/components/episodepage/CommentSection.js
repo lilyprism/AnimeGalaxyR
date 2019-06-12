@@ -5,8 +5,7 @@ import moment from 'moment';
 import 'moment/locale/pt';
 
 import "./commentsection.sass";
-
-import App from "../App";
+import RequestUtilities from "../../util/RequestUtilities";
 
 class CommentActions extends React.Component {
 
@@ -32,7 +31,7 @@ class CommentActions extends React.Component {
     };
 
     sendComment(text) {
-        App.sendPostRequest(`episode/${this.props.episode.id}/comment`, {text: text, parent: this.props.comment.id}, true).then(res => {
+        RequestUtilities.sendPostRequest(`episode/${this.props.episode.id}/comment`, {text: text, parent: this.props.comment.id}, true).then(res => {
             ToastsStore.success("Comentário Enviado");
             this.props.getComments();
 
@@ -117,7 +116,7 @@ export default class CommentSection extends React.Component {
     };
 
     sendNewComment = text => {
-        App.sendPostRequest(`episode/${this.props.episode.id}/comment`, {text: text, parent: null}, true).then(res => {
+        RequestUtilities.sendPostRequest(`episode/${this.props.episode.id}/comment`, {text: text, parent: null}, true).then(res => {
             console.log("Hey");
             ToastsStore.success("Comentário Enviado");
             this.props.getComments();

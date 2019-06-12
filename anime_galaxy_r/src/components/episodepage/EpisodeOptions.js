@@ -1,9 +1,10 @@
 import React from 'react';
-
-import "./episodeoptions.sass";
-import App from "../App";
 import * as ReactDOM from "react-dom";
 import {ToastsStore} from "react-toasts";
+
+import "./episodeoptions.sass";
+
+import RequestUtilities from "../../util/RequestUtilities";
 
 class LikeDislike extends React.Component {
 
@@ -68,14 +69,14 @@ class Report extends React.Component {
 
     report = (type = 0) => {
         if (type === 0) {
-            App.sendPostRequest("report/video", {info: this.props.episode.id}, false).then(res => {
+            RequestUtilities.sendPostRequest("report/video", {info: this.props.episode.id}, false).then(res => {
                 console.log("Video reported");
                 ToastsStore.error("Obrigado por reportar este vídeo, investigaremos o problema o mais cedo possível");
             }).catch(res => {
                 ToastsStore.error("Ocorreu um erro. Por favor tente mais tarde.");
             });
         } else {
-            App.sendPostRequest("report/video/other", {info: this.props.episode.id}, false).then(res => {
+            RequestUtilities.sendPostRequest("report/video/other", {info: this.props.episode.id}, false).then(res => {
                 console.log("Video reported");
                 ToastsStore.error("Obrigado por reportar este vídeo, investigaremos o problema o mais cedo possível");
             }).catch(res => {

@@ -5,9 +5,9 @@ import {ToastsStore} from "react-toasts";
 import "./episodepage.sass";
 
 import EpisodeOptions from "./EpisodeOptions";
-import App from "../App";
 import EpisodeList from "./EpisodeList";
 import CommentSection from "./CommentSection";
+import RequestUtilities from "../../util/RequestUtilities";
 
 export default class EpisodePage extends React.Component {
 
@@ -29,7 +29,7 @@ export default class EpisodePage extends React.Component {
         let initialValue = episode.liked;
         episode.liked = value;
         this.setState({episode: episode});
-        App.sendPostRequest("episode/like", {episode: this.state.episode.id, liked: value}, true).then(res => {
+        RequestUtilities.sendPostRequest("episode/like", {episode: this.state.episode.id, liked: value}, true).then(res => {
             console.log("Boas");
             console.log({episode: this.state.episode.id, liked: value});
         }).catch(err => {
@@ -41,7 +41,7 @@ export default class EpisodePage extends React.Component {
 
     getEpisode() {
         let url = `episode/${this.props.match.params.id}`;
-        App.sendGetRequest(url, this.props.is_logged_in).then(res => {
+        RequestUtilities.sendGetRequest(url, this.props.is_logged_in).then(res => {
             this.setState({episode: res.data, id: res.data.id}, () => {
                 this.getPlaylist();
                 this.getComments();
@@ -52,7 +52,7 @@ export default class EpisodePage extends React.Component {
     getEpisodeInfo() {
         let url = `episode/${this.props.match.params.id}`;
         console.log("Get Episode Info\nIsLoggedIn: " + this.props.is_logged_in);
-        App.sendGetRequest(url, this.props.is_logged_in).then(res => {
+        RequestUtilities.sendGetRequest(url, this.props.is_logged_in).then(res => {
             this.setState({episode: res.data}, () => {
                 this.reloadPlaylist();
                 this.getComments();
@@ -63,7 +63,7 @@ export default class EpisodePage extends React.Component {
     }
 
     getPlaylist() {
-        return App.sendGetRequest(`playlist/${this.state.episode.id}`, false).then(res => {
+        return RequestUtilities.sendGetRequest(`playlist/${this.state.episode.id}`, false).then(res => {
             this.setState({playlist: res.data}, () => {
                 return res.data;
             });
@@ -84,7 +84,7 @@ export default class EpisodePage extends React.Component {
     };
 
     getComments = () => {
-        App.sendGetRequest(`episode/${this.state.episode.id}/comments`, false).then(res => {
+        RequestUtilities.sendGetRequest(`episode/${this.state.episode.id}/comments`, false).then(res => {
             this.setState({comments: res.data});
         });
     };

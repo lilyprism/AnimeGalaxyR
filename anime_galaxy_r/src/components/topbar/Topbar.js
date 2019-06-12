@@ -4,8 +4,9 @@ import * as ReactDOM from "react-dom";
 
 import './topbar.sass';
 
-import App from "./../App";
 import SearchResultBox from "./SearchResultBox";
+import RequestUtilities from "../../util/RequestUtilities";
+import App from "../App";
 
 export default class Topbar extends React.Component {
 
@@ -92,7 +93,7 @@ export default class Topbar extends React.Component {
     searchAnime = search_term => {
         if (search_term.length >= 3) {
             // this.toggleSearchResults("hide", false);
-            App.sendGetRequest(`anime/search?text=${search_term}`, false).then(res => {
+            RequestUtilities.sendGetRequest(`anime/search?text=${search_term}`, false).then(res => {
                 this.setState({search_results: res.data}, () => {
                     this.toggleSearchResults("show");
                 });

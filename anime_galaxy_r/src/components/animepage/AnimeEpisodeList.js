@@ -1,6 +1,7 @@
 import React from 'react';
+
 import CardLayout from "../CardLayout";
-import App from "../App";
+import RequestUtilities from "../../util/RequestUtilities";
 
 import "./animeepisodelist.sass";
 
@@ -17,7 +18,7 @@ export default class AnimeEpisodeList extends React.Component {
     }
 
     getEpisodes = () => {
-        App.sendGetRequest(`anime/${this.props.anime.id}/episodes?page=${this.state.current_page}`, false).then(res => {
+        RequestUtilities.sendGetRequest(`anime/${this.props.anime.id}/episodes?page=${this.state.current_page}`, false).then(res => {
             console.log(`anime/${this.props.anime.id}/episodes?page=${this.state.current_page}`);
             this.setState({pagination: res.data});
             console.log("Hey");
