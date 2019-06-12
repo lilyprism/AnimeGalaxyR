@@ -118,10 +118,11 @@ class Report(Model):
 class Comment(MPTTModel):
 	episode = models.ForeignKey(Episode, related_name="comments", on_delete=models.CASCADE)
 
+	date = models.DateTimeField(auto_now=True, null=False, blank=True)
 	user = models.ForeignKey(CustomUser, related_name="comments", on_delete=models.CASCADE)
 	text = models.CharField(max_length=2500, null=False, blank=False, verbose_name="Conteudo")
 
 	parent = TreeForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name="children")
 
 	def __str__(self):
-		return f"{self.user} - {self.id}"
+		return f"[{self.episode.__str__()}]: {self.text[:25]}"

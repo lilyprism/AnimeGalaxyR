@@ -1,6 +1,7 @@
 from django.contrib import admin
+from mptt.admin import DraggableMPTTAdmin
 
-from .models import Anime, CustomUser, Episode, Genre, Report
+from .models import Anime, Comment, CustomUser, Episode, Genre, Report
 
 
 @admin.register(Genre)
@@ -56,3 +57,8 @@ class CustomUserAdmin(admin.ModelAdmin):
 			'fields' : ('is_staff', 'is_active', 'groups', 'user_permissions'),
 		}),
 	)
+
+
+@admin.register(Comment)
+class CommentAdmin(DraggableMPTTAdmin):
+	list_filter = ['episode__anime']

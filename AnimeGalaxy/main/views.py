@@ -14,7 +14,7 @@ from rest_framework.throttling import AnonRateThrottle, BaseThrottle, UserRateTh
 
 from .models import Anime, Episode, UserEpisodes
 from .paginators import StandardResultsSetPagination
-from .serializers import AnimeSearchSerializer, AnimeSerializer, CommentSerializer, EpisodeCreateSerializer, LikeSerializer, MultiEpisodeSerializer, PlaylistSerializer, ReportSerializer, SimpleMultiEpisodeSerializer, SingleEpisodeSerializer
+from .serializers import AnimeSearchSerializer, AnimeSerializer, CommentSerializer, CreateCommentSerializer, EpisodeCreateSerializer, LikeSerializer, MultiEpisodeSerializer, PlaylistSerializer, ReportSerializer, SimpleMultiEpisodeSerializer, SingleEpisodeSerializer
 from .throttles import LikeUserRateThrottle, ReportAnonRateThrottle, ReportUserRateThrottle
 
 
@@ -85,10 +85,27 @@ class EpisodesView(BaseMVS):
 		queryset = get_object_or_404(Episode, id=pk)
 		if not queryset:
 			return Response(status=status.HTTP_400_BAD_REQUEST)
-		else:
-			# Send episode information
-			serializer = CommentSerializer(queryset.comments.filter(parent=None), many=True)
-			return Response(serializer.data, status=status.HTTP_200_OK)
+
+		serializer = CommentSerializer(queryset.comments.filter(parent=None), many=True, context={"request": request})
+		return Response(serializer.data, status=status.HTTP_200_OK)
+
+	@permission_classes([IsAuthenticated])
+	def comment(self, request, pk=None, *args, **kwargs):
+		self.check_permissions(request)
+
+		queryset = get_object_or_404(Episode, id=pk)
+		if not queryset:
+			return Response(status=status.HTTP_400_BAD_REQUEST)
+
+		# Set user to the user from the request and episode to the current episode page pk
+		request.data["user"] = request.user.id
+		request.data["episode"] = pk
+
+		serializer = CreateCommentSerializer(data=request.data)
+		serializer.is_valid(raise_exception=True)
+		serializer.save()
+
+		return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 # noinspection PyMethodMayBeStatic

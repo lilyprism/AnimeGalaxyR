@@ -19,6 +19,22 @@ class UserSerializer(serializers.ModelSerializer):
 		fields = ['id', 'username', 'first_name', 'last_name', 'email', 'avatar']
 		read_only_fields = ['id', 'username']
 
+	def get_avatar(self, instance):
+		request = self.context.get('request')
+		image_url = instance.avatar.url
+		return request.build_absolute_uri(image_url)
+
+
+class SimpleUserSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = CustomUser
+		fields = ['id', 'username', 'avatar']
+
+	def get_avatar(self, instance):
+		request = self.context.get('request')
+		image_url = instance.avatar.url
+		return request.build_absolute_uri(image_url)
+
 
 class GenreSerializer(serializers.ModelSerializer):
 	class Meta:
@@ -57,7 +73,6 @@ class SingleEpisodeSerializer(serializers.ModelSerializer):
 
 		request = self.context.get("request", None)
 		if request and request.user and request.user.id:
-			print("Single video request from USER")
 			obj = UserEpisodes.objects.get_or_create(user_id=request.user.id, episode_id=instance.id)[0]
 			return obj.liked
 		return None
@@ -135,9 +150,16 @@ class AnimeSearchSerializer(HaystackSerializerMixin, SimpleAnimeSerializer):
 		search_fields = ("name",)
 
 
+class CreateCommentSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = Comment
+		fields = ['id', 'user', 'episode', 'text', 'parent']
+
+
 class CommentSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Comment
-		fields = ['id', 'user', 'text', 'replies']
+		fields = ['id', 'user', 'text', 'level', 'date', 'replies']
 
 	replies = serializers.ListSerializer(child=RecursiveField(), source="children", read_only=True)
+	user = SimpleUserSerializer()
