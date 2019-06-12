@@ -15,7 +15,7 @@ from rest_framework.throttling import AnonRateThrottle, BaseThrottle, UserRateTh
 from .models import Anime, Episode, UserEpisodes
 from .paginators import StandardResultsSetPagination
 from .serializers import AnimeSearchSerializer, AnimeSerializer, CommentSerializer, CreateCommentSerializer, EpisodeCreateSerializer, LikeSerializer, MultiEpisodeSerializer, PlaylistSerializer, ReportSerializer, SimpleMultiEpisodeSerializer, SingleEpisodeSerializer
-from .throttles import LikeUserRateThrottle, ReportAnonRateThrottle, ReportUserRateThrottle
+from .throttles import LowAnonRateThrottle, LowUserRateThrottle, NormalUserRateThrottle
 
 
 class BaseMVS(viewsets.ModelViewSet):
@@ -181,15 +181,15 @@ class UrlView(BaseMVS):
 		requested_episode = Episode.objects.get(pk=pk)
 		if not requested_episode:
 			return Response(status=status.HTTP_404_NOT_FOUND)
-		else:
-			episodes = Episode.objects.filter(anime=requested_episode.anime, number__gte=requested_episode.number).order_by("number")[:12]
-			serializer = PlaylistSerializer(episodes, many=True, context={"request": request})
-			return Response(serializer.data, status=status.HTTP_200_OK)
+
+		episodes = Episode.objects.filter(anime=requested_episode.anime, number__gte=requested_episode.number).order_by("number")[:12]
+		serializer = PlaylistSerializer(episodes, many=True, context={"request": request})
+		return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class LikeView(BaseMVS):
 	permission_classes = [IsAuthenticated]
-	throttle_classes = [LikeUserRateThrottle]
+	throttle_classes = [NormalUserRateThrottle]
 	queryset = UserEpisodes.objects.all()
 	serializer_class = LikeSerializer
 
@@ -211,7 +211,7 @@ class LikeView(BaseMVS):
 
 @api_view(['POST'])
 @permission_classes([AllowAny])
-@throttle_classes([ReportUserRateThrottle, ReportAnonRateThrottle])
+@throttle_classes([LowUserRateThrottle, LowAnonRateThrottle])
 def create_report(request, classifier):
 	if not classifier:
 		return Response(status=status.HTTP_400_BAD_REQUEST)

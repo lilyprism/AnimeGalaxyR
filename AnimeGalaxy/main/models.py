@@ -49,7 +49,8 @@ class Anime(Model):
 	description = RichTextField(null=False, blank=False, verbose_name="Descrição")
 
 	@property
-	def genre_list(self):
+	def genre_list(self) -> str:
+		""" Returns genres as string to index on search engine """
 		return " ".join([genre.name for genre in self.genres.all()])
 
 	def __str__(self) -> str:
@@ -68,17 +69,17 @@ class Episode(Model):
 	# Model fields
 	number = models.IntegerField(default=0, null=False, blank=False, validators=[MinValueValidator(0)], verbose_name="Número de Episódio")
 	views = models.IntegerField(default=0, null=False, validators=[MinValueValidator(0)], verbose_name="Visualizações")
+	blogger_url = models.URLField(max_length=1500, null=False, blank=False, verbose_name="URL de Blogger")
 
 	# Hidden Model fields
 	added = models.DateTimeField(default=timezone.now, editable=False)
-
-	blogger_url = models.URLField(max_length=1500, null=False, blank=False, verbose_name="URL de Blogger")
 
 	def __str__(self) -> str:
 		return f"{self.anime} - {self.number}"
 
 	@property
 	def sources(self) -> List:
+		""" Gets and caches sources for 6 hours """
 		sources = cache.get(f"episode{self.pk}")
 		if not sources:
 			sources = get_sources_from_url(self.blogger_url)
@@ -93,14 +94,17 @@ class CustomUser(AbstractUser):
 
 
 class UserEpisodes(Model):
+	# Meta configurations
 	class Meta:
 		verbose_name = "Episódio de Utilizador"
 		verbose_name_plural = "Episódios de Utilizador"
 		unique_together = ['episode', 'user']
 
+	# Model relations
 	episode = models.ForeignKey(Episode, related_name='user_episodes', on_delete=models.CASCADE)
 	user = models.ForeignKey(CustomUser, related_name='user_episodes', on_delete=models.CASCADE)
 
+	# Model Fields
 	liked = models.BooleanField(default=None, null=True, blank=True, verbose_name='Video Gostado')
 
 	def __str__(self):
@@ -108,6 +112,7 @@ class UserEpisodes(Model):
 
 
 class Report(Model):
+	# Model Fields
 	classifier = models.CharField(max_length=20, null=False, blank=False, verbose_name="Classificador")
 	info = models.CharField(max_length=250, null=False, blank=False, verbose_name="Informação")
 
@@ -116,12 +121,15 @@ class Report(Model):
 
 
 class Comment(MPTTModel):
+	# Model Relations
 	episode = models.ForeignKey(Episode, related_name="comments", on_delete=models.CASCADE)
 
+	# Model Fields
 	date = models.DateTimeField(auto_now=True, null=False, blank=True)
 	user = models.ForeignKey(CustomUser, related_name="comments", on_delete=models.CASCADE)
 	text = models.CharField(max_length=2500, null=False, blank=False, verbose_name="Conteudo")
 
+	# Relation to self (recursive)
 	parent = TreeForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name="children")
 
 	def __str__(self):

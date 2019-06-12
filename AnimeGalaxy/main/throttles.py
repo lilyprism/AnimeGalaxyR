@@ -1,16 +1,16 @@
 from rest_framework.throttling import AnonRateThrottle, UserRateThrottle
 
 
-class ReportUserRateThrottle(UserRateThrottle):
+class LowUserRateThrottle(UserRateThrottle):
 	rate = '4/hour'
 	scope = "report"
 
 
-class ReportAnonRateThrottle(AnonRateThrottle):
+class LowAnonRateThrottle(AnonRateThrottle):
 	rate = '6/hour'
 	scope = "report"
 
 
-class LikeUserRateThrottle(UserRateThrottle):
+class NormalUserRateThrottle(UserRateThrottle):
 	rate = '10/min'
 	scope = "like"
