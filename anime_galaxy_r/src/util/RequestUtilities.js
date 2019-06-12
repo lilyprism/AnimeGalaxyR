@@ -26,11 +26,7 @@ export default class RequestUtilities {
         return axios.get(`${process.env.REACT_APP_API_URL}/${endpoint}`, config).then(function (res) {
             return res;
         }).catch(error => {
-            console.log("Error");
-            if (error.response.status === 401) {
-                console.log("Unauthorized Status Code Found");
-                this.app_instance.logout();
-            }
+            this.errorHandler(error);
             throw error;
         });
     }
@@ -52,11 +48,7 @@ export default class RequestUtilities {
         return axios.post(`${process.env.REACT_APP_API_URL}/${endpoint}`, data, config).then(res => {
             return res;
         }).catch(error => {
-            console.log("Error");
-            if (error.status === 401) {
-                console.log("Unauthorized Status Code Found");
-                this.app_instance.logout();
-            }
+            this.errorHandler(error);
             throw error;
         });
     }
@@ -78,13 +70,25 @@ export default class RequestUtilities {
         return axios.put(`${process.env.REACT_APP_API_URL}/${endpoint}`, data, config).then(res => {
             return res.data;
         }).catch(error => {
-            console.log("Error");
-            if (error.status === 401) {
-                console.log("Unauthorized Status Code Found");
-                this.app_instance.logout();
-            }
+            this.errorHandler(error);
             throw error;
         });
+    }
+
+    static errorHandler(error) {
+        if (error.response !== undefined) {
+            switch (error.response.status) {
+                case 400:
+                    console.log("Bad Request");
+                    break;
+                case 401:
+                    console.log("Unauthorized Request");
+                    this.app_instance.logout();
+                    break;
+                default:
+                    console.log("Unhandled Error");
+            }
+        }
     }
 
 };

@@ -16,7 +16,6 @@ export default class AnimePage extends React.Component {
     }
 
     getEpisodeDetails = () => {
-        console.log(`anime/${this.props.match.params.id}`);
         RequestUtilities.sendGetRequest(`anime/${this.props.match.params.id}`, false).then(res => {
             this.setState({anime: res.data});
         });

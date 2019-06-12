@@ -53,7 +53,7 @@ class Sidebar extends React.Component {
                          event => {
                              App.hideSidebar();
                              this.props.logout().then(res => {
-                                 ToastsStore.success("Saíste da tua conta seu murcão", 3000, "bg-secondary-color");
+                                 ToastsStore.success("Saíste com sucesso", 3000);
                              });
                          }
                      }>

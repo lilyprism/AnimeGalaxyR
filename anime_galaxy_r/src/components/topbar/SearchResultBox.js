@@ -9,7 +9,7 @@ export default class SearchResultBox extends React.Component {
                 <ul className="search-result-list">
                     {
                         this.props.results.map(function (result, index) {
-                            return <Link to={`/anime/${result.id}`}><li className="search-result-list-item" key={result.id}>{result.name}</li></Link>
+                            return <Link to={`/anime/${result.id}`} key={result.id}><li className="search-result-list-item">{result.name}</li></Link>
                         })
                     }
                 </ul>

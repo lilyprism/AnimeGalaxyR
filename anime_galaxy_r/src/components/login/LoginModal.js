@@ -21,9 +21,9 @@ export default class LoginModal extends ModalWindow {
         event.preventDefault();
 
         this.props.login(this.state.username, this.state.password).then(res => {
-            if (res) {
+            if (res === true) {
                 console.log(res);
-                ToastsStore.success("Entraste com sucesso seu murcão");
+                ToastsStore.success("Entraste com sucesso");
             }
         });
     };

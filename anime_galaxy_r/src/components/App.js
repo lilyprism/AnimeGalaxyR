@@ -1,5 +1,4 @@
 import React from "react";
-import axios from 'axios';
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import {ToastsContainer, ToastsStore} from "react-toasts";
 
@@ -28,7 +27,7 @@ export default class App extends React.Component {
     }
 
     static isLoggedIn() {
-        return this.getAuthToken() !== undefined && this.getAuthToken() !== "Token ";
+        return this.getAuthToken() !== undefined && this.getAuthToken() !== null && this.getAuthToken() !== "Token ";
     }
 
     static getAuthToken() {

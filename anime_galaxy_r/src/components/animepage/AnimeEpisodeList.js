@@ -19,9 +19,7 @@ export default class AnimeEpisodeList extends React.Component {
 
     getEpisodes = () => {
         RequestUtilities.sendGetRequest(`anime/${this.props.anime.id}/episodes?page=${this.state.current_page}`, false).then(res => {
-            console.log(`anime/${this.props.anime.id}/episodes?page=${this.state.current_page}`);
             this.setState({pagination: res.data});
-            console.log("Hey");
         });
     };
 
