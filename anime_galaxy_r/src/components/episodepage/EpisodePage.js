@@ -8,6 +8,8 @@ import EpisodeOptions from "./EpisodeOptions";
 import EpisodeList from "./EpisodeList";
 import CommentSection from "./CommentSection";
 import RequestUtilities from "../../util/RequestUtilities";
+import AnimeDetails from "./AnimeDetails";
+import EpisodeControls from "./EpisodeControls";
 
 export default class EpisodePage extends React.Component {
 
@@ -43,7 +45,7 @@ export default class EpisodePage extends React.Component {
         let url = `episode/${this.props.match.params.id}`;
         RequestUtilities.sendGetRequest(url, this.props.is_logged_in).then(res => {
             this.setState({episode: res.data, id: res.data.id}, () => {
-                this.getPlaylist();
+                this.reloadPlaylist();
                 this.getComments();
             });
         });
@@ -58,21 +60,21 @@ export default class EpisodePage extends React.Component {
                 this.getComments();
             });
             console.log(res.data);
-            console.log("Getting episode info");
+            // console.log("Getting episode info");
         });
     }
 
     getPlaylist() {
+        console.log("Getting playlist");
         return RequestUtilities.sendGetRequest(`playlist/${this.state.episode.id}`, false).then(res => {
-            this.setState({playlist: res.data}, () => {
-                return res.data;
-            });
+            this.setState({playlist: res.data});
+            return res.data;
         });
     }
 
     reloadPlaylist() {
         this.getPlaylist().then(res => {
-            window.jwplayer("player-container").load(res);
+            // window.jwplayer("player-container").load(res);
         });
     }
 
@@ -90,11 +92,11 @@ export default class EpisodePage extends React.Component {
     };
 
     componentDidMount() {
-        this.props.history.listen((event, action) => {
-            if (action === "POP") {
-                this.getEpisodeInfo();
-            }
-        });
+        // this.props.history.listen((event, action) => {
+        //     if (action === "POP") {
+        //         this.getEpisodeInfo();
+        //     }
+        // });
     }
 
     componentWillUnmount() {
@@ -136,7 +138,7 @@ export default class EpisodePage extends React.Component {
                                                    event => {
                                                        if (parseInt(event.item.id) !== parseInt(this.props.match.params.id)) {
                                                            this.props.history.push(`/v/${event.item.id}`);
-                                                           this.getEpisodeInfo();
+                                                           // this.getEpisodeInfo();
                                                        }
                                                    }
                                                }
@@ -147,6 +149,8 @@ export default class EpisodePage extends React.Component {
                                                }
                                 />
                                 <EpisodeOptions episode={this.state.episode} is_logged_in={this.props.is_logged_in} sendLike={this.sendLike}/>
+                                <EpisodeControls anime={this.state.episode.anime} episode={this.state.playlist !== null && this.state.playlist.length >= 2 ? this.state.playlist[1] : this.state.episode}/>
+                                <AnimeDetails anime={this.state.episode.anime}/>
                             </div>
                         </div>
                         <div className="episode-list-container">

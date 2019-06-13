@@ -2,7 +2,7 @@ import React from 'react';
 
 import AnimeDetails from "./AnimeDetails";
 import AnimeEpisodeList from "./AnimeEpisodeList";
-import RequestUtilities from "../../util/RequestUtilities";
+import RequestUtilities from "./../../util/RequestUtilities";
 
 export default class AnimePage extends React.Component {
 
@@ -28,8 +28,6 @@ export default class AnimePage extends React.Component {
     }
 
     render() {
-
-
         if (this.state.anime !== null) {
             return (
                 <div className="anime-page-container">

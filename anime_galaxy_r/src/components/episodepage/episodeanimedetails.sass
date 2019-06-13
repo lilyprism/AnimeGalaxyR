@@ -1,0 +1,38 @@
+@import ../sass/colors
+@import ../sass/page-units
+
+.episode-anime-details
+  display: flex
+  flex-wrap: nowrap
+  width: 100%
+
+  @media (max-width: $breakpoint-md - 1)
+    padding-top: 20px
+    flex-wrap: wrap
+
+.episode-anime-details-img
+  width: 25%
+  @media (max-width: $breakpoint-md - 1)
+    width: 100%
+
+  img
+    width: 100%
+
+.episode-anime-desc
+  width: 75%
+  text-align: justify
+  padding: 0 20px
+
+  @media (max-width: $breakpoint-md - 1)
+    width: 100%
+    padding: 20px 0
+
+.episode-anime-details-tags
+  display: flex
+  flex-wrap: wrap
+
+.episode-anime-details-tag
+  background-color: $anime-details-tag-color
+  border-radius: 10px
+  padding: 5px
+  margin: 5px 5px 5px 0

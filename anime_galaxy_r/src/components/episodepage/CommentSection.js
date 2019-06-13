@@ -5,7 +5,9 @@ import moment from 'moment';
 import 'moment/locale/pt';
 
 import "./commentsection.sass";
+
 import RequestUtilities from "../../util/RequestUtilities";
+import Report from "./../Report";
 
 class CommentActions extends React.Component {
 
@@ -62,6 +64,15 @@ class CommentActions extends React.Component {
 
 class Comment extends React.Component {
 
+    reportComment = () => {
+        RequestUtilities.sendPostRequest("report/comment", {info: this.props.comment.id}, false).then(res => {
+            console.log("Video reported");
+            ToastsStore.error("Obrigado por reportar este comentário.");
+        }).catch(res => {
+            ToastsStore.error("Ocorreu um erro. Por favor tente mais tarde.");
+        });
+    };
+
     render() {
         let time = moment(this.props.comment.date);
         time.locale("pt");
@@ -72,7 +83,10 @@ class Comment extends React.Component {
                     <img className="comment-user-avatar" src={this.props.comment.user.avatar} width="75" height="75" alt=""/>
                     <div className="comment-right-container">
                         <div className="comment-user">
-                            <span className="comment-user-name">{this.props.comment.user.username}</span> - <span className="comment-time">{time.fromNow()}</span>
+                            <span className="comment-user-name">{this.props.comment.user.username}</span>&nbsp;-&nbsp;<span className="comment-time">{time.fromNow()}</span>
+                            <span className="ml-auto">
+                                <Report type={"comment"} comment={this.props.comment}/>
+                            </span>
                         </div>
                         <div className="comment-text">
                             {this.props.comment.text}

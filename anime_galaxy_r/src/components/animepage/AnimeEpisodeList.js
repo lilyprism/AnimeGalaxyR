@@ -54,7 +54,7 @@ export default class AnimeEpisodeList extends React.Component {
     render() {
         if (this.state.pagination !== null) {
             let cur_page = this.state.current_page;
-            let max_pages = Math.ceil(this.state.pagination.count / 12);
+            let max_pages = Math.ceil(this.state.pagination.count / 24);
 
             let page_controls = [];
             for (let i = Math.max(1, cur_page - 2); i < cur_page; i++) {

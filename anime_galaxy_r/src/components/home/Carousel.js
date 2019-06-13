@@ -65,23 +65,32 @@ class Carousel extends React.Component {
     }
 
     componentDidMount() {
-        let this_el = ReactDOM.findDOMNode(this);
+        this.initCarouselItems();
+    }
 
-        if (this_el instanceof HTMLElement) {
-            let carousel_items = this_el.querySelectorAll(".carousel-item");
-            for (let i = 0; i < carousel_items.length; i++) {
-                if (i === carousel_items.length - 1) {
-                    carousel_items[i].style.order = 1;
-                } else {
-                    carousel_items[i].style.order = i + 2;
+    initCarouselItems = () => {
+        setTimeout(() => {
+            let this_el = ReactDOM.findDOMNode(this);
+
+            if (this_el instanceof HTMLElement) {
+                console.log(this_el);
+                let carousel_items = document.querySelectorAll(".carousel-item");
+                console.log(carousel_items);
+                for (let i = 0; i < carousel_items.length; i++) {
+                    if (i === carousel_items.length - 1) {
+                        carousel_items[i].style.order = 1;
+                    } else {
+                        carousel_items[i].style.order = i + 1;
+                    }
                 }
             }
-        }
+            if (this.props.items.length > 6) {
+                this.addAutomaticCycle();
+            }
+        }, 500);
 
-        if (this.props.items.length > 0) {
-            this.addAutomaticCycle();
-        }
-    }
+
+    };
 
     componentWillUnmount() {
         if (this.state.interval !== null) {
@@ -92,7 +101,7 @@ class Carousel extends React.Component {
     addAutomaticCycle() {
         let interval = setInterval(() => {
             if (!this.state.mouseOver) {
-                this.moveLeft();
+                this.moveRight();
             }
         }, 4000);
         this.setState({interval: interval});
