@@ -117,7 +117,7 @@ export default class EpisodePage extends React.Component {
                     <div className="player-episodes-container">
                         <div className="player-misc-wrapper">
                             <div className="player-left-wrapper">
-                                <div className="video-loading-container"/>
+                                <div className="video-loading-container">A carregar o video...</div>
                                 <ReactJWPlayer playerId={`player-container`} playerScript="https://cdn.jwplayer.com/libraries/7OxfLofq.js" playlist={`${process.env.REACT_APP_API_URL}/playlist/${this.state.id}`}
                                                onReady={
                                                    event => {

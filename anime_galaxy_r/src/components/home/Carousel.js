@@ -80,7 +80,7 @@ class Carousel extends React.Component {
                     if (i === carousel_items.length - 1) {
                         carousel_items[i].style.order = 1;
                     } else {
-                        carousel_items[i].style.order = i + 1;
+                        carousel_items[i].style.order = i + 2;
                     }
                 }
             }
@@ -101,7 +101,7 @@ class Carousel extends React.Component {
     addAutomaticCycle() {
         let interval = setInterval(() => {
             if (!this.state.mouseOver) {
-                this.moveRight();
+                this.moveLeft();
             }
         }, 4000);
         this.setState({interval: interval});
