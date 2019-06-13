@@ -2,5 +2,5 @@ from rest_framework.pagination import PageNumberPagination
 
 
 class StandardResultsSetPagination(PageNumberPagination):
-	page_size = 12
+	page_size = 24
 	template = None

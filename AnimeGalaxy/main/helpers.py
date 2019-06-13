@@ -15,13 +15,17 @@ def get_quality_from_format(number: int) -> str:
 
 
 def get_sources_from_url(url: str) -> List:
-	""" Returns a list of sources """
+	""" Returns a list of sources
+
+		This function is needed because blogger sends expirable links
+		To prevent invalid links we cache it for 6 hours and then get a new one
+	"""
 
 	# URLs from BRAnimes have redirect urls, so just send them back
 	if "branimes" in url:
 		return [{"file": get_redirect_url(url), "type": "video/mp4", "label": "SD"}]
 
-	# Everything other than blogger URLs, return them as HD
+	# Everything other than blogger URLs, return them as normal HD
 	if "blogger.com" not in url:
 		return [{"file": url, "type": "video/mp4", "label": "HD"}]
 

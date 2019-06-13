@@ -12,7 +12,7 @@ from rest_framework.permissions import AllowAny, BasePermission, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.throttling import AnonRateThrottle, BaseThrottle, UserRateThrottle
 
-from .models import Anime, Episode, UserEpisodes
+from .models import Anime, Comment, Episode, UserEpisodes
 from .paginators import StandardResultsSetPagination
 from .serializers import AnimeSearchSerializer, AnimeSerializer, CommentSerializer, CreateCommentSerializer, EpisodeCreateSerializer, LikeSerializer, MultiEpisodeSerializer, PlaylistSerializer, ReportSerializer, SimpleMultiEpisodeSerializer, SingleEpisodeSerializer
 from .throttles import LowAnonRateThrottle, LowUserRateThrottle, NormalUserRateThrottle
@@ -59,6 +59,7 @@ class EpisodesView(BaseMVS):
 	queryset = Episode.objects.all().order_by("-pk")[:12]
 	serializer_class = MultiEpisodeSerializer
 	create_serializer = EpisodeCreateSerializer
+	throttle_classes: List[BaseThrottle] = []
 
 	filterset_fields = ('id',)
 
@@ -96,6 +97,11 @@ class EpisodesView(BaseMVS):
 		queryset = get_object_or_404(Episode, id=pk)
 		if not queryset:
 			return Response(status=status.HTTP_400_BAD_REQUEST)
+
+		# Prevent user spamming comments on same episode
+		comment_count = Comment.objects.filter(user=request.user.id, episode=pk).count()
+		if comment_count >= 5:
+			raise ValidationError({"error": {"message": "User cannot comment more than 5 comments on the same episode!", "code": 19932}}, code=19932)
 
 		# Set user to the user from the request and episode to the current episode page pk
 		request.data["user"] = request.user.id
@@ -152,7 +158,7 @@ class AnimeView(BaseMVS):
 
 class AnimeSearchView(HaystackViewSet):
 	index_models = [Anime]
-	throttle_classes = [UserRateThrottle, AnonRateThrottle]
+	throttle_classes: List[BaseThrottle] = []
 
 	serializer_class = AnimeSearchSerializer
 

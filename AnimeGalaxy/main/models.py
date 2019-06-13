@@ -106,6 +106,7 @@ class UserEpisodes(Model):
 
 	# Model Fields
 	liked = models.BooleanField(default=None, null=True, blank=True, verbose_name='Video Gostado')
+	date = models.DateTimeField(auto_now=True, null=False, editable=False)
 
 	def __str__(self):
 		return self.episode.__str__()
