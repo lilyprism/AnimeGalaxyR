@@ -179,7 +179,8 @@ export default class EpisodePage extends React.Component {
                                 <AnimeDetails anime={this.state.episode.anime}/>
                             </div>
                         </div>
-                        <div className="episode-list-container">
+                        <div className="right-episode-page-container">
+                            {this.state.playlist.length > 1 ? <h5 className="pl-25px p-0-l-down pless-title"><span>Próximos episódios</span></h5> : ""}
                             <EpisodeList playlist={this.state.playlist.slice(1)} episode={this.state.episode}/>
                         </div>
                     </div>

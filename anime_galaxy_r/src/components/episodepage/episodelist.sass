@@ -5,9 +5,9 @@ $visible-episodes: 4
 $item-margin-bottom: 10px
 
 .episode-list
-  padding: 0 0 0 10px
+  padding: 0 0 0 25px
   position: absolute
-  top: 0
+  top: 35px
   right: 0
   bottom: 0
   left: 0
@@ -18,7 +18,9 @@ $item-margin-bottom: 10px
   @media (max-width: $breakpoint-l - 1)
     padding-left: 0
     position: static
+    height: 100%
     overflow-y: auto
+    margin-top: 35px
 
 .episode-list-item
   height: calc((100% - #{$item-margin-bottom} * #{$visible-episodes - 1}) / #{$visible-episodes})
