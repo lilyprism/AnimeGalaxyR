@@ -21,9 +21,9 @@ export default class LoginModal extends ModalWindow {
         event.preventDefault();
 
         this.props.login(this.state.username, this.state.password).then(res => {
-            if (res) {
+            if (res === true) {
                 console.log(res);
-                ToastsStore.success("Entraste com sucesso seu murcão");
+                ToastsStore.success("Entraste com sucesso");
             }
         });
     };
@@ -39,7 +39,7 @@ export default class LoginModal extends ModalWindow {
                     </header>
                     <div className="modal-body">
                         <div className="login-container">
-                            <form className="login-form" action="" onSubmit={this.handleSubmit}>
+                            <form className="login-form w-100" action="" onSubmit={this.handleSubmit}>
                                 <div className="form-group">
                                     <label htmlFor="username-input">Username</label>
                                     <input className="input" spellCheck="false" type="text" name="username" id="username-input" onChange={event => this.setState({username: event.target.value})}/>

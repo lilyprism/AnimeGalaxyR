@@ -1,8 +1,8 @@
 import React from 'react';
 
-import CardLayout from "../CardLayout";
+import CardLayout from "./../CardLayout";
 import {Carousel} from "./Carousel";
-import App from "../App";
+import RequestUtilities from "../../util/RequestUtilities";
 
 export default class Home extends React.Component {
 
@@ -22,7 +22,7 @@ export default class Home extends React.Component {
 
     getLatestEpisodes() {
         // console.log(`${process.env.REACT_APP_API_URL}/episodes`);
-        App.sendGetRequest("episode/latest", false).then(res => {
+        RequestUtilities.sendGetRequest("episode/latest", false).then(res => {
             this.setState({
                 latest_episodes: res.data
             });
@@ -33,7 +33,7 @@ export default class Home extends React.Component {
     }
 
     getLatestAnime() {
-        App.sendGetRequest("anime/latest", false).then(res => {
+        RequestUtilities.sendGetRequest("anime/latest", false).then(res => {
             this.setState({
                 latest_anime: res.data
             });
@@ -44,7 +44,7 @@ export default class Home extends React.Component {
     }
 
     getWatchedAnime() {
-        App.sendGetRequest("anime/watched", true).then(res => {
+        RequestUtilities.sendGetRequest("anime/watched", true).then(res => {
             this.setState({
                 watched_anime: res.data
             });

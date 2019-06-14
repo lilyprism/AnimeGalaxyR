@@ -2,7 +2,7 @@
 @import ../sass/page-units
 
 .episode-options-container
-  padding: 15px 0 0 0
+  padding: 15px 0 20px 0
   display: flex
   justify-content: flex-end
   align-items: flex-start
@@ -11,13 +11,17 @@
     flex-wrap: wrap
     justify-content: flex-start
 
+
 .episode-option
   cursor: pointer
-  padding-left: 25px
+  margin-left: 25px
+
+.episode-option
+  white-space: nowrap
 
   @media (max-width: $breakpoint-md - 1)
-    padding-left: 0
-    padding-right: 25px
+    margin-left: 0
+    margin-right: 25px
 
 .episode-option:hover
   color: $icon-hover-color
@@ -27,35 +31,60 @@
 
 .episode-options-container .title
   flex-grow: 1
-  padding: 0 0 20px 0
+  white-space: nowrap
+  overflow: hidden
+  text-overflow: ellipsis
+  padding: 0
 
-.option-dropdown-container
+.report-dropdown-container
   display: none
   position: relative
 
-.option-dropdown-container.open
+.report-dropdown-container.open
   display: block
 
-.option-dropdown
+.report-dropdown
+  z-index: 9
   position: absolute
-  background: $background-color
-  border-radius: 5px
   bottom: 100%
-  white-space: nowrap
-  max-width: 200px
+  width: 250px
 
+.report-dropdown.video-report-dropdown, .report-dropdown.video-report-dropdown .report-dropdown-options
   @media (max-width: $breakpoint-md - 1)
     left: 0
   @media (min-width: $breakpoint-md)
     right: 0
 
-.option-dropdown > .episode-option
+.report-dropdown.comment-report-dropdown, .report-dropdown.comment-report-dropdown .report-dropdown-options
+  right: 0
+
+.report-dropdown-options
+  position: absolute
+  bottom: 100%
+  display: inline-block
+  background: $background-color
+  border-radius: 5px
+  max-width: 250px
+
+.report-dropdown .report-option
   padding: 5px
+  width: 100%
+  color: $light-text-color
+
+.report-option:hover
+  color: $secondary-color
 
 .like-dislike-container
   display: flex
+
+.like-dislike-container.disabled .episode-option
+  cursor: initial
+  color: gray
 
 .options-container
   display: flex
   align-items: center
   height: 29px
+
+  @media (max-width: $breakpoint-md - 1)
+    margin-top: 20px

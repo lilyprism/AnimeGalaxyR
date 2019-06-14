@@ -6,6 +6,7 @@ import * as ReactDOM from "react-dom";
 import App from "./App";
 import {ToastsStore} from "react-toasts";
 import ModalWindow from "./modalwindow/ModalWindow";
+import RequestUtilities from "../util/RequestUtilities";
 
 class Sidebar extends React.Component {
 
@@ -23,7 +24,7 @@ class Sidebar extends React.Component {
     };
 
     goToRandomAnime() {
-        App.sendGetRequest("anime/random", false).then(res => {
+        RequestUtilities.sendGetRequest("anime/random", false).then(res => {
             this.props.history.push(`/anime/${res.data.id}`);
         });
     }
@@ -52,7 +53,7 @@ class Sidebar extends React.Component {
                          event => {
                              App.hideSidebar();
                              this.props.logout().then(res => {
-                                 ToastsStore.success("Saíste da tua conta seu murcão", 3000, "bg-secondary-color");
+                                 ToastsStore.success("Saíste com sucesso", 3000);
                              });
                          }
                      }>

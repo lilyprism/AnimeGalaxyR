@@ -1,7 +1,8 @@
 import React from 'react';
+
 import AnimeDetails from "./AnimeDetails";
-import App from "../App";
 import AnimeEpisodeList from "./AnimeEpisodeList";
+import RequestUtilities from "./../../util/RequestUtilities";
 
 export default class AnimePage extends React.Component {
 
@@ -15,8 +16,7 @@ export default class AnimePage extends React.Component {
     }
 
     getEpisodeDetails = () => {
-        console.log(`anime/${this.props.match.params.id}`);
-        App.sendGetRequest(`anime/${this.props.match.params.id}`, false).then(res => {
+        RequestUtilities.sendGetRequest(`anime/${this.props.match.params.id}`, false).then(res => {
             this.setState({anime: res.data});
         });
     };
@@ -28,8 +28,6 @@ export default class AnimePage extends React.Component {
     }
 
     render() {
-
-
         if (this.state.anime !== null) {
             return (
                 <div className="anime-page-container">
