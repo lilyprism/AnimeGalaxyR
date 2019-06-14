@@ -5,38 +5,53 @@ from typing import List
 import requests
 
 
-def get_quality_from_format(format: int) -> str:
-	if format == 18:
+def get_quality_from_format(number: int) -> str:
+	if number == 18:
 		return "SD"
-	elif format == 22:
+	elif number == 22:
 		return "HD"
 	else:
 		return "Auto"
 
 
 def get_sources_from_url(url: str) -> List:
+	""" Returns a list of sources
+
+		This function is needed because blogger sends expirable links
+		To prevent invalid links we cache it for 6 hours and then get a new one
+	"""
+
+	# URLs from BRAnimes have redirect urls, so just send them back
 	if "branimes" in url:
 		return [{"file": get_redirect_url(url), "type": "video/mp4", "label": "SD"}]
+
+	# Everything other than blogger URLs, return them as normal HD
 	if "blogger.com" not in url:
 		return [{"file": url, "type": "video/mp4", "label": "HD"}]
 
-	CONFIG_REGEX = r"VIDEO_CONFIG = .+\}"
-	response = requests.get(url)
+	# Parse video configs from blogger url
 	try:
+		CONFIG_REGEX = r"VIDEO_CONFIG = .+\}"
+		response = requests.get(url)
 		match = re.findall(CONFIG_REGEX, response.text, re.DOTALL)[0]
+		js = json.loads(match[15:])
 	except:
 		return [{"file": url, "type": "video/mp4", "label": "SD"}]
 
-	js = json.loads(match[15:])
-
-	sources = []
-	for source in js.get("streams", []):
-		sources.append({"file": source.get("play_url", ""), "type": "video/mp4", "label": get_quality_from_format(source.get("format_id", 0))})
+	# Add all qualities from parsed video configs to an array of sources
+	sources = [
+		{
+			"file" : source.get("play_url", ""),
+			"type" : "video/mp4",
+			"label": get_quality_from_format(source.get("format_id", 0))
+		}
+		for source in js.get("streams", [])]
 
 	return sources
 
 
 def get_redirect_url(url: str) -> str:
+	""" Returns the first redirect url from given url """
 	session = requests.Session()
 	session.max_redirects = 1
 	try:

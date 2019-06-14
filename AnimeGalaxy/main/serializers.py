@@ -3,7 +3,7 @@ from rest_auth.registration.serializers import RegisterSerializer
 from rest_framework import serializers
 from rest_framework_recursive.fields import RecursiveField
 
-from .models import Anime, Comment, CustomUser, Episode, Genre, Report, UserEpisodes
+from .models import Anime, Comment, CustomUser, Episode, Genre, Report, UserCommentRatings, UserEpisodes
 
 
 class CustomRegisterSerializer(RegisterSerializer):
@@ -64,10 +64,18 @@ class AnimeSerializer(serializers.ModelSerializer):
 class SingleEpisodeSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Episode
-		fields = ['id', 'anime', 'number', 'views', 'liked']
+		fields = ['id', 'anime', 'number', 'views', 'liked', 'likes', 'dislikes']
 
 	anime = AnimeSerializer()
 	liked = serializers.SerializerMethodField()
+	likes = serializers.SerializerMethodField()
+	dislikes = serializers.SerializerMethodField()
+
+	def get_likes(self, instance):
+		return UserEpisodes.objects.filter(episode_id=instance.id, liked=True).count()
+
+	def get_dislikes(self, instance):
+		return UserEpisodes.objects.filter(episode_id=instance.id, liked=False).count()
 
 	def get_liked(self, instance):
 
@@ -121,7 +129,7 @@ class PlaylistSerializer(serializers.ModelSerializer):
 		return request.build_absolute_uri(image_url)
 
 
-class LikeSerializer(serializers.ModelSerializer):
+class EpisodeLikeSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = UserEpisodes
 		fields = ['episode', 'liked']
@@ -129,6 +137,16 @@ class LikeSerializer(serializers.ModelSerializer):
 
 	episode = serializers.PrimaryKeyRelatedField(queryset=Episode.objects.all())
 	liked = serializers.BooleanField(required=False, allow_null=True)
+
+
+class CommentLikeSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = UserCommentRatings
+		fields = ['comment', 'liked']
+		read_only_fields = ['comment']
+
+	comment = serializers.PrimaryKeyRelatedField(queryset=Comment.objects.all())
+	liked = serializers.BooleanField(required=True, allow_null=False)
 
 
 class ReportSerializer(serializers.ModelSerializer):
@@ -159,7 +177,24 @@ class CreateCommentSerializer(serializers.ModelSerializer):
 class CommentSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Comment
-		fields = ['id', 'user', 'text', 'level', 'date', 'replies']
+		fields = ['id', 'user', 'text', 'level', 'liked', 'date', 'replies', 'likes', 'dislikes']
 
 	replies = serializers.ListSerializer(child=RecursiveField(), source="children", read_only=True)
 	user = SimpleUserSerializer()
+	liked = serializers.SerializerMethodField()
+	likes = serializers.SerializerMethodField()
+	dislikes = serializers.SerializerMethodField()
+
+	def get_likes(self, instance):
+		return UserCommentRatings.objects.filter(comment_id=instance.id, liked=True).count()
+
+	def get_dislikes(self, instance):
+		return UserCommentRatings.objects.filter(comment_id=instance.id, liked=False).count()
+
+	def get_liked(self, instance):
+
+		request = self.context.get("request", None)
+		if request and request.user and request.user.id:
+			objs = UserCommentRatings.objects.filter(user_id=request.user.id, comment_id=instance.id)
+			return objs[0].liked if len(objs) > 0 else None
+		return None

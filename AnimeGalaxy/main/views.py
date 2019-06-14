@@ -12,10 +12,10 @@ from rest_framework.permissions import AllowAny, BasePermission, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.throttling import AnonRateThrottle, BaseThrottle, UserRateThrottle
 
-from .models import Anime, Episode, UserEpisodes
+from .models import Anime, Comment, Episode, UserCommentRatings, UserEpisodes
 from .paginators import StandardResultsSetPagination
-from .serializers import AnimeSearchSerializer, AnimeSerializer, CommentSerializer, CreateCommentSerializer, EpisodeCreateSerializer, LikeSerializer, MultiEpisodeSerializer, PlaylistSerializer, ReportSerializer, SimpleMultiEpisodeSerializer, SingleEpisodeSerializer
-from .throttles import LikeUserRateThrottle, ReportAnonRateThrottle, ReportUserRateThrottle
+from .serializers import AnimeSearchSerializer, AnimeSerializer, CommentLikeSerializer, CommentSerializer, CreateCommentSerializer, EpisodeCreateSerializer, EpisodeLikeSerializer, MultiEpisodeSerializer, PlaylistSerializer, ReportSerializer, SimpleMultiEpisodeSerializer, SingleEpisodeSerializer
+from .throttles import LowAnonRateThrottle, LowUserRateThrottle, NormalUserRateThrottle
 
 
 class BaseMVS(viewsets.ModelViewSet):
@@ -59,34 +59,31 @@ class EpisodesView(BaseMVS):
 	queryset = Episode.objects.all().order_by("-pk")[:12]
 	serializer_class = MultiEpisodeSerializer
 	create_serializer = EpisodeCreateSerializer
+	throttle_classes: List[BaseThrottle] = []
 
 	filterset_fields = ('id',)
 
 	def retrieve(self, request, pk=None, *args, **kwargs):
 		queryset = get_object_or_404(Episode, id=pk)
-		if not queryset:
-			return Response(status=status.HTTP_400_BAD_REQUEST)
-		else:
-			# Increment view number
-			queryset.views += 1
-			queryset.save()
 
-			# Set anime to currently being watched
-			watched = cache.get("watched_animes") or []
-			if queryset.anime_id not in watched:
-				watched.append(queryset.anime_id)
-				cache.set("watched_animes", watched, timeout=60 * 60)
+		# Increment view number
+		queryset.views += 1
+		queryset.save()
 
-			# Send episode information
-			serializer = SingleEpisodeSerializer(queryset, many=False, context={'request': request})
-			return Response(serializer.data, status=status.HTTP_200_OK)
+		# Set anime to currently being watched
+		watched = cache.get("watched_animes") or []
+		if queryset.anime_id not in watched:
+			watched.append(queryset.anime_id)
+			cache.set("watched_animes", watched, timeout=60 * 60)
+
+		# Send episode information
+		serializer = SingleEpisodeSerializer(queryset, many=False, context={'request': request})
+		return Response(serializer.data, status=status.HTTP_200_OK)
 
 	def comments(self, request, pk=None, *args, **kwargs):
 		queryset = get_object_or_404(Episode, id=pk)
-		if not queryset:
-			return Response(status=status.HTTP_400_BAD_REQUEST)
 
-		serializer = CommentSerializer(queryset.comments.filter(parent=None), many=True, context={"request": request})
+		serializer = CommentSerializer(queryset.comments.filter(parent=None).order_by("-date"), many=True, context={"request": request})
 		return Response(serializer.data, status=status.HTTP_200_OK)
 
 	@permission_classes([IsAuthenticated])
@@ -96,6 +93,11 @@ class EpisodesView(BaseMVS):
 		queryset = get_object_or_404(Episode, id=pk)
 		if not queryset:
 			return Response(status=status.HTTP_400_BAD_REQUEST)
+
+		# Prevent user spamming comments on same episode
+		comment_count = Comment.objects.filter(user=request.user.id, episode=pk).count()
+		if comment_count >= 5:
+			raise ValidationError({"error": {"message": "User cannot comment more than 5 comments on the same episode!", "code": 19932}}, code=19932)
 
 		# Set user to the user from the request and episode to the current episode page pk
 		request.data["user"] = request.user.id
@@ -152,7 +154,7 @@ class AnimeView(BaseMVS):
 
 class AnimeSearchView(HaystackViewSet):
 	index_models = [Anime]
-	throttle_classes = [UserRateThrottle, AnonRateThrottle]
+	throttle_classes: List[BaseThrottle] = []
 
 	serializer_class = AnimeSearchSerializer
 
@@ -162,12 +164,13 @@ class AnimeSearchView(HaystackViewSet):
 		if not text or 20 <= len(text) < 3:
 			return Response({"details": "Invalid request!"}, status.HTTP_400_BAD_REQUEST)
 
-		query = SearchQuerySet().all().models(Anime)
+		query = SearchQuerySet()
+		query.query.set_limits(low=0, high=12)
 		query1 = query.autocomplete(name__fuzzy=text)
 		query2 = query.autocomplete(genres__fuzzy=text)
 		query = query1 | query2
 
-		serializer = AnimeSearchSerializer(query, many=True, context={"request": request})
+		serializer = AnimeSearchSerializer(query.query.get_results(), many=True, context={"request": request})
 		return Response(serializer.data, status.HTTP_200_OK)
 
 
@@ -181,19 +184,18 @@ class UrlView(BaseMVS):
 		requested_episode = Episode.objects.get(pk=pk)
 		if not requested_episode:
 			return Response(status=status.HTTP_404_NOT_FOUND)
-		else:
-			episodes = Episode.objects.filter(anime=requested_episode.anime, number__gte=requested_episode.number).order_by("number")[:12]
-			serializer = PlaylistSerializer(episodes, many=True, context={"request": request})
-			return Response(serializer.data, status=status.HTTP_200_OK)
+
+		episodes = Episode.objects.filter(anime=requested_episode.anime, number__gte=requested_episode.number).order_by("number")[:12]
+		serializer = PlaylistSerializer(episodes, many=True, context={"request": request})
+		return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class LikeView(BaseMVS):
 	permission_classes = [IsAuthenticated]
-	throttle_classes = [LikeUserRateThrottle]
+	throttle_classes = [NormalUserRateThrottle]
 	queryset = UserEpisodes.objects.all()
-	serializer_class = LikeSerializer
 
-	def update(self, request, *args, **kwargs):
+	def episode(self, request, *args, **kwargs):
 
 		if not request.data.get("episode", None):
 			raise ValidationError("Episode is not valid!")
@@ -204,14 +206,35 @@ class LikeView(BaseMVS):
 		instance.liked = liked
 
 		instance.save()
-		serializer = LikeSerializer(instance=instance)
+		serializer = EpisodeLikeSerializer(instance=instance)
 
 		return Response(serializer.data)
+
+	def comment(self, request, *args, **kwargs):
+
+		liked = request.data.get("liked", None)
+		comment = request.data.get("comment", None)
+
+		if not comment:
+			raise ValidationError("Comment is not valid!")
+
+		if liked is None:
+			UserCommentRatings.objects.filter(user=request.user, comment_id=comment).delete()
+
+			return Response({"details": "success"}, status.HTTP_202_ACCEPTED)
+		else:
+			instance = UserCommentRatings.objects.get_or_create(user=request.user, comment_id=comment)[0]
+			instance.liked = liked
+
+			instance.save()
+			serializer = CommentLikeSerializer(instance=instance)
+
+			return Response(serializer.data, status.HTTP_202_ACCEPTED)
 
 
 @api_view(['POST'])
 @permission_classes([AllowAny])
-@throttle_classes([ReportUserRateThrottle, ReportAnonRateThrottle])
+@throttle_classes([LowUserRateThrottle, LowAnonRateThrottle])
 def create_report(request, classifier):
 	if not classifier:
 		return Response(status=status.HTTP_400_BAD_REQUEST)
