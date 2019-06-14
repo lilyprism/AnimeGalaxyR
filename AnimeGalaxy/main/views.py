@@ -2,6 +2,8 @@ from random import randint
 from typing import List
 
 from django.core.cache import cache
+from drf_haystack.viewsets import HaystackViewSet
+from haystack.query import SearchQuerySet
 from rest_framework import status, viewsets
 from rest_framework.decorators import api_view, permission_classes, throttle_classes
 from rest_framework.exceptions import ValidationError
@@ -11,8 +13,8 @@ from rest_framework.response import Response
 from rest_framework.throttling import AnonRateThrottle, BaseThrottle, UserRateThrottle
 
 from .models import Anime, Episode, UserEpisodes
-from .paginator import StandardResultsSetPagination
-from .serializers import AnimeSerializer, EpisodeCreateSerializer, LikeSerializer, MultiEpisodeSerializer, PlaylistSerializer, ReportSerializer, SimpleMultiEpisodeSerializer, SingleEpisodeSerializer
+from .paginators import StandardResultsSetPagination
+from .serializers import AnimeSearchSerializer, AnimeSerializer, CommentSerializer, CreateCommentSerializer, EpisodeCreateSerializer, LikeSerializer, MultiEpisodeSerializer, PlaylistSerializer, ReportSerializer, SimpleMultiEpisodeSerializer, SingleEpisodeSerializer
 from .throttles import LikeUserRateThrottle, ReportAnonRateThrottle, ReportUserRateThrottle
 
 
@@ -79,6 +81,32 @@ class EpisodesView(BaseMVS):
 			serializer = SingleEpisodeSerializer(queryset, many=False, context={'request': request})
 			return Response(serializer.data, status=status.HTTP_200_OK)
 
+	def comments(self, request, pk=None, *args, **kwargs):
+		queryset = get_object_or_404(Episode, id=pk)
+		if not queryset:
+			return Response(status=status.HTTP_400_BAD_REQUEST)
+
+		serializer = CommentSerializer(queryset.comments.filter(parent=None), many=True, context={"request": request})
+		return Response(serializer.data, status=status.HTTP_200_OK)
+
+	@permission_classes([IsAuthenticated])
+	def comment(self, request, pk=None, *args, **kwargs):
+		self.check_permissions(request)
+
+		queryset = get_object_or_404(Episode, id=pk)
+		if not queryset:
+			return Response(status=status.HTTP_400_BAD_REQUEST)
+
+		# Set user to the user from the request and episode to the current episode page pk
+		request.data["user"] = request.user.id
+		request.data["episode"] = pk
+
+		serializer = CreateCommentSerializer(data=request.data)
+		serializer.is_valid(raise_exception=True)
+		serializer.save()
+
+		return Response(serializer.data, status=status.HTTP_201_CREATED)
+
 
 # noinspection PyMethodMayBeStatic
 class AnimeView(BaseMVS):
@@ -120,6 +148,27 @@ class AnimeView(BaseMVS):
 		random_object = Anime.objects.all()[randint(0, count - 1)]
 
 		return Response({"id": random_object.pk}, status.HTTP_200_OK)
+
+
+class AnimeSearchView(HaystackViewSet):
+	index_models = [Anime]
+	throttle_classes = [UserRateThrottle, AnonRateThrottle]
+
+	serializer_class = AnimeSearchSerializer
+
+	def search(self, request, *args, **kwargs):
+		text = request.query_params.get('text', None)
+
+		if not text or 20 <= len(text) < 3:
+			return Response({"details": "Invalid request!"}, status.HTTP_400_BAD_REQUEST)
+
+		query = SearchQuerySet().all().models(Anime)
+		query1 = query.autocomplete(name__fuzzy=text)
+		query2 = query.autocomplete(genres__fuzzy=text)
+		query = query1 | query2
+
+		serializer = AnimeSearchSerializer(query, many=True, context={"request": request})
+		return Response(serializer.data, status.HTTP_200_OK)
 
 
 class UrlView(BaseMVS):

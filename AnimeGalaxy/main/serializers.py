@@ -1,7 +1,9 @@
+from drf_haystack.serializers import HaystackSerializerMixin
 from rest_auth.registration.serializers import RegisterSerializer
 from rest_framework import serializers
+from rest_framework_recursive.fields import RecursiveField
 
-from .models import Anime, CustomUser, Episode, Genre, Report, UserEpisodes
+from .models import Anime, Comment, CustomUser, Episode, Genre, Report, UserEpisodes
 
 
 class CustomRegisterSerializer(RegisterSerializer):
@@ -16,6 +18,22 @@ class UserSerializer(serializers.ModelSerializer):
 		model = CustomUser
 		fields = ['id', 'username', 'first_name', 'last_name', 'email', 'avatar']
 		read_only_fields = ['id', 'username']
+
+	def get_avatar(self, instance):
+		request = self.context.get('request')
+		image_url = instance.avatar.url
+		return request.build_absolute_uri(image_url)
+
+
+class SimpleUserSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = CustomUser
+		fields = ['id', 'username', 'avatar']
+
+	def get_avatar(self, instance):
+		request = self.context.get('request')
+		image_url = instance.avatar.url
+		return request.build_absolute_uri(image_url)
 
 
 class GenreSerializer(serializers.ModelSerializer):
@@ -55,7 +73,6 @@ class SingleEpisodeSerializer(serializers.ModelSerializer):
 
 		request = self.context.get("request", None)
 		if request and request.user and request.user.id:
-			print("Single video request from USER")
 			obj = UserEpisodes.objects.get_or_create(user_id=request.user.id, episode_id=instance.id)[0]
 			return obj.liked
 		return None
@@ -86,15 +103,21 @@ class EpisodeCreateSerializer(serializers.ModelSerializer):
 class PlaylistSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Episode
-		fields = ['id', 'title', 'description', 'image', 'sources']
+		fields = ['id', 'title', 'description', 'image', 'thumbnail', 'sources']
 
 	description = serializers.CharField(max_length=5000, source='anime.description')
 	title = serializers.CharField(max_length=250, source='__str__')
 	image = serializers.SerializerMethodField()
+	thumbnail = serializers.SerializerMethodField()
 
 	def get_image(self, episode):
 		request = self.context.get('request')
 		image_url = episode.anime.thumbnail.url
+		return request.build_absolute_uri(image_url)
+
+	def get_thumbnail(self, episode):
+		request = self.context.get('request')
+		image_url = episode.anime.image.url
 		return request.build_absolute_uri(image_url)
 
 
@@ -112,3 +135,31 @@ class ReportSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Report
 		fields = '__all__'
+
+
+class SimpleAnimeSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = Anime
+		fields = ["id", "name", "genres", "image"]
+
+	genres = GenreSerializer(many=True)
+
+
+class AnimeSearchSerializer(HaystackSerializerMixin, SimpleAnimeSerializer):
+	class Meta(SimpleAnimeSerializer.Meta):
+		search_fields = ("name",)
+
+
+class CreateCommentSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = Comment
+		fields = ['id', 'user', 'episode', 'text', 'parent']
+
+
+class CommentSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = Comment
+		fields = ['id', 'user', 'text', 'level', 'date', 'replies']
+
+	replies = serializers.ListSerializer(child=RecursiveField(), source="children", read_only=True)
+	user = SimpleUserSerializer()
