@@ -17,7 +17,8 @@ class CommentActions extends React.Component {
 
         this.state = {
             reply: "",
-            comment: this.props.comment
+            comment: this.props.comment,
+            form_open: false
         }
     }
 
@@ -32,11 +33,7 @@ class CommentActions extends React.Component {
 
         if (this_el instanceof HTMLElement) {
             this_el.querySelector(".comment-reply-form").classList.toggle("show");
-            if (event.target.innerHTML === "Reply") {
-                event.target.innerHTML = "Cancel";
-            } else {
-                event.target.innerHTML = "Reply"
-            }
+            this.setState({form_open: !this.state.form_open});
         }
     };
 
@@ -50,6 +47,7 @@ class CommentActions extends React.Component {
             if (this_el instanceof HTMLElement) {
                 this_el.querySelector(".comment-reply-textarea").value = "";
                 this_el.querySelector(".comment-reply-form").classList.toggle("show");
+                this.setState({form_open: false});
             }
         });
     }
@@ -89,7 +87,7 @@ class CommentActions extends React.Component {
             comment.likes = initialLikes;
             comment.dislikes = initialDislikes;
             this.setState({comment: comment});
-            ToastsStore.error("Algo de errado não está certo");
+            // ToastsStore.error("Algo de errado não está certo");
         });
     };
 
@@ -99,7 +97,7 @@ class CommentActions extends React.Component {
                 <div className="comment-options">
                     {
                         this.props.is_logged_in ?
-                            <span className="comment-option cursor-pointer" onClick={this.handleReplyClick}>Reply</span>
+                            <span className="comment-option cursor-pointer" onClick={this.handleReplyClick}>{!this.state.form_open ? "Reply" : "Close"}</span>
                             :
                             ""
                     }

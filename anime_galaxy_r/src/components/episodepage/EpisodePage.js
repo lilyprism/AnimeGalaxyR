@@ -1,13 +1,12 @@
 import React from 'react';
 import ReactJWPlayer from 'react-jw-player';
-import {ToastsStore} from "react-toasts";
 
 import "./episodepage.sass";
 
 import EpisodeOptions from "./EpisodeOptions";
 import EpisodeList from "./EpisodeList";
 import CommentSection from "./CommentSection";
-import RequestUtilities from "../../util/RequestUtilities";
+import RequestUtilities from "./../../util/RequestUtilities";
 import AnimeDetails from "./AnimeDetails";
 import EpisodeControls from "./EpisodeControls";
 
@@ -59,7 +58,7 @@ export default class EpisodePage extends React.Component {
             episode.likes = initialLikes;
             episode.dislikes = initialDislikes;
             this.setState({episode: episode});
-            ToastsStore.error("Algo de errado não está certo o/");
+            // ToastsStore.error("Algo de errado não está certo");
         });
     };
 
@@ -132,6 +131,7 @@ export default class EpisodePage extends React.Component {
 
         if (prevProps.is_logged_in !== this.props.is_logged_in) {
             this.getComments();
+            this.getEpisodeInfo();
         }
     }
 
@@ -179,7 +179,8 @@ export default class EpisodePage extends React.Component {
                                 <AnimeDetails anime={this.state.episode.anime}/>
                             </div>
                         </div>
-                        <div className="episode-list-container">
+                        <div className="right-episode-page-container">
+                            {this.state.playlist.length > 1 ? <h5 className="pl-25px p-0-l-down pless-title"><span>Próximos episódios</span></h5> : ""}
                             <EpisodeList playlist={this.state.playlist.slice(1)} episode={this.state.episode}/>
                         </div>
                     </div>

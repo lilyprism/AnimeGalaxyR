@@ -1,4 +1,5 @@
 @import colors
+@import page-units
 
 .h-100
   height: 100%
@@ -41,3 +42,15 @@
 
 .text-justify
   text-align: justify
+
+.d-block-md-down
+  display: none
+  @media (max-width: $breakpoint-md - 1)
+    display: block
+
+.pl-25px
+  padding-left: 25px
+
+.p-0-l-down
+  @media (max-width: $breakpoint-l - 1)
+    padding: 0

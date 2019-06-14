@@ -66,6 +66,11 @@ class Sidebar extends React.Component {
 
         return (
             <div className="sidebar sidebar-transition">
+                <Link to="/" onClick={this.handleNavItemClick} className="d-block-md-down">
+                    <div className="sidebar-item">
+                        <i className="fas fa-home fa-fw"/> Home
+                    </div>
+                </Link>
                 <Link to="/anime" onClick={this.handleNavItemClick}>
                     <div className="sidebar-item">
                         <i className="fas fa-list fa-fw"/> Anime

@@ -1,5 +1,6 @@
 import axios from "axios";
 import App from "../components/App";
+import {ToastsStore} from "react-toasts";
 
 export default class RequestUtilities {
 
@@ -84,6 +85,11 @@ export default class RequestUtilities {
                 case 401:
                     console.log("Unauthorized Request");
                     this.app_instance.logout();
+                    break;
+                case 429:
+                    console.log("Too Many Requests");
+                    ToastsStore.error("Esta ação encontra-se indisponível neste momento, por favor tente outra vez mais tarde");
+                    ToastsStore.error("Se continuares, serás banido");
                     break;
                 default:
                     console.log("Unhandled Error");
