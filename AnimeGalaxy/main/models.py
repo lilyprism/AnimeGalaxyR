@@ -153,7 +153,7 @@ class UserCommentRatings(Model):
 	user = models.ForeignKey(CustomUser, related_name="user_comment_rating", on_delete=models.CASCADE)
 
 	# Model Fields
-	liked = models.BooleanField(default=None, null=False, verbose_name='Comentário Gostado')
+	liked = models.BooleanField(default=None, null=True, verbose_name='Comentário Gostado')
 	date = models.DateTimeField(auto_now=True, null=False, editable=False)
 
 	def __str__(self):

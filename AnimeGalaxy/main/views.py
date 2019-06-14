@@ -83,7 +83,7 @@ class EpisodesView(BaseMVS):
 	def comments(self, request, pk=None, *args, **kwargs):
 		queryset = get_object_or_404(Episode, id=pk)
 
-		serializer = CommentSerializer(queryset.comments.filter(parent=None), many=True, context={"request": request})
+		serializer = CommentSerializer(queryset.comments.filter(parent=None).order_by("-date"), many=True, context={"request": request})
 		return Response(serializer.data, status=status.HTTP_200_OK)
 
 	@permission_classes([IsAuthenticated])
@@ -223,7 +223,8 @@ class LikeView(BaseMVS):
 
 			return Response({"details": "success"}, status.HTTP_202_ACCEPTED)
 		else:
-			instance = UserCommentRatings.objects.get_or_create(user=request.user, comment_id=comment, liked=liked)[0]
+			instance = UserCommentRatings.objects.get_or_create(user=request.user, comment_id=comment)[0]
+			instance.liked = liked
 
 			instance.save()
 			serializer = CommentLikeSerializer(instance=instance)
