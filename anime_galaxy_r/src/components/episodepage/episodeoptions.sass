@@ -11,13 +11,17 @@
     flex-wrap: wrap
     justify-content: flex-start
 
+
 .episode-option
   cursor: pointer
-  padding-left: 25px
+  margin-left: 25px
+
+.episode-option
+  white-space: nowrap
 
   @media (max-width: $breakpoint-md - 1)
-    padding-left: 0
-    padding-right: 25px
+    margin-left: 0
+    margin-right: 25px
 
 .episode-option:hover
   color: $icon-hover-color
@@ -27,6 +31,9 @@
 
 .episode-options-container .title
   flex-grow: 1
+  white-space: nowrap
+  overflow: hidden
+  text-overflow: ellipsis
   padding: 0
 
 .report-dropdown-container
@@ -69,6 +76,10 @@
 
 .like-dislike-container
   display: flex
+
+.like-dislike-container.disabled .episode-option
+  cursor: initial
+  color: gray
 
 .options-container
   display: flex

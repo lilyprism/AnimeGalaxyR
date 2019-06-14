@@ -20,7 +20,7 @@ export default class EpisodePage extends React.Component {
             episode: null,
             id: null,
             has_player: false,
-            playlist: null,
+            playlist: [],
             comments: []
         };
         this.getEpisode();
@@ -28,16 +28,38 @@ export default class EpisodePage extends React.Component {
 
     sendLike = value => {
         let episode = this.state.episode;
-        let initialValue = episode.liked;
+        let initialLiked = episode.liked;
+        let initialLikes = episode.likes;
+        let initialDislikes = episode.dislikes;
+
+        if (value === true) {
+            episode.likes += 1;
+            if (episode.liked === false) {
+                episode.dislikes -= 1;
+            }
+        } else if (value === false) {
+            episode.dislikes += 1;
+            if (episode.liked === true) {
+                episode.likes -= 1;
+            }
+        } else {
+            if (episode.liked === true) {
+                episode.likes -= 1;
+            } else if (episode.liked === false) {
+                episode.dislikes -= 1;
+            }
+        }
         episode.liked = value;
+
         this.setState({episode: episode});
         RequestUtilities.sendPostRequest("episode/like", {episode: this.state.episode.id, liked: value}, true).then(res => {
-            console.log("Boas");
-            console.log({episode: this.state.episode.id, liked: value});
+            console.log(res.data);
         }).catch(err => {
-            episode.liked = initialValue;
+            episode.liked = initialLiked;
+            episode.likes = initialLikes;
+            episode.dislikes = initialDislikes;
             this.setState({episode: episode});
-            ToastsStore.error("Algo de errado não está certo");
+            ToastsStore.error("Algo de errado não está certo o/");
         });
     };
 
@@ -86,7 +108,7 @@ export default class EpisodePage extends React.Component {
     };
 
     getComments = () => {
-        RequestUtilities.sendGetRequest(`episode/${this.state.episode.id}/comments`, false).then(res => {
+        RequestUtilities.sendGetRequest(`episode/${this.state.episode.id}/comments`, this.props.is_logged_in).then(res => {
             this.setState({comments: res.data});
         });
     };
@@ -106,6 +128,10 @@ export default class EpisodePage extends React.Component {
     componentDidUpdate(prevProps, prevState, snapshot) {
         if (prevProps.match.params.id !== this.props.match.params.id) {
             this.getEpisode();
+        }
+
+        if (prevProps.is_logged_in !== this.props.is_logged_in) {
+            this.getComments();
         }
     }
 
@@ -148,13 +174,13 @@ export default class EpisodePage extends React.Component {
                                                    }
                                                }
                                 />
-                                <EpisodeOptions episode={this.state.episode} is_logged_in={this.props.is_logged_in} sendLike={this.sendLike}/>
+                                <EpisodeOptions episode={this.state.episode} is_logged_in={this.props.is_logged_in} sendLike={this.sendLike} getEpisodeInfo={this.getEpisodeInfo}/>
                                 <EpisodeControls anime={this.state.episode.anime} episode={this.state.playlist !== null && this.state.playlist.length >= 2 ? this.state.playlist[1] : this.state.episode}/>
                                 <AnimeDetails anime={this.state.episode.anime}/>
                             </div>
                         </div>
                         <div className="episode-list-container">
-                            <EpisodeList playlist={this.state.playlist} episode={this.state.episode}/>
+                            <EpisodeList playlist={this.state.playlist.slice(1)} episode={this.state.episode}/>
                         </div>
                     </div>
                     <CommentSection getComments={this.getComments} episode={this.state.episode} comments={this.state.comments} is_logged_in={this.props.is_logged_in}/>

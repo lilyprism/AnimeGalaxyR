@@ -73,23 +73,16 @@ class Carousel extends React.Component {
             let this_el = ReactDOM.findDOMNode(this);
 
             if (this_el instanceof HTMLElement) {
-                console.log(this_el);
-                let carousel_items = document.querySelectorAll(".carousel-item");
-                console.log(carousel_items);
+                let carousel_items = this_el.querySelectorAll(".carousel-item");
                 for (let i = 0; i < carousel_items.length; i++) {
-                    if (i === carousel_items.length - 1) {
-                        carousel_items[i].style.order = 1;
-                    } else {
-                        carousel_items[i].style.order = i + 2;
-                    }
+                    carousel_items[i].style.order = i + 1;
                 }
             }
+
             if (this.props.items.length > 6) {
                 this.addAutomaticCycle();
             }
         }, 500);
-
-
     };
 
     componentWillUnmount() {
@@ -175,7 +168,7 @@ class Carousel extends React.Component {
         }
         if (this.props.items.length === 0) {
             return <div>Nada para ver aqui...</div>
-        } else if (this.props.items.length > 5) {
+        } else if (this.props.items.length > 6) {
             return (
                 <div className="carousel"
                      onMouseEnter={event => {

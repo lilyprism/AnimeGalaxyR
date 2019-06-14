@@ -6,8 +6,9 @@ import 'moment/locale/pt';
 
 import "./commentsection.sass";
 
-import RequestUtilities from "../../util/RequestUtilities";
+import RequestUtilities from "./../../util/RequestUtilities";
 import Report from "./../Report";
+import LikeDislike from "./LikeDislike";
 
 class CommentActions extends React.Component {
 
@@ -15,7 +16,14 @@ class CommentActions extends React.Component {
         super(props);
 
         this.state = {
-            reply: ""
+            reply: "",
+            comment: this.props.comment
+        }
+    }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (prevProps.comment !== this.props.comment) {
+            this.setState({comment: this.props.comment});
         }
     }
 
@@ -46,11 +54,56 @@ class CommentActions extends React.Component {
         });
     }
 
+    sendLike = value => {
+        let comment = this.state.comment;
+        let initialLiked = comment.liked;
+        let initialLikes = comment.likes;
+        let initialDislikes = comment.dislikes;
+
+        if (value === true) {
+            comment.likes += 1;
+            if (comment.liked === false) {
+                comment.dislikes -= 1;
+            }
+        } else if (value === false) {
+            comment.dislikes += 1;
+            if (comment.liked === true) {
+                comment.likes -= 1;
+            }
+        } else {
+            if (comment.liked === true) {
+                comment.likes -= 1;
+            } else if (comment.liked === false) {
+                comment.dislikes -= 1;
+            }
+        }
+        comment.liked = value;
+
+        this.setState({comment: comment});
+        RequestUtilities.sendPostRequest("comment/like", {comment: this.props.comment.id, liked: value}, true).then(res => {
+            console.log({comment: this.props.comment.id, liked: value});
+            // this.props.getComments();
+        }).catch(err => {
+            // this.props.getComments();
+            comment.liked = initialLiked;
+            comment.likes = initialLikes;
+            comment.dislikes = initialDislikes;
+            this.setState({comment: comment});
+            ToastsStore.error("Algo de errado não está certo");
+        });
+    };
+
     render() {
         return (
             <div className="comment-actions">
                 <div className="comment-options">
-                    <span className="comment-option cursor-pointer" onClick={this.handleReplyClick}>Reply</span>
+                    {
+                        this.props.is_logged_in ?
+                            <span className="comment-option cursor-pointer" onClick={this.handleReplyClick}>Reply</span>
+                            :
+                            ""
+                    }
+                    <LikeDislike disabled={!this.props.is_logged_in} comment={this.state.comment} sendLike={this.sendLike} className="comment-option"/>
                 </div>
                 <div className="comment-reply-form">
                     <textarea className="comment-reply-textarea" onChange={event => this.setState({reply: event.target.value})}/>
@@ -91,12 +144,7 @@ class Comment extends React.Component {
                         <div className="comment-text">
                             {this.props.comment.text}
                         </div>
-                        {
-                            this.props.is_logged_in ?
-                                <CommentActions getComments={this.props.getComments} episode={this.props.episode} comment={this.props.comment}/>
-                                :
-                                ""
-                        }
+                        <CommentActions getComments={this.props.getComments} episode={this.props.episode} comment={this.props.comment} is_logged_in={this.props.is_logged_in}/>
                     </div>
                 </div>
             </div>
