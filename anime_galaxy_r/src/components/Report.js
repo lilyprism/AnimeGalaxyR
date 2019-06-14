@@ -40,14 +40,14 @@ export default class Report extends React.Component {
                 console.log("Video reported");
                 ToastsStore.error("Obrigado por reportar este vídeo, investigaremos o problema o mais cedo possível");
             }).catch(res => {
-                ToastsStore.error("Ocorreu um erro. Por favor tente mais tarde.");
+                // ToastsStore.error("Ocorreu um erro. Por favor tente mais tarde.");
             });
         } else {
             RequestUtilities.sendPostRequest("report/video/other", {info: this.props.episode.id}, false).then(res => {
                 console.log("Video reported");
                 ToastsStore.error("Obrigado por reportar este vídeo, investigaremos o problema o mais cedo possível");
             }).catch(res => {
-                ToastsStore.error("Ocorreu um erro. Por favor tente mais tarde.");
+                // ToastsStore.error("Ocorreu um erro. Por favor tente mais tarde.");
             });
         }
     };
@@ -58,14 +58,14 @@ export default class Report extends React.Component {
                 console.log("Comment reported");
                 ToastsStore.error("Obrigado por reportar este comentário");
             }).catch(res => {
-                ToastsStore.error("Ocorreu um erro. Por favor tente mais tarde.");
+                // ToastsStore.error("Ocorreu um erro. Por favor tente mais tarde.");
             });
         } else {
             RequestUtilities.sendPostRequest("report/comment/offensive", {info: this.props.comment.id}, false).then(res => {
                 console.log("Comment reported");
                 ToastsStore.error("Obrigado por reportar este comentário");
             }).catch(res => {
-                ToastsStore.error("Ocorreu um erro. Por favor tente mais tarde.");
+                // ToastsStore.error("Ocorreu um erro. Por favor tente mais tarde.");
             });
         }
     };

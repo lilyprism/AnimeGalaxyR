@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactJWPlayer from 'react-jw-player';
-import {ToastsStore} from "react-toasts";
 
 import "./episodepage.sass";
 
@@ -59,7 +58,7 @@ export default class EpisodePage extends React.Component {
             episode.likes = initialLikes;
             episode.dislikes = initialDislikes;
             this.setState({episode: episode});
-            ToastsStore.error("Algo de errado não está certo o/");
+            // ToastsStore.error("Algo de errado não está certo");
         });
     };
 
