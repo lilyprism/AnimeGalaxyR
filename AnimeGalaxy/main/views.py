@@ -12,9 +12,9 @@ from rest_framework.permissions import AllowAny, BasePermission, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.throttling import AnonRateThrottle, BaseThrottle, UserRateThrottle
 
-from .models import Anime, Comment, Episode, UserEpisodes
+from .models import Anime, Comment, Episode, UserCommentRatings, UserEpisodes
 from .paginators import StandardResultsSetPagination
-from .serializers import AnimeSearchSerializer, AnimeSerializer, CommentSerializer, CreateCommentSerializer, EpisodeCreateSerializer, LikeSerializer, MultiEpisodeSerializer, PlaylistSerializer, ReportSerializer, SimpleMultiEpisodeSerializer, SingleEpisodeSerializer
+from .serializers import AnimeSearchSerializer, AnimeSerializer, CommentLikeSerializer, CommentSerializer, CreateCommentSerializer, EpisodeCreateSerializer, EpisodeLikeSerializer, MultiEpisodeSerializer, PlaylistSerializer, ReportSerializer, SimpleMultiEpisodeSerializer, SingleEpisodeSerializer
 from .throttles import LowAnonRateThrottle, LowUserRateThrottle, NormalUserRateThrottle
 
 
@@ -65,27 +65,23 @@ class EpisodesView(BaseMVS):
 
 	def retrieve(self, request, pk=None, *args, **kwargs):
 		queryset = get_object_or_404(Episode, id=pk)
-		if not queryset:
-			return Response(status=status.HTTP_400_BAD_REQUEST)
-		else:
-			# Increment view number
-			queryset.views += 1
-			queryset.save()
 
-			# Set anime to currently being watched
-			watched = cache.get("watched_animes") or []
-			if queryset.anime_id not in watched:
-				watched.append(queryset.anime_id)
-				cache.set("watched_animes", watched, timeout=60 * 60)
+		# Increment view number
+		queryset.views += 1
+		queryset.save()
 
-			# Send episode information
-			serializer = SingleEpisodeSerializer(queryset, many=False, context={'request': request})
-			return Response(serializer.data, status=status.HTTP_200_OK)
+		# Set anime to currently being watched
+		watched = cache.get("watched_animes") or []
+		if queryset.anime_id not in watched:
+			watched.append(queryset.anime_id)
+			cache.set("watched_animes", watched, timeout=60 * 60)
+
+		# Send episode information
+		serializer = SingleEpisodeSerializer(queryset, many=False, context={'request': request})
+		return Response(serializer.data, status=status.HTTP_200_OK)
 
 	def comments(self, request, pk=None, *args, **kwargs):
 		queryset = get_object_or_404(Episode, id=pk)
-		if not queryset:
-			return Response(status=status.HTTP_400_BAD_REQUEST)
 
 		serializer = CommentSerializer(queryset.comments.filter(parent=None), many=True, context={"request": request})
 		return Response(serializer.data, status=status.HTTP_200_OK)
@@ -168,12 +164,13 @@ class AnimeSearchView(HaystackViewSet):
 		if not text or 20 <= len(text) < 3:
 			return Response({"details": "Invalid request!"}, status.HTTP_400_BAD_REQUEST)
 
-		query = SearchQuerySet().all().models(Anime)
+		query = SearchQuerySet()
+		query.query.set_limits(low=0, high=12)
 		query1 = query.autocomplete(name__fuzzy=text)
 		query2 = query.autocomplete(genres__fuzzy=text)
 		query = query1 | query2
 
-		serializer = AnimeSearchSerializer(query, many=True, context={"request": request})
+		serializer = AnimeSearchSerializer(query.query.get_results(), many=True, context={"request": request})
 		return Response(serializer.data, status.HTTP_200_OK)
 
 
@@ -197,9 +194,8 @@ class LikeView(BaseMVS):
 	permission_classes = [IsAuthenticated]
 	throttle_classes = [NormalUserRateThrottle]
 	queryset = UserEpisodes.objects.all()
-	serializer_class = LikeSerializer
 
-	def update(self, request, *args, **kwargs):
+	def episode(self, request, *args, **kwargs):
 
 		if not request.data.get("episode", None):
 			raise ValidationError("Episode is not valid!")
@@ -210,9 +206,29 @@ class LikeView(BaseMVS):
 		instance.liked = liked
 
 		instance.save()
-		serializer = LikeSerializer(instance=instance)
+		serializer = EpisodeLikeSerializer(instance=instance)
 
 		return Response(serializer.data)
+
+	def comment(self, request, *args, **kwargs):
+
+		liked = request.data.get("liked", None)
+		comment = request.data.get("comment", None)
+
+		if not comment:
+			raise ValidationError("Comment is not valid!")
+
+		if liked is None:
+			UserCommentRatings.objects.filter(user=request.user, comment_id=comment).delete()
+
+			return Response({"details": "success"}, status.HTTP_202_ACCEPTED)
+		else:
+			instance = UserCommentRatings.objects.get_or_create(user=request.user, comment_id=comment, liked=liked)[0]
+
+			instance.save()
+			serializer = CommentLikeSerializer(instance=instance)
+
+			return Response(serializer.data, status.HTTP_202_ACCEPTED)
 
 
 @api_view(['POST'])

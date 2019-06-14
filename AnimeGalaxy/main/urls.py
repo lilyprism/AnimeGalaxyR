@@ -17,11 +17,13 @@ urlpatterns = [
 	path('report/comment/offensive', views.create_report, {"classifier": "comment-report-offensive"}, name="comment-report-offensive"),
 
 	# Episode Related
-	path('episode/like', views.LikeView.as_view({"post": "update"}), name="like-video"),
+	path('episode/like', views.LikeView.as_view({"post": "episode"}), name="like-video"),
 	path('episode/latest', views.EpisodesView.as_view({"get": "list", "post": "create"}), name='list-episodes'),
 	path('episode/<int:pk>', views.EpisodesView.as_view({"get": "retrieve"}), name='retrieve-episode'),
 	path('episode/<int:pk>/comments', views.EpisodesView.as_view({"get": "comments"}), name="episode-comments"),
 	path('episode/<int:pk>/comment', views.EpisodesView.as_view({"post": "comment"}), name="episode-comment"),
+
+	path('comment/like', views.LikeView.as_view({"post": "comment"}), name="like-comment"),
 
 	# Anime Related
 	path('anime/search', views.AnimeSearchView.as_view({"get": "search"}), name="search-anime"),
