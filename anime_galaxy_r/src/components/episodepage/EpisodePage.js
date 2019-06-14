@@ -7,7 +7,7 @@ import "./episodepage.sass";
 import EpisodeOptions from "./EpisodeOptions";
 import EpisodeList from "./EpisodeList";
 import CommentSection from "./CommentSection";
-import RequestUtilities from "../../util/RequestUtilities";
+import RequestUtilities from "./../../util/RequestUtilities";
 import AnimeDetails from "./AnimeDetails";
 import EpisodeControls from "./EpisodeControls";
 
@@ -132,6 +132,7 @@ export default class EpisodePage extends React.Component {
 
         if (prevProps.is_logged_in !== this.props.is_logged_in) {
             this.getComments();
+            this.getEpisodeInfo();
         }
     }
 
