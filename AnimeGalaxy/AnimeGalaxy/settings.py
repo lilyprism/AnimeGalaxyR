@@ -46,6 +46,7 @@ INSTALLED_APPS = [
 	'django.contrib.messages',
 	'django.contrib.staticfiles',
 
+	# Recursive models library
 	'mptt',
 
 	# Rest Framework Apps
@@ -66,6 +67,8 @@ INSTALLED_APPS = [
 	'anime.apps.AnimeConfig',
 	'episode.apps.EpisodeConfig',
 	'comment.apps.CommentConfig',
+
+	'report.apps.ReportConfig',
 ]
 
 MIDDLEWARE = [
@@ -82,9 +85,6 @@ MIDDLEWARE = [
 	'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
 	# Cache Middleware
-	# 'django.middleware.cache.UpdateCacheMiddleware',
-	# 'django.middleware.common.CommonMiddleware',
-	# 'django.middleware.cache.FetchFromCacheMiddleware',
 ]
 
 ROOT_URLCONF = 'AnimeGalaxy.urls'

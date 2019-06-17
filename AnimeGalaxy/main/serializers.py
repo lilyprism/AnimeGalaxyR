@@ -1,7 +1,7 @@
 from rest_auth.registration.serializers import RegisterSerializer
 from rest_framework import serializers
 
-from .models import CustomUser, Report
+from .models import CustomUser
 
 
 class CustomRegisterSerializer(RegisterSerializer):
@@ -32,9 +32,3 @@ class SimpleUserSerializer(serializers.ModelSerializer):
 		request = self.context.get('request')
 		image_url = instance.avatar.url
 		return request.build_absolute_uri(image_url)
-
-
-class ReportSerializer(serializers.ModelSerializer):
-	class Meta:
-		model = Report
-		fields = '__all__'

@@ -1,12 +1,6 @@
 from django.contrib import admin
 
-from .models import CustomUser, Report
-
-
-@admin.register(Report)
-class ReportAdmin(admin.ModelAdmin):
-	list_filter = ['classifier']
-	list_per_page = 24
+from .models import CustomUser
 
 
 @admin.register(CustomUser)

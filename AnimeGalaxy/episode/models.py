@@ -1,13 +1,14 @@
 from typing import List
 
-from anime.models import Anime
 from django.core.cache import cache
 from django.db import models
 from django.db.models import Model
 from django.utils import timezone
+from rest_framework.compat import MinValueValidator
+
+from anime.models import Anime
 from main.helpers import get_sources_from_url
 from main.models import CustomUser
-from rest_framework.compat import MinValueValidator
 
 
 class Episode(Model):
@@ -29,8 +30,8 @@ class Episode(Model):
 	added = models.DateTimeField(default=timezone.now, editable=False)
 
 	@property
-	def str_number(self):
-		return self.number.__str__()[:-2] if self.number.__str__().endswith(".0") else self.number
+	def str_number(self) -> str:
+		return self.number.__str__()[:-2] if self.number.__str__().endswith(".0") else self.number.__str__()
 
 	def __str__(self) -> str:
 		return f"{self.anime} - {self.str_number}"
