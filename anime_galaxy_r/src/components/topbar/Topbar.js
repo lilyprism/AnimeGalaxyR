@@ -57,7 +57,6 @@ export default class Topbar extends React.Component {
             } else if (value === "hide") {
                 if (this.state.results_open) {
                     this.toggleSearchResults("hide");
-                    console.log("Hide searchbar with results open");
                     setTimeout(function () {
                         this_el.querySelector(".search-area").classList.remove("open");
                     }, 300);
@@ -97,7 +96,6 @@ export default class Topbar extends React.Component {
                 this.setState({search_results: res.data}, () => {
                     this.toggleSearchResults("show");
                 });
-                console.log(res.data);
             }).catch(err => {
                 this.setState({search_results: []});
                 this.toggleSearchResults("hide");

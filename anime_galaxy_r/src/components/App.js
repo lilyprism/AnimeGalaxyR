@@ -11,6 +11,7 @@ import EpisodePage from "./episodepage/EpisodePage";
 import AnimePage from "./animepage/AnimePage";
 import LoginModal from "./login/LoginModal";
 import RequestUtilities from "../util/RequestUtilities";
+import RegisterModal from "./register/RegisterModal";
 
 export default class App extends React.Component {
 
@@ -70,6 +71,10 @@ export default class App extends React.Component {
             this.setState({is_logged_in: false});
             return App.isLoggedIn();
         });
+    };
+
+    register = (username, password, confirmPassword, email) => {
+        return RequestUtilities.sendPostRequest("auth/register", {})
     };
 
     static hideSidebar() {
@@ -152,7 +157,8 @@ export default class App extends React.Component {
                     </div>
                 </div>
                 <ToastsContainer store={ToastsStore}/>
-                {!this.state.is_logged_in ? <LoginModal element_id={"login-modal"} login={this.login}/> : ""}
+                {!this.state.is_logged_in ? <LoginModal element_id="login-modal" login={this.login}/> : ""}
+                {!this.state.is_logged_in ? <RegisterModal element_id="register-modal"/> : ""}
             </Router>
         );
     }

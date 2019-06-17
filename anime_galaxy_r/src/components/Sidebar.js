@@ -34,14 +34,19 @@ class Sidebar extends React.Component {
         let register = "";
         if (!this.props.is_logged_in) {
             login_logout =
-                <div className="sidebar-item cursor-pointer" onClick={() => {
-                    ModalWindow.openModal("login-modal");
-                    App.hideSidebar();
-                }}>
+                <div className="sidebar-item cursor-pointer"
+                     onClick={() => {
+                         ModalWindow.openModal("login-modal");
+                         this.handleNavItemClick();
+                     }}>
                     <i className="fas fa-sign-in-alt fa-fw"/> Entrar
                 </div>;
             register =
-                <Link to="/register" onClick={this.handleNavItemClick}>
+                <Link to="/register"
+                      onClick={() => {
+                          ModalWindow.openModal("register-modal");
+                          this.handleNavItemClick();
+                      }}>
                     <div className="sidebar-item">
                         <i className="fas fa-user-plus fa-fw"/> Registar
                     </div>
@@ -87,16 +92,16 @@ class Sidebar extends React.Component {
                     </div>
                 </Link>
                 <a href={"/random"}
-                    onClick={event => {
-                        event.preventDefault();
-                        this.handleNavItemClick();
-                        this.goToRandomAnime();
-                    }}
-                    onKeyPress={event => {
-                        if (event.which === 13) {
-                            event.target.click();
-                        }
-                    }}
+                   onClick={event => {
+                       event.preventDefault();
+                       this.handleNavItemClick();
+                       this.goToRandomAnime();
+                   }}
+                   onKeyPress={event => {
+                       if (event.which === 13) {
+                           event.target.click();
+                       }
+                   }}
                 >
                     <div className="sidebar-item">
                         <i className="fas fa-random fa-fw"/> Aleatório

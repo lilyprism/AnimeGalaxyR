@@ -121,10 +121,39 @@ a
 
 ::-webkit-scrollbar-thumb:hover
   background: $scrollbar-hover-color
+
   
+//Base form styling
+.form-group
+  padding-bottom: 20px
+  color: $light-text-color
+  font-size: 18px
+  width: 100%
+
+.form-group label
+  display: block
+  
+.invalid-form-msg
+  display: none
+  color: $invalid-text-color
+  font-weight: bold
+  
+.form-group.invalid .invalid-form-msg
+  display: block
+
+.input
+  font-size: 18px
+  width: 100%
+  background: rgba(255, 255, 255, 0.2)
+  border: 0
+  border-radius: 5px
+  outline: 0
+  padding: 5px
+  margin-top: 5px
+  color: $light-text-color
+
 input[type="submit"]
   cursor: pointer
-
 
 .btn
   padding: 10px 20px
@@ -141,3 +170,4 @@ input[type="submit"]
   border: 0
   border-radius: 5px
   color: $light-text-color
+

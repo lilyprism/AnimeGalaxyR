@@ -32,7 +32,7 @@ export default class RequestUtilities {
         });
     }
 
-    static sendPostRequest(endpoint, data = {}, authorized = false, config) {
+    static sendPostRequest(endpoint, data = {}, authorized = false, config = {}) {
         if (authorized) {
             if (config !== undefined) {
                 if (config.headers === undefined) {

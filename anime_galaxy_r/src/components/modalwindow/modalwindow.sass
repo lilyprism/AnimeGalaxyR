@@ -5,39 +5,37 @@
   display: none
   position: fixed
   top: 0
-  right: 0
-  bottom: 0
-  left: 0
+  height: 100%
+  width: 100%
+  padding: 20px
   z-index: 18
+  overflow-y: auto
 
 .modal-container.open
-  display: flex
-  justify-content: center
-  align-items: center
+  display: block
 
 .modal-overlay
-  position: absolute
+  position: fixed
   top: 0
+  left: 0
   right: 0
   bottom: 0
-  left: 0
   background-color: rgba(0, 0, 0, 0.7)
   z-index: 19
 
 .modal
   color: $light-text-color
   position: relative
-  top: -100px
   display: flex
   flex-direction: column
-  max-height: 500px
-  min-width: 300px
   padding: 20px
+  margin: 0 auto
   background-color: $background-color
   border-radius: 10px
   z-index: 20
   box-shadow: 0 0 5px black
   transition: width 0.5s
+  width: 500px
 
   @media (max-width: $breakpoint-sm - 1)
     max-width: 250px

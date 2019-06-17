@@ -2,7 +2,6 @@ import React from "react";
 import {ToastsStore} from "react-toasts";
 
 import "../modalwindow/modalwindow.sass";
-import "./login.sass";
 
 import ModalWindow from "../modalwindow/ModalWindow";
 
@@ -24,6 +23,7 @@ export default class LoginModal extends ModalWindow {
             if (res === true) {
                 console.log(res);
                 ToastsStore.success("Entraste com sucesso");
+                ModalWindow.closeModal(this.props.element_id);
             }
         });
     };
