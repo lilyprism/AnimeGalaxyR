@@ -74,6 +74,10 @@ export default class App extends React.Component {
     };
 
     register = (username, password, confirmPassword, email) => {
+        console.log("------ Register function ------");
+        return new Promise(function (resolve, reject) {
+            resolve("Hello there");
+        });
         return RequestUtilities.sendPostRequest("auth/register", {})
     };
 
@@ -158,7 +162,7 @@ export default class App extends React.Component {
                 </div>
                 <ToastsContainer store={ToastsStore}/>
                 {!this.state.is_logged_in ? <LoginModal element_id="login-modal" login={this.login}/> : ""}
-                {!this.state.is_logged_in ? <RegisterModal element_id="register-modal"/> : ""}
+                {!this.state.is_logged_in ? <RegisterModal element_id="register-modal" register={this.register}/> : ""}
             </Router>
         );
     }
