@@ -78,7 +78,7 @@ class CommentActions extends React.Component {
         comment.liked = value;
 
         this.setState({comment: comment});
-        RequestUtilities.sendPostRequest("comment/like", {comment: this.props.comment.id, liked: value}, true).then(res => {
+        RequestUtilities.sendPostRequest("episode/comment/like", {comment: this.props.comment.id, liked: value}, true).then(res => {
             console.log({comment: this.props.comment.id, liked: value});
             // this.props.getComments();
         }).catch(err => {

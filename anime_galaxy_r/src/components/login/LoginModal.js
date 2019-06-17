@@ -37,21 +37,25 @@ export default class LoginModal extends ModalWindow {
                     <header className="modal-header">
                         <h1 className="title"><span>Login</span></h1>
                     </header>
-                    <div className="modal-body">
-                        <div className="login-container">
-                            <form className="login-form w-100" action="" onSubmit={this.handleSubmit}>
+                    <form className="login-form w-100" action="" onSubmit={this.handleSubmit}>
+                        <div className="modal-body">
+                            <div className="login-container">
                                 <div className="form-group">
                                     <label htmlFor="username-input">Username</label>
                                     <input className="input" spellCheck="false" type="text" name="username" id="username-input" onChange={event => this.setState({username: event.target.value})}/>
+                                    <sub className="invalid-form-msg">Algo de errado não está certo</sub>
                                 </div>
                                 <div className="form-group">
                                     <label htmlFor="password-input">Password</label>
                                     <input className="input" type="password" name="password" id="password-input" onChange={event => this.setState({password: event.target.value})}/>
+                                    <sub className="invalid-form-msg">Algo de errado não está certo</sub>
                                 </div>
-                                <input className="btn" type="submit" value="Login"/>
-                            </form>
+                            </div>
                         </div>
-                    </div>
+                        <div className="modal-footer">
+                            <input className="btn" type="submit" value="Login"/>
+                        </div>
+                    </form>
                 </div>
             </div>
         );
