@@ -4,12 +4,12 @@ from typing import List
 from django.core.cache import cache
 from drf_haystack.viewsets import HaystackViewSet
 from haystack.query import SearchQuerySet
-from main.views import BaseMVS
 from rest_framework import status
 from rest_framework.permissions import BasePermission
 from rest_framework.response import Response
 from rest_framework.throttling import BaseThrottle
 
+from main.views import BaseMVS
 from .models import Anime
 from .serializers import AnimeSearchSerializer, AnimeSerializer
 
@@ -53,14 +53,13 @@ class AnimeSearchView(HaystackViewSet):
 	def search(self, request, *args, **kwargs):
 		text = request.query_params.get('text', None)
 
-		if not text or 20 <= len(text) < 3:
+		if not text or len(text) < 3 or len(text) >= 60:
 			return Response({"details": "Invalid request!"}, status.HTTP_400_BAD_REQUEST)
 
 		query = SearchQuerySet()
 		query.query.set_limits(low=0, high=12)
 		query1 = query.autocomplete(name__fuzzy=text)
-		query2 = query.autocomplete(genres__fuzzy=text)
-		query = query1 | query2
+		query = query1
 
 		serializer = AnimeSearchSerializer(query.query.get_results(), many=True, context={"request": request})
 		return Response(serializer.data, status.HTTP_200_OK)

@@ -38,10 +38,5 @@ class Anime(Model):
 	description = RichTextField(null=False, blank=False, verbose_name="Descrição")
 	complete = models.BooleanField(verbose_name="Completo", default=False, null=False, blank=False)
 
-	@property
-	def genre_list(self) -> str:
-		""" Returns genres as string to index on search engine """
-		return " ".join([genre.name for genre in self.genres.all()])
-
 	def __str__(self) -> str:
 		return self.name
