@@ -1,48 +1,12 @@
 from django.contrib import admin
-from mptt.admin import DraggableMPTTAdmin
 
-from .models import Anime, Comment, CustomUser, Episode, Genre, Report
-
-
-@admin.register(Genre)
-class GenreAdmin(admin.ModelAdmin):
-	fieldsets = (
-		('Configurações Gerais', {
-			'fields': ('name',)
-		}),
-	)
-
-
-@admin.register(Anime)
-class AnimeAdmin(admin.ModelAdmin):
-	fieldsets = (
-		('Configurações Gerais', {
-			'fields': ('name', 'description')
-		}),
-		('Configurações Avançadas', {
-			'classes': ('wide', 'collapse'),
-			'fields' : ('genres', 'image', 'thumbnail'),
-		})
-	)
+from .models import CustomUser, Report
 
 
 @admin.register(Report)
 class ReportAdmin(admin.ModelAdmin):
 	list_filter = ['classifier']
 	list_per_page = 24
-
-
-@admin.register(Episode)
-class EpisodeAdmin(admin.ModelAdmin):
-
-	list_filter = ['anime']
-	list_per_page = 24
-
-	fieldsets = (
-		('Configurações Gerais', {
-			'fields': ('anime', 'number', 'blogger_url')
-		}),
-	)
 
 
 @admin.register(CustomUser)
@@ -57,8 +21,3 @@ class CustomUserAdmin(admin.ModelAdmin):
 			'fields' : ('is_staff', 'is_active', 'groups', 'user_permissions'),
 		}),
 	)
-
-
-@admin.register(Comment)
-class CommentAdmin(DraggableMPTTAdmin):
-	list_filter = ['episode__anime']

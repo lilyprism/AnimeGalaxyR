@@ -63,6 +63,9 @@ INSTALLED_APPS = [
 	'haystack',
 
 	'main.apps.MainConfig',
+	'anime.apps.AnimeConfig',
+	'episode.apps.EpisodeConfig',
+	'comment.apps.CommentConfig',
 ]
 
 MIDDLEWARE = [
