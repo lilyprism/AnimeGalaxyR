@@ -26,7 +26,7 @@ export default class LoginModal extends ModalWindow {
                 ModalWindow.closeModal(this.props.element_id);
             }
         }).catch(error => {
-            console.log(error.response);
+            console.log(error);
             this.validateForm(error);
         });
     };
@@ -35,13 +35,15 @@ export default class LoginModal extends ModalWindow {
         document.querySelectorAll(`#${this.props.element_id} .form-group`).forEach(function (element) {
             element.classList.remove("invalid");
         });
-        if (error.response.data !== undefined){
-            if (error.response.data.non_field_errors !== undefined) {
-                console.log("Non Field Error");
-                let error_form_group = document.querySelector("#non-field-errors");
+        if (error.response !== undefined) {
+            if (error.response.data !== undefined) {
+                if (error.response.data.non_field_errors !== undefined) {
+                    console.log("Non Field Error");
+                    let error_form_group = document.querySelector("#non-field-errors");
 
-                error_form_group.querySelector(".invalid-form-msg").innerHTML = error.response.data.non_field_errors.toString().replace(/,/g, "<br/>");
-                error_form_group.classList.add("invalid");
+                    error_form_group.querySelector(".invalid-form-msg").innerHTML = error.response.data.non_field_errors.toString().replace(/,/g, "<br/>");
+                    error_form_group.classList.add("invalid");
+                }
             }
         }
     }
