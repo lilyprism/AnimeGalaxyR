@@ -42,7 +42,19 @@ export default class Topbar extends React.Component {
     toggleSearchBar = value => {
         let this_el = ReactDOM.findDOMNode(this);
 
+
         if (this_el instanceof HTMLElement) {
+            if (!this_el.querySelector(".search-area").classList.contains("open")) {
+                console.log("Hello");
+                let search_input = this_el.querySelector(".search-input");
+                search_input.focus();
+                search_input.tabIndex = 0;
+            } else {
+                console.log("Bye");
+                let search_input = this_el.querySelector(".search-input");
+                search_input.tabIndex = -1;
+            }
+
             if (value === undefined) {
                 if (this.state.results_open) {
                     this.toggleSearchResults("hide");
@@ -140,7 +152,7 @@ export default class Topbar extends React.Component {
                     </div>
                     <div className="search-area">
                         <div className="search-input-container">
-                            <input className="search-input" id="search-input" placeholder="eg: Fairy Tail" spellCheck={false} type="text"
+                            <input className="search-input" tabIndex={-1} id="search-input" placeholder="eg: Fairy Tail" spellCheck={false} type="text"
                                    onChange={
                                        event => {
                                            this.searchAnime(event.target.value)
@@ -151,7 +163,7 @@ export default class Topbar extends React.Component {
                                 <SearchResultBox results={this.state.search_results} results_open={this.state.results_open}/>
                             </div>
                         </div>
-                        <div className="icon search-icon" role="button" onClick={event => this.toggleSearchBar()}>
+                        <div className="icon search-icon" role="button" tabIndex={0} onClick={event => this.toggleSearchBar()}>
                             <i className="fas fa-search fa-17x"/>
                         </div>
                     </div>
