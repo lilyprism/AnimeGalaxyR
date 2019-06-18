@@ -160,6 +160,9 @@ REST_AUTH_REGISTER_SERIALIZERS = {
 	"REGISTER_SERIALIZER": "main.serializers.CustomRegisterSerializer",
 }
 
+ACCOUNT_EMAIL_VERIFICATION = 'none'
+ACCOUNT_EMAIL_REQUIRED = True
+
 SITE_ID = 1
 
 # Cache configuration
