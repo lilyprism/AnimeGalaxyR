@@ -1,7 +1,8 @@
-import ModalWindow from './../modalwindow/ModalWindow';
-import {ToastsStore} from "react-toasts";
 import React from "react";
-import * as ReactDOM from "react-dom";
+import ReactDOM from "react-dom";
+import {ToastsStore} from "react-toasts";
+
+import ModalWindow from './../modalwindow/ModalWindow';
 
 export default class RegisterModal extends ModalWindow {
 
