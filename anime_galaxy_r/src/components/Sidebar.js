@@ -29,38 +29,67 @@ class Sidebar extends React.Component {
         });
     }
 
+    handleLoginClick = () => {
+        this.handleNavItemClick();
+        ModalWindow.openModal("login-modal");
+    };
+
+
+    handleLogoutClick = () => {
+        App.hideSidebar();
+        this.props.logout().then(res => {
+            ToastsStore.success("Saíste com sucesso", 3000);
+        });
+    };
+
+    handleRegisterClick = () => {
+        this.handleNavItemClick();
+        ModalWindow.openModal("register-modal");
+    };
+
     render() {
         let login_logout = "";
         let register = "";
         if (!this.props.is_logged_in) {
             login_logout =
-                <div className="sidebar-item cursor-pointer" onClick={() => {
-                    ModalWindow.openModal("login-modal");
-                    App.hideSidebar();
-                }}>
-                    <i className="fas fa-sign-in-alt fa-fw"/> Entrar
-                </div>;
+                <Link to="/login"
+                      onClick={
+                          event => {
+                              event.preventDefault();
+                              this.handleLoginClick();
+                          }
+                      }>
+                    <div className="sidebar-item cursor-pointer">
+                        <i className="fas fa-sign-in-alt fa-fw"/> Entrar
+                    </div>
+                </Link>;
             register =
-                <Link to="/register" onClick={this.handleNavItemClick}>
+                <Link to="/register"
+                      onClick={
+                          event => {
+                              event.preventDefault();
+                              this.handleRegisterClick();
+                          }
+                      }>
                     <div className="sidebar-item">
                         <i className="fas fa-user-plus fa-fw"/> Registar
                     </div>
                 </Link>;
         } else {
             login_logout =
-                <div className="cursor-pointer"
-                     onClick={
-                         event => {
-                             App.hideSidebar();
-                             this.props.logout().then(res => {
-                                 ToastsStore.success("Saíste com sucesso", 3000);
-                             });
-                         }
-                     }>
-                    <div className="sidebar-item">
-                        <i className="fas fa-sign-out-alt fa-fw"/> Sair
+                <Link to="/logout"
+                      onClick={
+                          event => {
+                              event.preventDefault();
+                              this.handleLogoutClick();
+                          }
+                      }>
+                    <div className="cursor-pointer">
+                        <div className="sidebar-item">
+                            <i className="fas fa-sign-out-alt fa-fw"/> Sair
+                        </div>
                     </div>
-                </div>;
+                </Link>;
             register = "";
         }
 
@@ -87,16 +116,16 @@ class Sidebar extends React.Component {
                     </div>
                 </Link>
                 <a href={"/random"}
-                    onClick={event => {
-                        event.preventDefault();
-                        this.handleNavItemClick();
-                        this.goToRandomAnime();
-                    }}
-                    onKeyPress={event => {
-                        if (event.which === 13) {
-                            event.target.click();
-                        }
-                    }}
+                   onClick={event => {
+                       event.preventDefault();
+                       this.handleNavItemClick();
+                       this.goToRandomAnime();
+                   }}
+                   onKeyPress={event => {
+                       if (event.which === 13) {
+                           event.target.click();
+                       }
+                   }}
                 >
                     <div className="sidebar-item">
                         <i className="fas fa-random fa-fw"/> Aleatório

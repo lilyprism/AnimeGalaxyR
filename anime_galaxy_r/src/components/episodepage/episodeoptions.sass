@@ -2,95 +2,95 @@
 @import ../sass/page-units
 
 .episode-options-container
-  padding: 15px 0 20px 0
-  display: flex
-  justify-content: flex-end
-  align-items: flex-start
+	padding: 15px 0 20px 0
+	display: flex
+	justify-content: flex-end
+	align-items: flex-start
 
-  @media (max-width: $breakpoint-md - 1)
-    flex-wrap: wrap
-    justify-content: flex-start
+	@media (max-width: $breakpoint-md - 1)
+		flex-wrap: wrap
+		justify-content: flex-start
 
-  .episode-option
-    cursor: pointer
-    margin-left: 25px
+	.episode-option
+		cursor: pointer
+		margin-left: 25px
 
-  .episode-option
-    white-space: nowrap
+	.episode-option
+		white-space: nowrap
 
-    @media (max-width: $breakpoint-md - 1)
-      margin-left: 0
-      margin-right: 25px
+		@media (max-width: $breakpoint-md - 1)
+			margin-left: 0
+			margin-right: 25px
 
 .comment-like-dislike
-  .episode-option:not(:first-child)
-    margin-left: 25px
+	.episode-option:not(:first-child)
+		margin-left: 25px
 
 .episode-option
-  cursor: pointer
+	cursor: pointer
 
 .episode-option:hover
-  color: $icon-hover-color
+	color: $icon-hover-color
 
 .episode-option.chosen
-  color: $secondary-color
+	color: $secondary-color
 
 .episode-options-container .title
-  flex-grow: 1
-  white-space: nowrap
-  overflow: hidden
-  text-overflow: ellipsis
-  padding: 0
+	flex-grow: 1
+	white-space: nowrap
+	overflow: hidden
+	text-overflow: ellipsis
+	padding: 0
 
 .report-dropdown-container
-  display: none
-  position: relative
+	display: none
+	position: relative
 
 .report-dropdown-container.open
-  display: block
+	display: block
 
 .report-dropdown
-  z-index: 9
-  position: absolute
-  bottom: 100%
-  width: 250px
+	z-index: 9
+	position: absolute
+	bottom: 100%
+	width: 250px
 
 .report-dropdown.video-report-dropdown, .report-dropdown.video-report-dropdown .report-dropdown-options
-  @media (max-width: $breakpoint-md - 1)
-    left: 0
-  @media (min-width: $breakpoint-md)
-    right: 0
+	@media (max-width: $breakpoint-md - 1)
+		left: 0
+	@media (min-width: $breakpoint-md)
+		right: 0
 
 .report-dropdown.comment-report-dropdown, .report-dropdown.comment-report-dropdown .report-dropdown-options
-  right: 0
+	right: 0
 
 .report-dropdown-options
-  position: absolute
-  bottom: 100%
-  display: inline-block
-  background: $background-color
-  border-radius: 5px
-  max-width: 250px
+	position: absolute
+	bottom: 100%
+	display: inline-block
+	background: $background-color
+	border-radius: 5px
+	max-width: 250px
 
 .report-dropdown .report-option
-  padding: 5px
-  width: 100%
-  color: $light-text-color
+	padding: 5px
+	width: 100%
+	color: $light-text-color
 
 .report-option:hover
-  color: $secondary-color
+	color: $secondary-color
 
 .like-dislike-container
-  display: flex
+	display: flex
 
 .like-dislike-container.disabled .episode-option
-  cursor: initial
-  color: gray
+	cursor: initial
+	color: gray
 
 .options-container
-  display: flex
-  align-items: center
-  height: 29px
+	display: flex
+	align-items: center
+	height: 29px
 
-  @media (max-width: $breakpoint-md - 1)
-    margin-top: 20px
+	@media (max-width: $breakpoint-md - 1)
+		margin-top: 20px

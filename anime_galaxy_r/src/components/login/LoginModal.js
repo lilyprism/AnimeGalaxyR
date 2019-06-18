@@ -2,7 +2,6 @@ import React from "react";
 import {ToastsStore} from "react-toasts";
 
 import "../modalwindow/modalwindow.sass";
-import "./login.sass";
 
 import ModalWindow from "../modalwindow/ModalWindow";
 
@@ -24,9 +23,30 @@ export default class LoginModal extends ModalWindow {
             if (res === true) {
                 console.log(res);
                 ToastsStore.success("Entraste com sucesso");
+                ModalWindow.closeModal(this.props.element_id);
             }
+        }).catch(error => {
+            console.log(error);
+            this.validateForm(error);
         });
     };
+
+    validateForm(error) {
+        document.querySelectorAll(`#${this.props.element_id} .form-group`).forEach(function (element) {
+            element.classList.remove("invalid");
+        });
+        if (error.response !== undefined) {
+            if (error.response.data !== undefined) {
+                if (error.response.data.non_field_errors !== undefined) {
+                    console.log("Non Field Error");
+                    let error_form_group = document.querySelector("#non-field-errors");
+
+                    error_form_group.querySelector(".invalid-form-msg").innerHTML = error.response.data.non_field_errors.toString().replace(/,/g, "<br/>");
+                    error_form_group.classList.add("invalid");
+                }
+            }
+        }
+    }
 
     render() {
         return (
@@ -37,9 +57,9 @@ export default class LoginModal extends ModalWindow {
                     <header className="modal-header">
                         <h1 className="title"><span>Login</span></h1>
                     </header>
-                    <div className="modal-body">
-                        <div className="login-container">
-                            <form className="login-form w-100" action="" onSubmit={this.handleSubmit}>
+                    <form className="login-form w-100" action="" onSubmit={this.handleSubmit}>
+                        <div className="modal-body">
+                            <div className="login-container">
                                 <div className="form-group">
                                     <label htmlFor="username-input">Username</label>
                                     <input className="input" spellCheck="false" type="text" name="username" id="username-input" onChange={event => this.setState({username: event.target.value})}/>
@@ -48,10 +68,15 @@ export default class LoginModal extends ModalWindow {
                                     <label htmlFor="password-input">Password</label>
                                     <input className="input" type="password" name="password" id="password-input" onChange={event => this.setState({password: event.target.value})}/>
                                 </div>
-                                <input className="btn" type="submit" value="Login"/>
-                            </form>
+                                <div className="form-group" id="non-field-errors">
+                                    <sub className="invalid-form-msg">Algo de errado não está certo</sub>
+                                </div>
+                            </div>
                         </div>
-                    </div>
+                        <div className="modal-footer">
+                            <input className="btn" type="submit" value="Login"/>
+                        </div>
+                    </form>
                 </div>
             </div>
         );

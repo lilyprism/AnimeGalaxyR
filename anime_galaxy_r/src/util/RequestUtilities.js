@@ -32,7 +32,7 @@ export default class RequestUtilities {
         });
     }
 
-    static sendPostRequest(endpoint, data = {}, authorized = false, config) {
+    static sendPostRequest(endpoint, data = {}, authorized = false, config = {}) {
         if (authorized) {
             if (config !== undefined) {
                 if (config.headers === undefined) {
@@ -81,6 +81,7 @@ export default class RequestUtilities {
             switch (error.response.status) {
                 case 400:
                     console.log("Bad Request");
+                    console.log(error.response);
                     break;
                 case 401:
                     console.log("Unauthorized Request");
@@ -95,6 +96,7 @@ export default class RequestUtilities {
                     console.log("Unhandled Error");
             }
         }
+        throw error;
     }
 
 };

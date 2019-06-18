@@ -9,10 +9,20 @@ export default class ModalWindow extends React.Component {
 
         if (window.openModal === undefined && window.closeModal === undefined) {
             window.openModal = function (id) {
-                document.getElementById(id).classList.add("open");
+                if (document.getElementById(id) !== null) {
+                    document.getElementById(id).classList.add("open");
+                    let first_input = document.getElementById(id).querySelector(".input");
+                    if (first_input) {
+                        first_input.focus();
+                    }
+                }
+                document.querySelector("body").classList.add("overflow-hidden");
             };
             window.closeModal = function (id) {
-                document.getElementById(id).classList.remove("open");
+                if (document.getElementById(id) !== null) {
+                    document.getElementById(id).classList.remove("open");
+                }
+                document.querySelector("body").classList.remove("overflow-hidden");
             };
         }
     }

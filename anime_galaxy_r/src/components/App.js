@@ -10,7 +10,9 @@ import Topbar from "./topbar/Topbar";
 import EpisodePage from "./episodepage/EpisodePage";
 import AnimePage from "./animepage/AnimePage";
 import LoginModal from "./login/LoginModal";
-import RequestUtilities from "../util/RequestUtilities";
+import RequestUtilities from "./../util/RequestUtilities";
+import RegisterModal from "./register/RegisterModal";
+import Profile from "./profile/Profile";
 
 export default class App extends React.Component {
 
@@ -20,7 +22,8 @@ export default class App extends React.Component {
         super(props);
 
         this.state = {
-            is_logged_in: App.isLoggedIn()
+            is_logged_in: App.isLoggedIn(),
+            user: null
         };
         App.app_instance = this;
         RequestUtilities.setAppInstance(this);
@@ -34,7 +37,7 @@ export default class App extends React.Component {
         let token = localStorage.getItem("anime_galaxy_auth_token");
 
         if (token !== null) {
-            return `Token ${localStorage.getItem("anime_galaxy_auth_token")}`;
+            return `JWT ${localStorage.getItem("anime_galaxy_auth_token")}`;
         } else {
             return null;
         }
@@ -48,15 +51,27 @@ export default class App extends React.Component {
         localStorage.removeItem("anime_galaxy_auth_token");
     }
 
+    getUser = () => {
+        if (this.state.is_logged_in) {
+            RequestUtilities.sendGetRequest("auth/user", true).then(res => {
+                this.setState({user: res.data});
+            });
+        }
+    };
+
     login = (username, password) => {
         return RequestUtilities.sendPostRequest("auth/login", {username: username, password: password}, false).then(res => {
-            console.log(res.data);
-            App.setAuthToken(res.data.key);
-            this.setState({is_logged_in: true});
+            App.setAuthToken(res.data.token);
+            this.setState({
+                is_logged_in: true,
+                user: res.data.user
+            }, () => {
+                this.getUser();
+            });
             return App.isLoggedIn();
-        }).catch(res => {
+        }).catch(error => {
             this.setState({is_logged_in: false});
-            return App.isLoggedIn();
+            throw error;
         });
     };
 
@@ -70,6 +85,18 @@ export default class App extends React.Component {
             this.setState({is_logged_in: false});
             return App.isLoggedIn();
         });
+    };
+
+    register = (username, password, confirmPassword, email) => {
+        console.log("------ Register function ------");
+        return RequestUtilities.sendPostRequest("auth/register", {
+            email: email,
+            username: username,
+            password1: password,
+            password2: confirmPassword
+        }).then(res => {
+            return true;
+        })
     };
 
     static hideSidebar() {
@@ -96,6 +123,7 @@ export default class App extends React.Component {
 
     componentDidMount() {
         this.handleScrollAndResize();
+        this.getUser();
     }
 
     //This function is responsible for adding the events needed to handle sticky-like behaviours in the website
@@ -143,6 +171,10 @@ export default class App extends React.Component {
                                     props =>
                                         <AnimePage {...props}/>
                                 }/>
+                                <Route exact path="/profile" render={
+                                    props =>
+                                        <Profile {...props} user={this.state.user}/>
+                                }/>
                                 {/*<Route path="/login" render={*/}
                                 {/*    props =>*/}
                                 {/*        <Login {...props} login={this.login} is_logged_in={this.state.is_logged_in}/>*/}
@@ -152,7 +184,8 @@ export default class App extends React.Component {
                     </div>
                 </div>
                 <ToastsContainer store={ToastsStore}/>
-                {!this.state.is_logged_in ? <LoginModal element_id={"login-modal"} login={this.login}/> : ""}
+                {!this.state.is_logged_in ? <LoginModal element_id="login-modal" login={this.login}/> : ""}
+                {!this.state.is_logged_in ? <RegisterModal element_id="register-modal" register={this.register}/> : ""}
             </Router>
         );
     }

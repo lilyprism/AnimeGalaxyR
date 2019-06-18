@@ -87,7 +87,7 @@ export default class EpisodePage extends React.Component {
 
     getPlaylist() {
         console.log("Getting playlist");
-        return RequestUtilities.sendGetRequest(`playlist/${this.state.episode.id}`, false).then(res => {
+        return RequestUtilities.sendGetRequest(`episode/playlist/${this.state.episode.id}`, false).then(res => {
             this.setState({playlist: res.data});
             return res.data;
         });
@@ -107,9 +107,11 @@ export default class EpisodePage extends React.Component {
     };
 
     getComments = () => {
-        RequestUtilities.sendGetRequest(`episode/${this.state.episode.id}/comments`, this.props.is_logged_in).then(res => {
-            this.setState({comments: res.data});
-        });
+        if (this.state.episode !== undefined) {
+            RequestUtilities.sendGetRequest(`episode/${this.state.episode.id}/comments`, this.props.is_logged_in).then(res => {
+                this.setState({comments: res.data});
+            });
+        }
     };
 
     componentDidMount() {
@@ -144,7 +146,7 @@ export default class EpisodePage extends React.Component {
                         <div className="player-misc-wrapper">
                             <div className="player-left-wrapper">
                                 <div className="video-loading-container">A carregar o video...</div>
-                                <ReactJWPlayer playerId={`player-container`} playerScript="https://cdn.jwplayer.com/libraries/7OxfLofq.js" playlist={`${process.env.REACT_APP_API_URL}/playlist/${this.state.id}`}
+                                <ReactJWPlayer playerId={`player-container`} playerScript="https://cdn.jwplayer.com/libraries/7OxfLofq.js" playlist={`${process.env.REACT_APP_API_URL}/episode/playlist/${this.state.id}`}
                                                onReady={
                                                    event => {
                                                        this.setState({has_player: true});
@@ -180,7 +182,7 @@ export default class EpisodePage extends React.Component {
                             </div>
                         </div>
                         <div className="right-episode-page-container">
-                            {this.state.playlist.length > 1 ? <h5 className="pl-25px p-0-l-down pless-title"><span>Próximos episódios</span></h5> : ""}
+                            {this.state.playlist.length > 1 ? <h4 className="pl-25px p-0-l-down pless-title"><span>Próximos episódios</span></h4> : ""}
                             <EpisodeList playlist={this.state.playlist.slice(1)} episode={this.state.episode}/>
                         </div>
                     </div>
@@ -190,7 +192,7 @@ export default class EpisodePage extends React.Component {
         } else {
             return (
                 <div>
-                    Nada para ver aqui...
+                    A carregar a página...
                 </div>
             );
         }
