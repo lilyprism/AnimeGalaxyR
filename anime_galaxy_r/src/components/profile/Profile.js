@@ -22,7 +22,9 @@ export default class Profile extends React.Component {
                                     This is the default description for a new user on the platform
                                 </p>
                                 <p>
-                                    This way, I can actually check what the profile page would look likewith an actual user.
+                                    This way, I can actually check what the profile page would look like with an actual user.
+                                    Like, I need to check what the page looks like with a description of realistic size, and this
+                                    text server that purpose by filling the space where the user description would be.
                                 </p>
                                 <p>
                                     What I mean is, this is placeholder information to facilitate
