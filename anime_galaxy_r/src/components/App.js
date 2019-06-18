@@ -55,9 +55,9 @@ export default class App extends React.Component {
             App.setAuthToken(res.data.key);
             this.setState({is_logged_in: true});
             return App.isLoggedIn();
-        }).catch(res => {
+        }).catch(error => {
             this.setState({is_logged_in: false});
-            return App.isLoggedIn();
+            throw error;
         });
     };
 
