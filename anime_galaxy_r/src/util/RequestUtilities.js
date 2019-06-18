@@ -81,6 +81,7 @@ export default class RequestUtilities {
             switch (error.response.status) {
                 case 400:
                     console.log("Bad Request");
+                    console.log(error.response);
                     break;
                 case 401:
                     console.log("Unauthorized Request");
@@ -95,6 +96,7 @@ export default class RequestUtilities {
                     console.log("Unhandled Error");
             }
         }
+        throw error;
     }
 
 };
