@@ -36,7 +36,6 @@ export default class LoginModal extends ModalWindow {
             element.classList.remove("invalid");
         });
         if (error.response.data !== undefined){
-        console.log("Hello there General Kenobi");
             if (error.response.data.non_field_errors !== undefined) {
                 console.log("Non Field Error");
                 let error_form_group = document.querySelector("#non-field-errors");
