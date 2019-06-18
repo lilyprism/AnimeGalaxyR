@@ -28,14 +28,57 @@ export default class RegisterModal extends ModalWindow {
             }
         }
 
-        this.props.register(this.state.username, this.state.password).then(res => {
+        this.props.register(this.state.username, this.state.password, this.state.confirmPassword, this.state.email).then(res => {
             if (res === true) {
                 console.log(res);
                 ToastsStore.success("Entraste com sucesso");
                 ModalWindow.closeModal(this.props.element_id);
             }
+        }).catch(error => {
+            this.validateForm(error);
         });
     };
+
+    validateForm(error) {
+        document.querySelectorAll(`#${this.props.element_id} .form-group`).forEach(function (element) {
+            element.classList.remove("invalid");
+        });
+        console.log();
+        if (error.response.data !== undefined) {
+            if (error.response.data.username !== undefined) {
+                console.log("Username Error");
+                let username_form_group = document.querySelector("#register-username-input").parentElement;
+
+                username_form_group.querySelector(".invalid-form-msg").innerHTML = error.response.data.username.toString().replace(/,/g, "<br/>");
+
+                username_form_group.classList.add("invalid");
+            }
+            if (error.response.data.password1 !== undefined) {
+                console.log("Password Error");
+                let password_form_group = document.querySelector("#register-password-input").parentElement;
+
+                password_form_group.querySelector(".invalid-form-msg").innerHTML = error.response.data.password1.toString().replace(/,/g, "<br/>");
+
+                password_form_group.classList.add("invalid");
+            }
+            if (error.response.data.password2 !== undefined) {
+                console.log("Password Confirm Error");
+                let confirm_password_form_group = document.querySelector("#register-confirm-password-input").parentElement;
+
+                confirm_password_form_group.querySelector(".invalid-form-msg").innerHTML = error.response.data.password2.toString().replace(/,/g, "<br/>");
+
+                confirm_password_form_group.classList.add("invalid");
+            }
+            if (error.response.data.email !== undefined) {
+                console.log("Email Error");
+                let email_form_group = document.querySelector("#register-email-input").parentElement;
+
+                email_form_group.querySelector(".invalid-form-msg").innerHTML = error.response.data.email.toString().replace(/,/g, "<br/>");
+
+                email_form_group.classList.add("invalid");
+            }
+        }
+    }
 
     render() {
         return (

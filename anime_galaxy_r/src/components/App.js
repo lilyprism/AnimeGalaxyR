@@ -75,10 +75,14 @@ export default class App extends React.Component {
 
     register = (username, password, confirmPassword, email) => {
         console.log("------ Register function ------");
-        return new Promise(function (resolve, reject) {
-            resolve("Hello there");
-        });
-        return RequestUtilities.sendPostRequest("auth/register", {})
+        return RequestUtilities.sendPostRequest("auth/register", {
+            email: email,
+            username: username,
+            password1: password,
+            password2: confirmPassword
+        }).then(res => {
+            return true;
+        })
     };
 
     static hideSidebar() {
