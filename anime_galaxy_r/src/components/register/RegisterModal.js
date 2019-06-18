@@ -31,7 +31,7 @@ export default class RegisterModal extends ModalWindow {
         this.props.register(this.state.username, this.state.password, this.state.confirmPassword, this.state.email).then(res => {
             if (res === true) {
                 console.log(res);
-                ToastsStore.success("Entraste com sucesso");
+                ToastsStore.success("Registaste-te com sucesso");
                 ModalWindow.closeModal(this.props.element_id);
             }
         }).catch(error => {
