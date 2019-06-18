@@ -29,43 +29,67 @@ class Sidebar extends React.Component {
         });
     }
 
+    handleLoginClick = () => {
+        ModalWindow.openModal("login-modal");
+        this.handleNavItemClick();
+    };
+
+
+    handleLogoutClick = () => {
+        App.hideSidebar();
+        this.props.logout().then(res => {
+            ToastsStore.success("Saíste com sucesso", 3000);
+        });
+    };
+
+    handleRegisterClick = () => {
+        ModalWindow.openModal("register-modal");
+        this.handleNavItemClick();
+    };
+
     render() {
         let login_logout = "";
         let register = "";
         if (!this.props.is_logged_in) {
             login_logout =
-                <div className="sidebar-item cursor-pointer"
-                     onClick={() => {
-                         ModalWindow.openModal("login-modal");
-                         this.handleNavItemClick();
-                     }}>
-                    <i className="fas fa-sign-in-alt fa-fw"/> Entrar
-                </div>;
+                <Link to="/login"
+                      onClick={
+                          event => {
+                              event.preventDefault();
+                              this.handleLoginClick();
+                          }
+                      }>
+                    <div className="sidebar-item cursor-pointer" onClick={this.handleLoginClick}>
+                        <i className="fas fa-sign-in-alt fa-fw"/> Entrar
+                    </div>
+                </Link>;
             register =
                 <Link to="/register"
-                      onClick={() => {
-                          ModalWindow.openModal("register-modal");
-                          this.handleNavItemClick();
-                      }}>
-                    <div className="sidebar-item">
+                      onClick={
+                          event => {
+                              event.preventDefault();
+                              this.handleRegisterClick();
+                          }
+                      }>
+                    <div className="sidebar-item" onClick={this.handleRegisterClick}>
                         <i className="fas fa-user-plus fa-fw"/> Registar
                     </div>
                 </Link>;
         } else {
             login_logout =
-                <div className="cursor-pointer"
-                     onClick={
-                         event => {
-                             App.hideSidebar();
-                             this.props.logout().then(res => {
-                                 ToastsStore.success("Saíste com sucesso", 3000);
-                             });
-                         }
-                     }>
-                    <div className="sidebar-item">
-                        <i className="fas fa-sign-out-alt fa-fw"/> Sair
+                <Link to="/logout"
+                      onClick={
+                          event => {
+                              event.preventDefault();
+                              this.handleLogoutClick();
+                          }
+                      }>
+                    <div className="cursor-pointer" onClick={this.handleLogoutClick}>
+                        <div className="sidebar-item">
+                            <i className="fas fa-sign-out-alt fa-fw"/> Sair
+                        </div>
                     </div>
-                </div>;
+                </Link>;
             register = "";
         }
 
