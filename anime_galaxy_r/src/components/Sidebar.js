@@ -30,8 +30,8 @@ class Sidebar extends React.Component {
     }
 
     handleLoginClick = () => {
-        ModalWindow.openModal("login-modal");
         this.handleNavItemClick();
+        ModalWindow.openModal("login-modal");
     };
 
 
@@ -43,8 +43,8 @@ class Sidebar extends React.Component {
     };
 
     handleRegisterClick = () => {
-        ModalWindow.openModal("register-modal");
         this.handleNavItemClick();
+        ModalWindow.openModal("register-modal");
     };
 
     render() {
@@ -59,7 +59,7 @@ class Sidebar extends React.Component {
                               this.handleLoginClick();
                           }
                       }>
-                    <div className="sidebar-item cursor-pointer" onClick={this.handleLoginClick}>
+                    <div className="sidebar-item cursor-pointer">
                         <i className="fas fa-sign-in-alt fa-fw"/> Entrar
                     </div>
                 </Link>;
@@ -71,7 +71,7 @@ class Sidebar extends React.Component {
                               this.handleRegisterClick();
                           }
                       }>
-                    <div className="sidebar-item" onClick={this.handleRegisterClick}>
+                    <div className="sidebar-item">
                         <i className="fas fa-user-plus fa-fw"/> Registar
                     </div>
                 </Link>;
@@ -84,7 +84,7 @@ class Sidebar extends React.Component {
                               this.handleLogoutClick();
                           }
                       }>
-                    <div className="cursor-pointer" onClick={this.handleLogoutClick}>
+                    <div className="cursor-pointer">
                         <div className="sidebar-item">
                             <i className="fas fa-sign-out-alt fa-fw"/> Sair
                         </div>
