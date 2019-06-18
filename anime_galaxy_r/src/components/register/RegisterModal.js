@@ -50,7 +50,6 @@ export default class RegisterModal extends ModalWindow {
                 let username_form_group = document.querySelector("#register-username-input").parentElement;
 
                 username_form_group.querySelector(".invalid-form-msg").innerHTML = error.response.data.username.toString().replace(/,/g, "<br/>");
-
                 username_form_group.classList.add("invalid");
             }
             if (error.response.data.password1 !== undefined) {
@@ -58,7 +57,6 @@ export default class RegisterModal extends ModalWindow {
                 let password_form_group = document.querySelector("#register-password-input").parentElement;
 
                 password_form_group.querySelector(".invalid-form-msg").innerHTML = error.response.data.password1.toString().replace(/,/g, "<br/>");
-
                 password_form_group.classList.add("invalid");
             }
             if (error.response.data.password2 !== undefined) {
@@ -66,7 +64,6 @@ export default class RegisterModal extends ModalWindow {
                 let confirm_password_form_group = document.querySelector("#register-confirm-password-input").parentElement;
 
                 confirm_password_form_group.querySelector(".invalid-form-msg").innerHTML = error.response.data.password2.toString().replace(/,/g, "<br/>");
-
                 confirm_password_form_group.classList.add("invalid");
             }
             if (error.response.data.email !== undefined) {
@@ -74,7 +71,6 @@ export default class RegisterModal extends ModalWindow {
                 let email_form_group = document.querySelector("#register-email-input").parentElement;
 
                 email_form_group.querySelector(".invalid-form-msg").innerHTML = error.response.data.email.toString().replace(/,/g, "<br/>");
-
                 email_form_group.classList.add("invalid");
             }
         }
