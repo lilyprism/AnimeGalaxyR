@@ -22,7 +22,8 @@ export default class App extends React.Component {
         super(props);
 
         this.state = {
-            is_logged_in: App.isLoggedIn()
+            is_logged_in: App.isLoggedIn(),
+            user: null
         };
         App.app_instance = this;
         RequestUtilities.setAppInstance(this);
@@ -54,7 +55,7 @@ export default class App extends React.Component {
         return RequestUtilities.sendPostRequest("auth/login", {username: username, password: password}, false).then(res => {
             console.log(res.data.token);
             App.setAuthToken(res.data.token);
-            this.setState({is_logged_in: true});
+            this.setState({is_logged_in: true, user: res.data.user});
             return App.isLoggedIn();
         }).catch(error => {
             this.setState({is_logged_in: false});
