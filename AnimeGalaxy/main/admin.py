@@ -11,7 +11,7 @@ class CustomUserAdmin(admin.ModelAdmin):
 			'fields': ('username', 'first_name', 'last_name', 'email', 'avatar', 'password')
 		}),
 		('Configurações Avançadas', {
-			'classes': ('collapse',),
+			'classes': [],
 			'fields' : ('is_staff', 'is_active', 'groups', 'user_permissions'),
 		}),
 	)

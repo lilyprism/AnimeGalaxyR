@@ -37,6 +37,9 @@ INSTALLED_APPS = [
 	# CKEditor Support
 	'ckeditor',
 
+	'jet.dashboard',
+	'jet',
+
 	# Django Apps
 	'django.contrib.admin',
 	'django.contrib.sites',

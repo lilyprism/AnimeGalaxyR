@@ -22,7 +22,7 @@ class AnimeAdmin(admin.ModelAdmin):
 			'fields': ('name', 'description', 'complete')
 		}),
 		('Configurações Avançadas', {
-			'classes': ('wide', 'collapse'),
+			'classes': ('wide',),
 			'fields' : ('genres', 'image', 'thumbnail'),
 		})
 	)
