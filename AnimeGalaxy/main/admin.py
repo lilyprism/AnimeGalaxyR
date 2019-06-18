@@ -8,7 +8,7 @@ class CustomUserAdmin(admin.ModelAdmin):
 
 	fieldsets = (
 		('Configurações Gerais', {
-			'fields': ('username', 'first_name', 'last_name', 'email', 'avatar', 'password')
+			'fields': ('username', 'first_name', 'last_name', 'email', 'avatar', 'password', 'description')
 		}),
 		('Configurações Avançadas', {
 			'classes': [],

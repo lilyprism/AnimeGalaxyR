@@ -20,6 +20,8 @@ pysolr = "*"
 django-mptt = "*"
 djangorestframework-recursive = "*"
 django-jet = "*"
+djangorestframework-jwt = "*"
+feedparser = "*"
 
 [requires]
 python_version = "3.6"

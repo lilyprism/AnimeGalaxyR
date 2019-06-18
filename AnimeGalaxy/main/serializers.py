@@ -14,7 +14,7 @@ class CustomRegisterSerializer(RegisterSerializer):
 class UserSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = CustomUser
-		fields = ['id', 'username', 'first_name', 'last_name', 'email', 'avatar']
+		fields = ['id', 'username', 'first_name', 'last_name', 'email', 'avatar', 'description']
 		read_only_fields = ['id', 'username']
 
 	def get_avatar(self, instance):

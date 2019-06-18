@@ -55,11 +55,9 @@ INSTALLED_APPS = [
 	# Rest Framework Apps
 	'rest_framework',
 	'rest_framework_recursive',
-	'rest_framework.authtoken',
 	'rest_auth',
 	'allauth',
 	'allauth.account',
-	'allauth.socialaccount',
 	'rest_auth.registration',
 	'django_filters',
 
@@ -144,10 +142,13 @@ AUTH_USER_MODEL = 'main.CustomUser'
 # Rest Framework settings
 REST_FRAMEWORK = {
 	'DEFAULT_AUTHENTICATION_CLASSES': (
-		'rest_framework.authentication.TokenAuthentication',
+		'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+		'rest_framework.authentication.SessionAuthentication',
+		'rest_framework.authentication.BasicAuthentication',
 	),
 	'DEFAULT_RENDERER_CLASSES'      : (
 		'rest_framework.renderers.JSONRenderer',
+		'rest_framework.renderers.BrowsableAPIRenderer',
 	),
 	'DEFAULT_FILTER_BACKENDS'       : ('django_filters.rest_framework.DjangoFilterBackend',),
 	'DEFAULT_THROTTLE_RATES'        : {
@@ -162,6 +163,8 @@ REST_AUTH_SERIALIZERS = {
 REST_AUTH_REGISTER_SERIALIZERS = {
 	"REGISTER_SERIALIZER": "main.serializers.CustomRegisterSerializer",
 }
+
+REST_USE_JWT = True
 
 ACCOUNT_EMAIL_VERIFICATION = 'none'
 ACCOUNT_EMAIL_REQUIRED = True

@@ -12,3 +12,4 @@ user_storage = FileSystemStorage(location=os.path.join(settings.MEDIA_ROOT, 'use
 class CustomUser(AbstractUser):
 	# User custom fields
 	avatar = models.ImageField(storage=user_storage, null=False, blank=False, default='default.jpg', verbose_name="Avatar")
+	description = models.CharField(max_length=250, null=False, blank=True, default="")
