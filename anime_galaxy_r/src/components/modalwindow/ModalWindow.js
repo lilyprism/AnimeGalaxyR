@@ -11,6 +11,10 @@ export default class ModalWindow extends React.Component {
             window.openModal = function (id) {
                 if (document.getElementById(id) !== null) {
                     document.getElementById(id).classList.add("open");
+                    let first_input = document.getElementById(id).querySelector(".input");
+                    if (first_input) {
+                        first_input.focus();
+                    }
                 }
                 document.querySelector("body").classList.add("overflow-hidden");
             };
