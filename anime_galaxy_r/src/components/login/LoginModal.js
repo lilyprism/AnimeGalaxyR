@@ -25,8 +25,27 @@ export default class LoginModal extends ModalWindow {
                 ToastsStore.success("Entraste com sucesso");
                 ModalWindow.closeModal(this.props.element_id);
             }
+        }).catch(error => {
+            console.log(error.response);
+            this.validateForm(error);
         });
     };
+
+    validateForm(error) {
+        document.querySelectorAll(`#${this.props.element_id} .form-group`).forEach(function (element) {
+            element.classList.remove("invalid");
+        });
+        if (error.response.data !== undefined){
+        console.log("Hello there General Kenobi");
+            if (error.response.data.non_field_errors !== undefined) {
+                console.log("Non Field Error");
+                let error_form_group = document.querySelector("#non-field-errors");
+
+                error_form_group.querySelector(".invalid-form-msg").innerHTML = error.response.data.non_field_errors.toString().replace(/,/g, "<br/>");
+                error_form_group.classList.add("invalid");
+            }
+        }
+    }
 
     render() {
         return (
@@ -43,11 +62,12 @@ export default class LoginModal extends ModalWindow {
                                 <div className="form-group">
                                     <label htmlFor="username-input">Username</label>
                                     <input className="input" spellCheck="false" type="text" name="username" id="username-input" onChange={event => this.setState({username: event.target.value})}/>
-                                    <sub className="invalid-form-msg">Algo de errado não está certo</sub>
                                 </div>
                                 <div className="form-group">
                                     <label htmlFor="password-input">Password</label>
                                     <input className="input" type="password" name="password" id="password-input" onChange={event => this.setState({password: event.target.value})}/>
+                                </div>
+                                <div className="form-group" id="non-field-errors">
                                     <sub className="invalid-form-msg">Algo de errado não está certo</sub>
                                 </div>
                             </div>
