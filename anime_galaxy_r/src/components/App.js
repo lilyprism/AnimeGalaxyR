@@ -10,8 +10,9 @@ import Topbar from "./topbar/Topbar";
 import EpisodePage from "./episodepage/EpisodePage";
 import AnimePage from "./animepage/AnimePage";
 import LoginModal from "./login/LoginModal";
-import RequestUtilities from "../util/RequestUtilities";
+import RequestUtilities from "./../util/RequestUtilities";
 import RegisterModal from "./register/RegisterModal";
+import Profile from "./profile/Profile";
 
 export default class App extends React.Component {
 
@@ -35,7 +36,7 @@ export default class App extends React.Component {
         let token = localStorage.getItem("anime_galaxy_auth_token");
 
         if (token !== null) {
-            return `Token ${localStorage.getItem("anime_galaxy_auth_token")}`;
+            return `JWT ${localStorage.getItem("anime_galaxy_auth_token")}`;
         } else {
             return null;
         }
@@ -51,8 +52,8 @@ export default class App extends React.Component {
 
     login = (username, password) => {
         return RequestUtilities.sendPostRequest("auth/login", {username: username, password: password}, false).then(res => {
-            console.log(res.data);
-            App.setAuthToken(res.data.key);
+            console.log(res.data.token);
+            App.setAuthToken(res.data.token);
             this.setState({is_logged_in: true});
             return App.isLoggedIn();
         }).catch(error => {
@@ -155,6 +156,10 @@ export default class App extends React.Component {
                                 <Route exact path="/anime/:id" render={
                                     props =>
                                         <AnimePage {...props}/>
+                                }/>
+                                <Route exact path="/profile" render={
+                                    props =>
+                                        <Profile {...props} user={this.state.user}/>
                                 }/>
                                 {/*<Route path="/login" render={*/}
                                 {/*    props =>*/}
