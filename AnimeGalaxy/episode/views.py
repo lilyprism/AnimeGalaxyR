@@ -1,10 +1,8 @@
 from typing import List
 
-from anime.models import Anime
 from django.core.cache import cache
-from main.paginators import StandardResultsSetPagination
-from main.throttles import NormalUserRateThrottle
-from main.views import BaseMVS
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
 from rest_framework import status
 from rest_framework.exceptions import ValidationError
 from rest_framework.generics import get_object_or_404
@@ -12,6 +10,10 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.throttling import BaseThrottle
 
+from anime.models import Anime
+from main.paginators import StandardResultsSetPagination
+from main.throttles import NormalUserRateThrottle
+from main.views import BaseMVS
 from .models import Episode, UserEpisodes
 from .serializers import EpisodeCreateSerializer, EpisodeLikeSerializer, MultiEpisodeSerializer, PlaylistSerializer, SimpleMultiEpisodeSerializer, SingleEpisodeSerializer
 
@@ -42,6 +44,11 @@ class EpisodesView(BaseMVS):
 		serializer = SingleEpisodeSerializer(queryset, many=False, context={'request': request})
 		return Response(serializer.data, status=status.HTTP_200_OK)
 
+	@method_decorator(cache_page(60 * 15))
+	def list(self, request, *args, **kwargs):
+		return super(EpisodesView, self).list(request, *args, **kwargs)
+
+	@method_decorator(cache_page(60 * 15))
 	def episodes(self, request, pk=None, *args, **kwargs):
 		self.pagination_class = StandardResultsSetPagination
 		queryset = get_object_or_404(Anime, id=pk).episodes.order_by("-number")
@@ -61,6 +68,7 @@ class UrlView(BaseMVS):
 	queryset = Episode.objects.all()
 	serializer_class = PlaylistSerializer
 
+	@method_decorator(cache_page(60 * 15))
 	def retrieve(self, request, pk=None, *args, **kwargs):
 		requested_episode = Episode.objects.get(pk=pk)
 		if not requested_episode:

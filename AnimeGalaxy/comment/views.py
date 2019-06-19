@@ -1,6 +1,5 @@
-from episode.models import Episode
-from main.throttles import NormalUserRateThrottle
-from main.views import BaseMVS
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
 from rest_framework import status
 from rest_framework.decorators import permission_classes
 from rest_framework.exceptions import ValidationError
@@ -8,11 +7,15 @@ from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
+from episode.models import Episode
+from main.throttles import NormalUserRateThrottle
+from main.views import BaseMVS
 from .models import Comment, UserCommentRatings
 from .serializers import CommentLikeSerializer, CommentSerializer, CreateCommentSerializer
 
 
 class CommentsView(BaseMVS):
+	@method_decorator(cache_page(60 * 2))
 	def comments(self, request, pk=None, *args, **kwargs):
 		queryset = get_object_or_404(Episode, id=pk)
 
