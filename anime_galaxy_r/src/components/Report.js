@@ -57,15 +57,17 @@ export default class Report extends React.Component {
             RequestUtilities.sendPostRequest("report/comment/spoiler", {info: this.props.comment.id}, false).then(res => {
                 console.log("Comment reported");
                 ToastsStore.error("Obrigado por reportar este comentário");
-            }).catch(res => {
-                // ToastsStore.error("Ocorreu um erro. Por favor tente mais tarde.");
+            }).catch(error => {
+                console.log(error);
+                ToastsStore.error("Ocorreu um erro. Por favor tente mais tarde.");
             });
         } else {
             RequestUtilities.sendPostRequest("report/comment/offensive", {info: this.props.comment.id}, false).then(res => {
                 console.log("Comment reported");
                 ToastsStore.error("Obrigado por reportar este comentário");
-            }).catch(res => {
-                // ToastsStore.error("Ocorreu um erro. Por favor tente mais tarde.");
+            }).catch(error => {
+                console.log(error);
+                ToastsStore.error("Ocorreu um erro. Por favor tente mais tarde.");
             });
         }
     };
