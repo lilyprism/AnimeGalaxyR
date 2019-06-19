@@ -44,15 +44,6 @@ export default class Topbar extends React.Component {
 
 
         if (this_el instanceof HTMLElement) {
-            if (!this_el.querySelector(".search-area").classList.contains("open")) {
-                let search_input = this_el.querySelector(".search-input");
-                search_input.focus();
-                search_input.tabIndex = 0;
-            } else {
-                let search_input = this_el.querySelector(".search-input");
-                search_input.tabIndex = -1;
-            }
-
             if (value === undefined) {
                 if (this.state.results_open) {
                     this.toggleSearchResults("hide");
@@ -76,6 +67,15 @@ export default class Topbar extends React.Component {
             } else if (value === "show") {
                 this.toggleSearchResults("hide");
                 this_el.querySelector(".search-area").classList.add("open");
+            }
+
+            if (this_el.querySelector(".search-area").classList.contains("open")) {
+                let search_input = this_el.querySelector(".search-input");
+                search_input.focus();
+                search_input.tabIndex = 0;
+            } else {
+                let search_input = this_el.querySelector(".search-input");
+                search_input.tabIndex = -1;
             }
         }
     };
