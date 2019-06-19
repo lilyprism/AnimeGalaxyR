@@ -22,8 +22,7 @@ export default class App extends React.Component {
         super(props);
 
         this.state = {
-            is_logged_in: App.isLoggedIn(),
-            user: null
+            is_logged_in: App.isLoggedIn()
         };
         App.app_instance = this;
         RequestUtilities.setAppInstance(this);
@@ -51,22 +50,12 @@ export default class App extends React.Component {
         localStorage.removeItem("anime_galaxy_auth_token");
     }
 
-    getUser = () => {
-        if (this.state.is_logged_in) {
-            RequestUtilities.sendGetRequest("auth/user", true).then(res => {
-                this.setState({user: res.data});
-            });
-        }
-    };
-
     login = (username, password) => {
         return RequestUtilities.sendPostRequest("auth/login", {username: username, password: password}, false).then(res => {
             App.setAuthToken(res.data.token);
             this.setState({
                 is_logged_in: true,
                 user: res.data.user
-            }, () => {
-                this.getUser();
             });
             return App.isLoggedIn();
         }).catch(error => {
@@ -123,7 +112,6 @@ export default class App extends React.Component {
 
     componentDidMount() {
         this.handleScrollAndResize();
-        this.getUser();
     }
 
     //This function is responsible for adding the events needed to handle sticky-like behaviours in the website
@@ -173,12 +161,8 @@ export default class App extends React.Component {
                                 }/>
                                 <Route exact path="/profile" render={
                                     props =>
-                                        <Profile {...props} user={this.state.user}/>
+                                        <Profile {...props} is_logged_in={this.state.is_logged_in}/>
                                 }/>
-                                {/*<Route path="/login" render={*/}
-                                {/*    props =>*/}
-                                {/*        <Login {...props} login={this.login} is_logged_in={this.state.is_logged_in}/>*/}
-                                {/*}/>*/}
                             </Switch>
                         </section>
                     </div>
