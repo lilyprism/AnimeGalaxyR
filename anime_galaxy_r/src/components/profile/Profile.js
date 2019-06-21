@@ -3,7 +3,7 @@ import React from 'react';
 import "./profile.sass";
 
 import RequestUtilities from "../../util/RequestUtilities";
-import AnimeList from "./AnimeList";
+import EpisodeHistoryList from "./EpisodeHistoryList";
 
 class ProfileDescription extends React.Component {
 
@@ -41,8 +41,9 @@ export default class Profile extends React.Component {
 
     getUserInfo = () => {
         if (this.props.is_logged_in) {
-            RequestUtilities.sendGetRequest("auth/user", true).then(res => {
+            RequestUtilities.sendGetRequest("user/details", true).then(res => {
                 this.setState({user: res.data});
+                console.log(res.data);
             });
         }
     };
@@ -63,11 +64,11 @@ export default class Profile extends React.Component {
             <div className="profile">
                 <div className="profile-header">
                     <div className={`profile-header-img ${this.state.editable.is_img_editable ? "editable" : ""}`}>
-                        <img className={`profile-img ${this.state.editable.is_img_editable ? "editable" : ""}`} src={this.state.user !== null ? this.state.user.avatar : "http://via.placeholder.com/500"} alt="User Profile"/>
+                        <img className={`profile-img ${this.state.editable.is_img_editable ? "editable" : ""}`} src={this.state.user !== null ? this.state.user.user.avatar : "http://via.placeholder.com/500"} alt="User Profile"/>
                     </div>
                     <div className="profile-header-content">
                         <div className="profile-header-content-top">
-                            <span className="profile-header-username">{this.state.user !== null ? this.state.user.username : "Username Here"}</span>
+                            <span className="profile-header-username">{this.state.user !== null ? this.state.user.user.username : "Username Here"}</span>
                             <span className="profile-settings-btn cursor-pointer" onClick={this.toggleEditable}><i className="fas fa-cog"/></span>
                         </div>
                         <div className="profile-header-content-middle">
@@ -81,10 +82,9 @@ export default class Profile extends React.Component {
                     </div>
                 </div>
                 <div className="profile-main-content">
-                    <h1 className="title"><span>Animes Completos</span></h1>
-                    <AnimeList/>
+                    <h1 className="title"><span>Histórico de Episódios</span></h1>
+                    <EpisodeHistoryList items={this.state.user !== null ? this.state.user.last_seen : []}/>
                 </div>
-
             </div>
         );
     }
