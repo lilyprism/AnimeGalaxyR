@@ -132,6 +132,15 @@ class Sidebar extends React.Component {
                     </div>
                 </a>
                 <div className="login-item-container">
+                    {this.props.is_logged_in ?
+                        <Link to="/profile" onClick={this.handleNavItemClick}>
+                            <div className="sidebar-item">
+                                <i className="fas fa-address-card fa-fw"/> Profile
+                            </div>
+                        </Link>
+                        :
+                        ""
+                    }
                     {login_logout}
                     {register}
                 </div>
