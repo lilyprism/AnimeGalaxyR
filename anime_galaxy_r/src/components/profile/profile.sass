@@ -1,4 +1,5 @@
 @import "./../sass/colors"
+@import "./../sass/page-units"
 
 .profile-header
 	display: flex
@@ -60,14 +61,18 @@
 
 .profile-header-content-middle
 	display: flex
+	flex-wrap: wrap
 	padding: 10px 0 0 10px
 	flex-grow: 1
 
 .profile-header-description
 	text-align: justify
 	padding-right: 10px
-	height: 100%
-	width: 70%
+	width: 100%
+
+	@media (min-width: $breakpoint-l)
+		width: 70%
+		height: 100%
 
 .profile-header-description-textarea
 	height: 100%
