@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/2.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.2/ref/settings/
 """
-
+import datetime
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -37,6 +37,9 @@ INSTALLED_APPS = [
 	# CKEditor Support
 	'ckeditor',
 
+	'jet.dashboard',
+	'jet',
+
 	# Django Apps
 	'django.contrib.admin',
 	'django.contrib.sites',
@@ -46,12 +49,12 @@ INSTALLED_APPS = [
 	'django.contrib.messages',
 	'django.contrib.staticfiles',
 
+	# Recursive models library
 	'mptt',
 
 	# Rest Framework Apps
 	'rest_framework',
 	'rest_framework_recursive',
-	'rest_framework.authtoken',
 	'rest_auth',
 	'allauth',
 	'allauth.account',
@@ -63,6 +66,11 @@ INSTALLED_APPS = [
 	'haystack',
 
 	'main.apps.MainConfig',
+	'anime.apps.AnimeConfig',
+	'episode.apps.EpisodeConfig',
+	'comment.apps.CommentConfig',
+
+	'report.apps.ReportConfig',
 ]
 
 MIDDLEWARE = [
@@ -79,9 +87,6 @@ MIDDLEWARE = [
 	'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
 	# Cache Middleware
-	# 'django.middleware.cache.UpdateCacheMiddleware',
-	# 'django.middleware.common.CommonMiddleware',
-	# 'django.middleware.cache.FetchFromCacheMiddleware',
 ]
 
 ROOT_URLCONF = 'AnimeGalaxy.urls'
@@ -109,8 +114,12 @@ WSGI_APPLICATION = 'AnimeGalaxy.wsgi.application'
 
 DATABASES = {
 	'default': {
-		'ENGINE': 'django.db.backends.sqlite3',
-		'NAME'  : os.path.join(BASE_DIR, 'db.sqlite3'),
+		'ENGINE'  : 'django.db.backends.postgresql_psycopg2',
+		'NAME'    : 'animegalaxy',
+		'USER'    : 'postgres',
+		'PASSWORD': 'admin',
+		'HOST'    : 'localhost',
+		'PORT'    : '5432'
 	}
 }
 
@@ -138,10 +147,13 @@ AUTH_USER_MODEL = 'main.CustomUser'
 # Rest Framework settings
 REST_FRAMEWORK = {
 	'DEFAULT_AUTHENTICATION_CLASSES': (
-		'rest_framework.authentication.TokenAuthentication',
+		'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+		'rest_framework.authentication.SessionAuthentication',
+		'rest_framework.authentication.BasicAuthentication',
 	),
 	'DEFAULT_RENDERER_CLASSES'      : (
 		'rest_framework.renderers.JSONRenderer',
+		'rest_framework.renderers.BrowsableAPIRenderer',
 	),
 	'DEFAULT_FILTER_BACKENDS'       : ('django_filters.rest_framework.DjangoFilterBackend',),
 	'DEFAULT_THROTTLE_RATES'        : {
@@ -156,6 +168,17 @@ REST_AUTH_SERIALIZERS = {
 REST_AUTH_REGISTER_SERIALIZERS = {
 	"REGISTER_SERIALIZER": "main.serializers.CustomRegisterSerializer",
 }
+
+REST_USE_JWT = True
+
+JWT_AUTH = {
+	'JWT_EXPIRATION_DELTA'        : datetime.timedelta(days=2),
+	'JWT_ALLOW_REFRESH'           : True,
+	'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=7),
+}
+
+ACCOUNT_EMAIL_VERIFICATION = 'none'
+ACCOUNT_EMAIL_REQUIRED = True
 
 SITE_ID = 1
 
@@ -215,3 +238,28 @@ MEDIA_URL = '/media/'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# Databse Logging
+LOG_DB = False
+
+if LOG_DB:
+	LOGGING = {
+		'disable_existing_loggers': False,
+		'version'                 : 1,
+		'handlers'                : {
+			'console': {
+				'class': 'logging.StreamHandler',
+				'level': 'DEBUG',
+			},
+		},
+		'loggers'                 : {
+			''         : {
+				'handlers' : ['console'],
+				'level'    : 'DEBUG',
+				'propagate': False,
+			},
+			'django.db': {
+				'level': 'DEBUG'
+			},
+		},
+	}

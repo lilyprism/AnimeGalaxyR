@@ -1,21 +1,20 @@
-from random import randint
 from typing import List
 
-from django.core.cache import cache
-from drf_haystack.viewsets import HaystackViewSet
-from haystack.query import SearchQuerySet
+from PIL import Image
+from django.contrib.auth import get_user_model
 from rest_framework import status, viewsets
-from rest_framework.decorators import api_view, permission_classes, throttle_classes
 from rest_framework.exceptions import ValidationError
-from rest_framework.generics import get_object_or_404
+from rest_framework.generics import RetrieveUpdateAPIView, get_object_or_404
+from rest_framework.parsers import FileUploadParser
 from rest_framework.permissions import AllowAny, BasePermission, IsAuthenticated, IsAuthenticatedOrReadOnly
+from rest_framework.request import Request
 from rest_framework.response import Response
-from rest_framework.throttling import AnonRateThrottle, BaseThrottle, UserRateThrottle
+from rest_framework.throttling import AnonRateThrottle, UserRateThrottle
 
-from .models import Anime, Comment, Episode, UserCommentRatings, UserEpisodes
-from .paginators import StandardResultsSetPagination
-from .serializers import AnimeSearchSerializer, AnimeSerializer, CommentLikeSerializer, CommentSerializer, CreateCommentSerializer, EpisodeCreateSerializer, EpisodeLikeSerializer, MultiEpisodeSerializer, PlaylistSerializer, ReportSerializer, SimpleMultiEpisodeSerializer, SingleEpisodeSerializer
-from .throttles import LowAnonRateThrottle, LowUserRateThrottle, NormalUserRateThrottle
+from episode.models import UserEpisodes
+from episode.serializers import UserProfileUserEpisodeSerializer
+from main.models import CustomUser
+from .serializers import UserSerializer
 
 
 class BaseMVS(viewsets.ModelViewSet):
@@ -54,195 +53,73 @@ class BaseMVS(viewsets.ModelViewSet):
 		return super(BaseMVS, self).handle_exception(exc)
 
 
-class EpisodesView(BaseMVS):
-	# Query Options
-	queryset = Episode.objects.all().order_by("-pk")[:12]
-	serializer_class = MultiEpisodeSerializer
-	create_serializer = EpisodeCreateSerializer
-	throttle_classes: List[BaseThrottle] = []
-
-	filterset_fields = ('id',)
-
-	def retrieve(self, request, pk=None, *args, **kwargs):
-		queryset = get_object_or_404(Episode, id=pk)
-
-		# Increment view number
-		queryset.views += 1
-		queryset.save()
-
-		# Set anime to currently being watched
-		watched = cache.get("watched_animes") or []
-		if queryset.anime_id not in watched:
-			watched.append(queryset.anime_id)
-			cache.set("watched_animes", watched, timeout=60 * 60)
-
-		# Send episode information
-		serializer = SingleEpisodeSerializer(queryset, many=False, context={'request': request})
-		return Response(serializer.data, status=status.HTTP_200_OK)
-
-	def comments(self, request, pk=None, *args, **kwargs):
-		queryset = get_object_or_404(Episode, id=pk)
-
-		serializer = CommentSerializer(queryset.comments.filter(parent=None).order_by("-date"), many=True, context={"request": request})
-		return Response(serializer.data, status=status.HTTP_200_OK)
-
-	@permission_classes([IsAuthenticated])
-	def comment(self, request, pk=None, *args, **kwargs):
-		self.check_permissions(request)
-
-		queryset = get_object_or_404(Episode, id=pk)
-		if not queryset:
-			return Response(status=status.HTTP_400_BAD_REQUEST)
-
-		# Prevent user spamming comments on same episode
-		comment_count = Comment.objects.filter(user=request.user.id, episode=pk).count()
-		if comment_count >= 5:
-			raise ValidationError({"error": {"message": "User cannot comment more than 5 comments on the same episode!", "code": 19932}}, code=19932)
-
-		# Set user to the user from the request and episode to the current episode page pk
-		request.data["user"] = request.user.id
-		request.data["episode"] = pk
-
-		serializer = CreateCommentSerializer(data=request.data)
-		serializer.is_valid(raise_exception=True)
-		serializer.save()
-
-		return Response(serializer.data, status=status.HTTP_201_CREATED)
+class ImageUploadParser(FileUploadParser):
+	media_type = 'image/*'
 
 
-# noinspection PyMethodMayBeStatic
-class AnimeView(BaseMVS):
-	# Query options
-	queryset = Anime.objects.all()
-	serializer_class = AnimeSerializer
-	throttle_classes: List[BaseThrottle] = []
-	permission_classes: List[BasePermission] = []
-	pagination_class = StandardResultsSetPagination
+class ProfileView(BaseMVS):
+	permission_classes = [AllowAny]
+	queryset = CustomUser
 
-	def watched(self, request, *args, **kwargs):
-		watched_list = cache.get("watched_animes") or []
+	def details(self, request, pk=None, *args, **kwargs):
+		if not pk and not request.user:
+			return Response("", status.HTTP_405_METHOD_NOT_ALLOWED)
 
-		if len(watched_list) == 0:
-			return Response([], status.HTTP_200_OK)
+		user_id = pk if pk else request.user.id
+		return self.get_user_details(user_id, request)
 
-		queryset = Anime.objects.filter(pk__in=watched_list)[:8]
-		serializer = AnimeSerializer(queryset, context={"request": request}, many=True)
-		return Response(serializer.data, status.HTTP_200_OK)
+	@staticmethod
+	def get_user_details(user_id: int, request):
+		# Last Episodes Watched
+		last_seen = UserEpisodes.objects.order_by("-date").filter(user=user_id)[:10]
 
-	def latest(self, request, *args, **kwargs):
-		queryset = Anime.objects.order_by("-pk")[:8]
-		serializer = AnimeSerializer(queryset, context={"request": request}, many=True)
-		return Response(serializer.data, status.HTTP_200_OK)
+		# Animes Currently Watching
+		watch_episodes = UserEpisodes.objects.filter(user=user_id).distinct("episode__anime__id").order_by("episode__anime__id", "-episode__number")
 
-	def episodes(self, request, *args, **kwargs):
-		queryset = self.get_object().episodes.order_by("-number")
+		# TODO(sayga231): Get complete and watching with queries to have more control and make it more efficient
+		complete = [anime for anime in watch_episodes if anime.episode.number >= anime.episode.anime.episodes.count()]
+		watching = [anime for anime in watch_episodes if anime.episode.number < anime.episode.anime.episodes.count()]
 
-		page = self.paginate_queryset(queryset)
-		if page is not None:
-			serializer = SimpleMultiEpisodeSerializer(page, context={"request": request}, many=True)
-			return self.get_paginated_response(serializer.data)
+		user = get_object_or_404(CustomUser, pk=user_id)
 
-		serializer = SimpleMultiEpisodeSerializer(queryset, context={"request": request}, many=True)
-		return Response(serializer.data, status.HTTP_200_OK)
+		user_data = UserSerializer(user, context={"request": request}).data
+		seen_data = UserProfileUserEpisodeSerializer(last_seen, many=True, context={"request": request}).data
+		watch_data = UserProfileUserEpisodeSerializer(watching, many=True, context={"request": request}).data
+		comp_data = UserProfileUserEpisodeSerializer(complete, many=True, context={"request": request}).data
 
-	def random(self, request, *args, **kwargs):
-		count = Anime.objects.count()
-		random_object = Anime.objects.all()[randint(0, count - 1)]
+		# Other stats
+		finished_animes = len(complete)
+		episodes_watched = UserEpisodes.objects.filter(user=user_id).count()
+		# TODO(sayga231): Track player time and save on DB to get a better estimate and resume video times
+		time_watched = episodes_watched * 20
 
-		return Response({"id": random_object.pk}, status.HTTP_200_OK)
+		return Response({"animes_finished": finished_animes, "episodes_watched": episodes_watched, "time_watched": time_watched, "user": user_data, "last_seen": seen_data, "watching": watch_data, "complete": comp_data})
 
 
-class AnimeSearchView(HaystackViewSet):
-	index_models = [Anime]
-	throttle_classes: List[BaseThrottle] = []
+class UserChangeView(RetrieveUpdateAPIView):
+	parser_class = (ImageUploadParser,)
 
-	serializer_class = AnimeSearchSerializer
-
-	def search(self, request, *args, **kwargs):
-		text = request.query_params.get('text', None)
-
-		if not text or 20 <= len(text) < 3:
-			return Response({"details": "Invalid request!"}, status.HTTP_400_BAD_REQUEST)
-
-		query = SearchQuerySet()
-		query.query.set_limits(low=0, high=12)
-		query1 = query.autocomplete(name__fuzzy=text)
-		query2 = query.autocomplete(genres__fuzzy=text)
-		query = query1 | query2
-
-		serializer = AnimeSearchSerializer(query.query.get_results(), many=True, context={"request": request})
-		return Response(serializer.data, status.HTTP_200_OK)
-
-
-class UrlView(BaseMVS):
-	# Query Options
-	throttle_classes: List[BaseThrottle] = []
-	queryset = Episode.objects.all()
-	serializer_class = PlaylistSerializer
-
-	def retrieve(self, request, pk=None, *args, **kwargs):
-		requested_episode = Episode.objects.get(pk=pk)
-		if not requested_episode:
-			return Response(status=status.HTTP_404_NOT_FOUND)
-
-		episodes = Episode.objects.filter(anime=requested_episode.anime, number__gte=requested_episode.number).order_by("number")[:12]
-		serializer = PlaylistSerializer(episodes, many=True, context={"request": request})
-		return Response(serializer.data, status=status.HTTP_200_OK)
-
-
-class LikeView(BaseMVS):
+	serializer_class = UserSerializer
 	permission_classes = [IsAuthenticated]
-	throttle_classes = [NormalUserRateThrottle]
-	queryset = UserEpisodes.objects.all()
 
-	def episode(self, request, *args, **kwargs):
+	def get_object(self):
+		return self.request.user
 
-		if not request.data.get("episode", None):
-			raise ValidationError("Episode is not valid!")
+	def get_queryset(self):
+		return get_user_model().objects.none()
 
-		liked = request.data.get("liked", None)
+	def put(self, request: Request, format=None, **kwargs):
 
-		instance = UserEpisodes.objects.get_or_create(user=request.user, episode=request.data["episode"])[0]
-		instance.liked = liked
+		# Validate avatar image and save it
+		if 'avatar' in request.data.items():
+			f = request.data['avatar']
 
-		instance.save()
-		serializer = EpisodeLikeSerializer(instance=instance)
+			try:
+				img = Image.open(f)
+				img.verify()
+			except (IOError,):
+				raise ValidationError("Unsupported image type")
 
-		return Response(serializer.data)
+			self.request.user.avatar.save(f.name, f, True)
 
-	def comment(self, request, *args, **kwargs):
-
-		liked = request.data.get("liked", None)
-		comment = request.data.get("comment", None)
-
-		if not comment:
-			raise ValidationError("Comment is not valid!")
-
-		if liked is None:
-			UserCommentRatings.objects.filter(user=request.user, comment_id=comment).delete()
-
-			return Response({"details": "success"}, status.HTTP_202_ACCEPTED)
-		else:
-			instance = UserCommentRatings.objects.get_or_create(user=request.user, comment_id=comment)[0]
-			instance.liked = liked
-
-			instance.save()
-			serializer = CommentLikeSerializer(instance=instance)
-
-			return Response(serializer.data, status.HTTP_202_ACCEPTED)
-
-
-@api_view(['POST'])
-@permission_classes([AllowAny])
-@throttle_classes([LowUserRateThrottle, LowAnonRateThrottle])
-def create_report(request, classifier):
-	if not classifier:
-		return Response(status=status.HTTP_400_BAD_REQUEST)
-
-	request.data["classifier"] = classifier
-
-	serializer = ReportSerializer(data=request.data)
-	serializer.is_valid(raise_exception=True)
-	serializer.save()
-
-	return Response(serializer.data, status=status.HTTP_201_CREATED)
+		return super(UserChangeView, self).put(request, format, **kwargs)

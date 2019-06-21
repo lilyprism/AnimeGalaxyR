@@ -1,37 +1,20 @@
-from django.urls import path
+from django.urls import include, path
 from rest_auth.registration.views import RegisterView
 from rest_auth.views import LoginView, LogoutView
 
-from . import views
+from .views import ProfileView, UserChangeView
 
 urlpatterns = [
 	# Authentication
 	path('auth/login', LoginView.as_view(), name='rest_login'),
 	path('auth/logout', LogoutView.as_view(), name='rest_logout'),
 	path('auth/register', RegisterView.as_view(), name='rest_register'),
+	path('auth/user', UserChangeView.as_view(), name='rest_user_profile'),
+	path('user/details', ProfileView.as_view({"get": "details"}), name='user_details'),
+	path('user/details/<int:pk>', ProfileView.as_view({"get": "details"}), name='user_pk_details'),
 
-	# Reports
-	path('report/video', views.create_report, {"classifier": "video-report"}, name="create-video-report"),
-	path('report/video/other', views.create_report, {"classifier": "video-report-other"}, name="create-report"),
-	path('report/comment/spoiler', views.create_report, {"classifier": "comment-report-spoiler"}, name="comment-spoiler"),
-	path('report/comment/offensive', views.create_report, {"classifier": "comment-report-offensive"}, name="comment-report-offensive"),
-
-	# Episode Related
-	path('episode/like', views.LikeView.as_view({"post": "episode"}), name="like-video"),
-	path('episode/latest', views.EpisodesView.as_view({"get": "list", "post": "create"}), name='list-episodes'),
-	path('episode/<int:pk>', views.EpisodesView.as_view({"get": "retrieve"}), name='retrieve-episode'),
-	path('episode/<int:pk>/comments', views.EpisodesView.as_view({"get": "comments"}), name="episode-comments"),
-	path('episode/<int:pk>/comment', views.EpisodesView.as_view({"post": "comment"}), name="episode-comment"),
-
-	path('comment/like', views.LikeView.as_view({"post": "comment"}), name="like-comment"),
-
-	# Anime Related
-	path('anime/search', views.AnimeSearchView.as_view({"get": "search"}), name="search-anime"),
-	path('anime/random', views.AnimeView.as_view({"get": "random"}), name="random-anime"),
-	path('anime/latest', views.AnimeView.as_view({"get": "latest"}), name="latest-anime"),
-	path('anime/watched', views.AnimeView.as_view({"get": "watched"}), name="watched-anime"),
-	path('anime/<int:pk>', views.AnimeView.as_view({"get": "retrieve"}), name="get-anime"),
-	path('anime/<int:pk>/episodes', views.AnimeView.as_view({"get": "episodes"}), name="episodes/anime"),
-
-	path('playlist/<int:pk>', views.UrlView.as_view({"get": "retrieve"}), name='retrieve-urls'),
+	# App related
+	path('report/', include('report.urls')),
+	path('episode/', include('episode.urls')),
+	path('anime/', include('anime.urls')),
 ]

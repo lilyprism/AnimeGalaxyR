@@ -19,6 +19,10 @@ drf-haystack = "*"
 pysolr = "*"
 django-mptt = "*"
 djangorestframework-recursive = "*"
+django-jet = "*"
+djangorestframework-jwt = "*"
+feedparser = "*"
+psycopg2 = "*"
 
 [requires]
 python_version = "3.6"
