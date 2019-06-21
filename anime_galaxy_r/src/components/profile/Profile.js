@@ -36,10 +36,10 @@ export default class Profile extends React.Component {
             },
             user: null
         };
-        this.getUser();
+        this.getUserInfo();
     }
 
-    getUser = () => {
+    getUserInfo = () => {
         if (this.props.is_logged_in) {
             RequestUtilities.sendGetRequest("auth/user", true).then(res => {
                 this.setState({user: res.data});
