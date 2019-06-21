@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/2.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.2/ref/settings/
 """
-
+import datetime
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -58,6 +58,7 @@ INSTALLED_APPS = [
 	'rest_auth',
 	'allauth',
 	'allauth.account',
+	'allauth.socialaccount',
 	'rest_auth.registration',
 	'django_filters',
 
@@ -165,6 +166,12 @@ REST_AUTH_REGISTER_SERIALIZERS = {
 }
 
 REST_USE_JWT = True
+
+JWT_AUTH = {
+	'JWT_EXPIRATION_DELTA'        : datetime.timedelta(days=2),
+	'JWT_ALLOW_REFRESH'           : True,
+	'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=7),
+}
 
 ACCOUNT_EMAIL_VERIFICATION = 'none'
 ACCOUNT_EMAIL_REQUIRED = True

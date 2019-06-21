@@ -24,7 +24,7 @@ class AnimeView(BaseMVS):
 	throttle_classes: List[BaseThrottle] = []
 	permission_classes: List[BasePermission] = []
 
-	@method_decorator(cache_page(60 * 5))
+	@method_decorator(cache_page(60 * 1))
 	def watched(self, request, *args, **kwargs):
 		watched_list = cache.get("watched_animes") or []
 
@@ -35,7 +35,7 @@ class AnimeView(BaseMVS):
 		serializer = AnimeSerializer(queryset, context={"request": request}, many=True)
 		return Response(serializer.data, status.HTTP_200_OK)
 
-	@method_decorator(cache_page(60 * 15))
+	@method_decorator(cache_page(60 * 1))
 	def latest(self, request, *args, **kwargs):
 		queryset = Anime.objects.order_by("-pk")[:8]
 		serializer = AnimeSerializer(queryset, context={"request": request}, many=True)
@@ -54,7 +54,7 @@ class AnimeSearchView(HaystackViewSet):
 
 	serializer_class = AnimeSearchSerializer
 
-	@method_decorator(cache_page(60 * 15))
+	@method_decorator(cache_page(60 * 1))
 	def search(self, request, *args, **kwargs):
 		text = request.query_params.get('text', None)
 

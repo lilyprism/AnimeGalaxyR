@@ -1,5 +1,3 @@
-from django.utils.decorators import method_decorator
-from django.views.decorators.cache import cache_page
 from rest_framework import status
 from rest_framework.decorators import permission_classes
 from rest_framework.exceptions import ValidationError
@@ -15,7 +13,6 @@ from .serializers import CommentLikeSerializer, CommentSerializer, CreateComment
 
 
 class CommentsView(BaseMVS):
-	@method_decorator(cache_page(60 * 2))
 	def comments(self, request, pk=None, *args, **kwargs):
 		queryset = get_object_or_404(Episode, id=pk)
 
