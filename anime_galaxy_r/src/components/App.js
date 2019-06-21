@@ -54,8 +54,7 @@ export default class App extends React.Component {
         return RequestUtilities.sendPostRequest("auth/login", {username: username, password: password}, false).then(res => {
             App.setAuthToken(res.data.token);
             this.setState({
-                is_logged_in: true,
-                user: res.data.user
+                is_logged_in: true
             });
             return App.isLoggedIn();
         }).catch(error => {
@@ -161,7 +160,11 @@ export default class App extends React.Component {
                                 }/>
                                 <Route exact path="/profile" render={
                                     props =>
-                                        <Profile {...props} is_logged_in={this.state.is_logged_in}/>
+                                        <Profile {...props} is_logged_in={this.state.is_logged_in} self={true}/>
+                                }/>
+                                <Route exact path="/user/:id" render={
+                                    props =>
+                                        <Profile {...props} is_logged_in={this.state.is_logged_in} self={false}/>
                                 }/>
                             </Switch>
                         </section>
