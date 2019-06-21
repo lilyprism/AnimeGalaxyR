@@ -14,6 +14,10 @@ export default class Home extends React.Component {
             latest_anime: [],
             watched_anime: []
         };
+        this.getLatestEpisodes();
+        this.getLatestAnime();
+        this.getWatchedAnime();
+        console.log("HEy");
     }
 
     getLatestEpisodes() {
@@ -50,11 +54,11 @@ export default class Home extends React.Component {
         });
     }
 
-    componentDidMount() {
-        this.getLatestEpisodes();
-        this.getLatestAnime();
-        this.getWatchedAnime();
-    }
+    // componentDidMount() {
+    //     this.getLatestEpisodes();
+    //     this.getLatestAnime();
+    //     this.getWatchedAnime();
+    // }
 
     render() {
         return (

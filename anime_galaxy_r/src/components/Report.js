@@ -34,6 +34,23 @@ export default class Report extends React.Component {
         }
     };
 
+    toggleReport = () => {
+        if (this.state.is_open) {
+            let this_el = ReactDOM.findDOMNode(this);
+            if (this_el instanceof HTMLElement) {
+                let dropdown_el = this_el.querySelector(".report-dropdown-container");
+                dropdown_el.classList.remove("open");
+            }
+        } else {
+            let this_el = ReactDOM.findDOMNode(this);
+            if (this_el instanceof HTMLElement) {
+                let dropdown_el = this_el.querySelector(".report-dropdown-container");
+                dropdown_el.classList.add("open");
+            }
+        }
+        this.setState({is_open: !this.state.is_open});
+    };
+
     report = (type = 0) => {
         if (type === 0) {
             RequestUtilities.sendPostRequest("report/video", {info: this.props.episode.id}, false).then(res => {
@@ -57,15 +74,17 @@ export default class Report extends React.Component {
             RequestUtilities.sendPostRequest("report/comment/spoiler", {info: this.props.comment.id}, false).then(res => {
                 console.log("Comment reported");
                 ToastsStore.error("Obrigado por reportar este comentário");
-            }).catch(res => {
-                // ToastsStore.error("Ocorreu um erro. Por favor tente mais tarde.");
+            }).catch(error => {
+                console.log(error);
+                ToastsStore.error("Ocorreu um erro. Por favor tente mais tarde.");
             });
         } else {
             RequestUtilities.sendPostRequest("report/comment/offensive", {info: this.props.comment.id}, false).then(res => {
                 console.log("Comment reported");
                 ToastsStore.error("Obrigado por reportar este comentário");
-            }).catch(res => {
-                // ToastsStore.error("Ocorreu um erro. Por favor tente mais tarde.");
+            }).catch(error => {
+                console.log(error);
+                ToastsStore.error("Ocorreu um erro. Por favor tente mais tarde.");
             });
         }
     };
@@ -74,8 +93,8 @@ export default class Report extends React.Component {
         let report_dropdown =
             <div className="report-dropdown video-report-dropdown">
                 <div className="report-dropdown-options">
-                    <div className="report-option" onClick={this.report}><i className="fas fa-flag fa-fw"/> Video não funciona</div>
-                    <div className="report-option" onClick={() => this.report(1)}><i className="fas fa-flag fa-fw"/> Outro problema</div>
+                    <div tabIndex={0} className="report-option" onClick={this.report}><i className="fas fa-flag fa-fw"/> Video não funciona</div>
+                    <div tabIndex={0} className="report-option" onClick={() => this.report(1)}><i className="fas fa-flag fa-fw"/> Outro problema</div>
                 </div>
             </div>;
 
@@ -83,8 +102,8 @@ export default class Report extends React.Component {
             report_dropdown =
                 <div className="report-dropdown comment-report-dropdown">
                     <div className="report-dropdown-options">
-                        <div className="report-option" onClick={this.reportComment}>Spoilers</div>
-                        <div className="report-option" onClick={() => this.reportComment(1)}>Conteúdo ofensivo</div>
+                        <div tabIndex={0} className="report-option" onClick={this.reportComment}>Spoilers</div>
+                        <div tabIndex={0} className="report-option" onClick={() => this.reportComment(1)}>Conteúdo ofensivo</div>
                     </div>
                 </div>
         }
@@ -94,7 +113,7 @@ export default class Report extends React.Component {
                 <div className="report-dropdown-container">
                     {report_dropdown}
                 </div>
-                <div className="report-option" onClick={this.openReport}><i className="fas fa-flag fa-fw"/></div>
+                <div tabIndex={0} className="report-option" onClick={this.toggleReport}><i className="fas fa-flag fa-fw"/></div>
             </div>
         );
     }

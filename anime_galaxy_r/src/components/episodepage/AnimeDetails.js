@@ -1,6 +1,7 @@
 import React from 'react';
 
 import "./episodeanimedetails.sass";
+import {Link} from "react-router-dom";
 
 export default class AnimeDetails extends React.Component {
 
@@ -9,7 +10,7 @@ export default class AnimeDetails extends React.Component {
             return (
                 <div className="episode-anime-details">
                     <div className="episode-anime-details-img">
-                        <img src={this.props.anime.image} alt="Anime"/>
+                        <Link to={`/anime/${this.props.anime.id}`}><img src={this.props.anime.image} alt="Anime"/></Link>
                     </div>
                     <div className="episode-anime-desc">
                         <div className="episode-anime-details-tags">

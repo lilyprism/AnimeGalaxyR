@@ -10,7 +10,7 @@ class LatestEpisodeCard extends React.Component {
             <div className="card">
                 <Link to={`/v/${this.props.item.id}`}>
                     <div className="card-body">
-                        <div className="card-title">
+                        <div className="card-title" title={this.props.item.anime.name}>
                             <span>{this.props.item.anime.name}</span>
                         </div>
                     </div>
@@ -35,7 +35,7 @@ class EpisodeListCard extends React.Component{
             <div className="card">
                 <Link to={`/v/${this.props.item.id}`}>
                     <div className="card-body">
-                        <div className="card-title">
+                        <div className="card-title" title={`Episódio ${this.props.item.number}`}>
                             <span>Episódio {this.props.item.number}</span>
                         </div>
                     </div>

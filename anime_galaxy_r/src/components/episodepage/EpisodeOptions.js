@@ -10,7 +10,7 @@ export default class EpisodeOptions extends React.Component {
     render() {
         return (
             <div className="episode-options-container">
-                <h1 className="title"><span>{this.props.episode.anime.name} - Episódio {this.props.episode.number}</span></h1>
+                <h1 className="title" title={`${this.props.episode.anime.name} - Episódio ${this.props.episode.number}`}><span>{this.props.episode.anime.name} - Episódio {this.props.episode.number}</span></h1>
                 <div className="options-container">
                     <LikeDislike episode={this.props.episode} sendLike={this.props.sendLike} disabled={!this.props.is_logged_in} getEpisodeInfo={this.props.getEpisodeInfo}/>
                     <span className="episode-option"><i className="fas fa-eye"/> {this.props.episode.views}</span>

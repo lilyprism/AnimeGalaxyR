@@ -1,23 +1,57 @@
+@import "./../sass/colors"
+@import "./../sass/page-units"
+
 .profile-header
 	display: flex
 	align-items: stretch
-	padding: 20px 0
+	margin-top: 10px
+	padding: 20px
+	background-color: $background-color
+	border-radius: 10px
 
 .profile-header-img
-	width: 25%
+	width: 20%
+	transition: filter 0.3s
 
-	img
-		width: 100%
+.profile-header-img.editable
+	position: relative
+
+.profile-header-img.editable .profile-img
+	filter: brightness(0.5)
+
+.profile-header-img.editable:before
+	position: absolute
+	top: 0
+	right: 0
+	bottom: 0
+	left: 0
+	display: flex
+	align-items: center
+	justify-content: center
+	content: '+'
+	font-size: 60px
+	font-weight: bold
+	color: $light-text-color
+	opacity: 1
+	transition: opacity 0.3s
+	z-index: 1
+
+.profile-header-img.editable:hover:before
+	opacity: 1
+
+.profile-img
+	width: 100%
+	border-radius: 10%
 
 .profile-header-content
 	display: flex
 	flex-direction: column
-	width: 75%
+	width: 80%
 
 .profile-header-content-top
 	display: flex
 	justify-content: space-between
-	padding: 0 0 10px 10px
+	padding: 0 0 0 10px
 
 .profile-header-username
 	font-size: 20px
@@ -26,11 +60,30 @@
 	font-size: 20px
 
 .profile-header-content-middle
-	padding: 10px
+	display: flex
+	flex-wrap: wrap
+	padding: 10px 0 0 10px
 	flex-grow: 1
 
 .profile-header-description
 	text-align: justify
+	padding-right: 10px
+	width: 100%
+
+	@media (min-width: $breakpoint-l)
+		width: 70%
+		height: 100%
+
+.profile-header-description-textarea
+	height: 100%
+	width: 100%
+	background-color: $input-background-color
+	border: none
+	padding: 5px
+	border-radius: 5px
+	color: $light-text-color
+	resize: none
+	font-size: 18px
 
 .profile-header-content-bottom
-	padding: 10px 10px 0 10px
+	padding: 0 10px 0 10px

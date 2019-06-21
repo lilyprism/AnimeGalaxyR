@@ -107,7 +107,7 @@ export default class EpisodePage extends React.Component {
     };
 
     getComments = () => {
-        if (this.state.episode !== undefined) {
+        if (this.state.episode !== undefined && this.state.episode !== null) {
             RequestUtilities.sendGetRequest(`episode/${this.state.episode.id}/comments`, this.props.is_logged_in).then(res => {
                 this.setState({comments: res.data});
             });
