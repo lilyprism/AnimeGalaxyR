@@ -2,7 +2,6 @@ import React from 'react';
 
 import "./profile.sass";
 import RequestUtilities from "../../util/RequestUtilities";
-import {Carousel} from "../home/Carousel";
 
 class ProfileDescription extends React.Component {
 
@@ -81,7 +80,6 @@ export default class Profile extends React.Component {
                 </div>
                 <div className="profile-main-content">
                     <h1 className="title"><span>Animes Completos</span></h1>
-                    {/*<Carousel item_type="CarouselItem"/>*/}
                 </div>
 
             </div>
