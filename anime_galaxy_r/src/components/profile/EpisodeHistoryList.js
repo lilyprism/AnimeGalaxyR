@@ -9,7 +9,7 @@ export default class EpisodeHistoryList extends React.Component {
             <div className="episodehistorylist-container">
                 <ul className="episodehistorylist">
                     {this.props.items.map(function (item, index) {
-                        return <li className="episodehistorylist-item">{`${item.episode.anime.name} - ${item.episode.number}`}</li>
+                        return <li className="episodehistorylist-item" key={item.episode.id}>{`${item.episode.anime.name} - ${item.episode.number}`}</li>
                     })}
                 </ul>
             </div>
