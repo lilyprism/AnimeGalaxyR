@@ -3,14 +3,19 @@
 .profile-header
 	display: flex
 	align-items: stretch
-	padding: 20px 0
+	padding: 20px
+	background-color: $background-color
+	border-radius: 0 0 20px 20px
 
 .profile-header-img
-	width: 25%
+	width: 20%
 	transition: filter 0.3s
 
 .profile-header-img.editable
 	position: relative
+
+.profile-header-img.editable .profile-img
+	filter: brightness(0.5)
 
 .profile-header-img.editable:before
 	position: absolute
@@ -22,30 +27,29 @@
 	align-items: center
 	justify-content: center
 	content: '+'
-	font-size: 30px
+	font-size: 60px
 	font-weight: bold
-	color: $background-color
-	opacity: 0
+	color: $light-text-color
+	opacity: 1
 	transition: opacity 0.3s
-
-.profile-header-img.editable:hover
-	filter: brightness(0.5)
+	z-index: 1
 
 .profile-header-img.editable:hover:before
 	opacity: 1
 
 .profile-img
 	width: 100%
+	border-radius: 10%
 
 .profile-header-content
 	display: flex
 	flex-direction: column
-	width: 75%
+	width: 80%
 
 .profile-header-content-top
 	display: flex
 	justify-content: space-between
-	padding: 0 0 10px 10px
+	padding: 0 0 0 10px
 
 .profile-header-username
 	font-size: 20px
@@ -71,6 +75,7 @@
 	border-radius: 5px
 	color: $light-text-color
 	resize: none
+	font-size: 18px
 
 .profile-header-content-bottom
-	padding: 10px 10px 0 10px
+	padding: 0 10px 0 10px
