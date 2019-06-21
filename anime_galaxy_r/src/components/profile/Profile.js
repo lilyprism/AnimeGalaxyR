@@ -4,19 +4,24 @@ import "./profile.sass";
 
 import RequestUtilities from "../../util/RequestUtilities";
 import EpisodeHistoryList from "./EpisodeHistoryList";
+import UserAnimeStats from "./UserAnimeStats";
 
 class ProfileDescription extends React.Component {
 
     render() {
         if (!this.props.editable) {
             return (
-                <p>
-                    {this.props.user !== null ? this.props.user.description : "A carregar a descrição do utilizador"}
-                </p>
+                <div className="profile-header-description">
+                    <p>
+                        {this.props.user !== null ? this.props.user.description : "A carregar a descrição do utilizador"}
+                    </p>
+                </div>
             );
         } else {
             return (
-                <textarea className="profile-header-description-textarea" defaultValue={this.props.user !== null ? this.props.user.description : "A carregar a descrição do utilizador"}/>
+                <div className="profile-header-description">
+                    <textarea className="profile-header-description-textarea" defaultValue={this.props.user !== null ? this.props.user.description : "A carregar a descrição do utilizador"}/>
+                </div>
             );
         }
     }
@@ -72,12 +77,8 @@ export default class Profile extends React.Component {
                             <span className="profile-settings-btn cursor-pointer" onClick={this.toggleEditable}><i className="fas fa-cog"/></span>
                         </div>
                         <div className="profile-header-content-middle">
-                            <div className="profile-header-description">
-                                <ProfileDescription editable={this.state.editable.is_desc_editable} user={this.state.user}/>
-                            </div>
-                        </div>
-                        <div className="profile-header-content-bottom">
-                            <span className="profile-num-anime">Número de animes vistos: 5</span>
+                            <ProfileDescription editable={this.state.editable.is_desc_editable} user={this.state.user}/>
+                            <UserAnimeStats stats={{anime: 5, episodes: 100, time: 5}}/>
                         </div>
                     </div>
                 </div>
