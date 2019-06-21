@@ -1,7 +1,9 @@
 import React from 'react';
 
 import "./profile.sass";
+
 import RequestUtilities from "../../util/RequestUtilities";
+import AnimeList from "./AnimeList";
 
 class ProfileDescription extends React.Component {
 
@@ -80,6 +82,7 @@ export default class Profile extends React.Component {
                 </div>
                 <div className="profile-main-content">
                     <h1 className="title"><span>Animes Completos</span></h1>
+                    <AnimeList/>
                 </div>
 
             </div>
