@@ -9,6 +9,7 @@ import "./commentsection.sass";
 import RequestUtilities from "./../../util/RequestUtilities";
 import Report from "./../Report";
 import LikeDislike from "./LikeDislike";
+import {Link} from "react-router-dom";
 
 class CommentActions extends React.Component {
 
@@ -131,10 +132,10 @@ class Comment extends React.Component {
         return (
             <div className={`comment comment-lvl-${Math.min(this.props.comment.level, 3)}`}>
                 <div className="comment-body">
-                    <img className="comment-user-avatar" src={this.props.comment.user.avatar} width="75" height="75" alt=""/>
+                    <Link to={`/user/${this.props.comment.user.id}`}><img className="comment-user-avatar" src={this.props.comment.user.avatar} width="75" height="75" alt=""/></Link>
                     <div className="comment-right-container">
                         <div className="comment-user">
-                            <span className="comment-user-name">{this.props.comment.user.username}</span>&nbsp;-&nbsp;<span className="comment-time">{time.fromNow()}</span>
+                            <Link to={`/user/${this.props.comment.user.id}`}><span className="comment-user-name">{this.props.comment.user.username}</span>&nbsp;-&nbsp;<span className="comment-time">{time.fromNow()}</span></Link>
                             <span className="ml-auto">
                                 <Report type={"comment"} comment={this.props.comment}/>
                             </span>
