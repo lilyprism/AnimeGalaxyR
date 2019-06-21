@@ -62,7 +62,7 @@ export default class Profile extends React.Component {
     };
 
     toggleEditable = () => {
-        if (this.props.self) {
+        if (this.props.self && this.props.is_logged_in) {
             let editable = this.state.editable;
             editable.is_editable = !editable.is_editable;
             editable.is_desc_editable = !editable.is_desc_editable;
@@ -84,7 +84,7 @@ export default class Profile extends React.Component {
                     <div className="profile-header-content">
                         <div className="profile-header-content-top">
                             <span className="profile-header-username">{this.state.userInfo !== null ? this.state.userInfo.user.username : "Username Here"}</span>
-                            {this.props.self ? <span className="profile-settings-btn cursor-pointer" onClick={this.toggleEditable}><i className="fas fa-cog"/></span> : ""}
+                            {this.props.self && this.props.is_logged_in ? <span className="profile-settings-btn cursor-pointer" onClick={this.toggleEditable}><i className="fas fa-cog"/></span> : ""}
                         </div>
                         <div className="profile-header-content-middle">
                             <ProfileDescription editable={this.state.editable.is_desc_editable} user={this.state.userInfo}/>
