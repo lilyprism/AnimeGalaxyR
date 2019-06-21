@@ -4,13 +4,16 @@ from PIL import Image
 from django.contrib.auth import get_user_model
 from rest_framework import status, viewsets
 from rest_framework.exceptions import ValidationError
-from rest_framework.generics import RetrieveUpdateAPIView
+from rest_framework.generics import RetrieveUpdateAPIView, get_object_or_404
 from rest_framework.parsers import FileUploadParser
-from rest_framework.permissions import BasePermission, IsAuthenticated, IsAuthenticatedOrReadOnly
+from rest_framework.permissions import AllowAny, BasePermission, IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.throttling import AnonRateThrottle, UserRateThrottle
 
+from episode.models import UserEpisodes
+from episode.serializers import UserProfileUserEpisodeSerializer
+from main.models import CustomUser
 from .serializers import UserSerializer
 
 
@@ -52,6 +55,45 @@ class BaseMVS(viewsets.ModelViewSet):
 
 class ImageUploadParser(FileUploadParser):
 	media_type = 'image/*'
+
+
+class ProfileView(BaseMVS):
+	permission_classes = [AllowAny]
+	queryset = CustomUser
+
+	def details(self, request, pk=None, *args, **kwargs):
+		if not pk and not request.user:
+			return Response("", status.HTTP_405_METHOD_NOT_ALLOWED)
+
+		user_id = pk if pk else request.user.id
+		return self.get_user_details(user_id, request)
+
+	@staticmethod
+	def get_user_details(user_id: int, request):
+		# Last Episodes Watched
+		last_seen = UserEpisodes.objects.order_by("-date").filter(user=user_id)[:10]
+
+		# Animes Currently Watching
+		watch_episodes = UserEpisodes.objects.filter(user=user_id).distinct("episode__anime__id").order_by("episode__anime__id", "-episode__number")
+
+		# TODO(sayga231): Get complete and watching with queries to have more control and make it more efficient
+		complete = [anime for anime in watch_episodes if anime.episode.number >= anime.episode.anime.episodes.count()]
+		watching = [anime for anime in watch_episodes if anime.episode.number < anime.episode.anime.episodes.count()]
+
+		user = get_object_or_404(CustomUser, pk=user_id)
+
+		user_data = UserSerializer(user, context={"request": request}).data
+		seen_data = UserProfileUserEpisodeSerializer(last_seen, many=True, context={"request": request}).data
+		watch_data = UserProfileUserEpisodeSerializer(watching, many=True, context={"request": request}).data
+		comp_data = UserProfileUserEpisodeSerializer(complete, many=True, context={"request": request}).data
+
+		# Other stats
+		finished_animes = len(complete)
+		episodes_watched = UserEpisodes.objects.filter(user=user_id).count()
+		# TODO(sayga231): Track player time and save on DB to get a better estimate and resume video times
+		time_watched = episodes_watched * 20
+
+		return Response({"animes_finished": finished_animes, "episodes_watched": episodes_watched, "time_watched": time_watched, "user": user_data, "last_seen": seen_data, "watching": watch_data, "complete": comp_data})
 
 
 class UserChangeView(RetrieveUpdateAPIView):

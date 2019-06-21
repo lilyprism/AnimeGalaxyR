@@ -114,8 +114,12 @@ WSGI_APPLICATION = 'AnimeGalaxy.wsgi.application'
 
 DATABASES = {
 	'default': {
-		'ENGINE': 'django.db.backends.sqlite3',
-		'NAME'  : os.path.join(BASE_DIR, 'db.sqlite3'),
+		'ENGINE'  : 'django.db.backends.postgresql_psycopg2',
+		'NAME'    : 'animegalaxy',
+		'USER'    : 'postgres',
+		'PASSWORD': 'admin',
+		'HOST'    : 'localhost',
+		'PORT'    : '5432'
 	}
 }
 
@@ -234,3 +238,28 @@ MEDIA_URL = '/media/'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# Databse Logging
+LOG_DB = False
+
+if LOG_DB:
+	LOGGING = {
+		'disable_existing_loggers': False,
+		'version'                 : 1,
+		'handlers'                : {
+			'console': {
+				'class': 'logging.StreamHandler',
+				'level': 'DEBUG',
+			},
+		},
+		'loggers'                 : {
+			''         : {
+				'handlers' : ['console'],
+				'level'    : 'DEBUG',
+				'propagate': False,
+			},
+			'django.db': {
+				'level': 'DEBUG'
+			},
+		},
+	}

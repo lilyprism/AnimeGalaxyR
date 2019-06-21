@@ -37,6 +37,12 @@ class SimpleAnimeSerializer(serializers.ModelSerializer):
 	genres = GenreSerializer(many=True)
 
 
+class GenrelessAnimeSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = Anime
+		fields = ['id', 'name', 'image']
+
+
 class AnimeSearchSerializer(HaystackSerializerMixin, SimpleAnimeSerializer):
 	class Meta(SimpleAnimeSerializer.Meta):
 		search_fields = ("name", "genres",)

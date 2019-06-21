@@ -1,7 +1,7 @@
-from anime.models import Anime
-from anime.serializers import AnimeSerializer
 from rest_framework import serializers
 
+from anime.models import Anime
+from anime.serializers import AnimeSerializer, GenrelessAnimeSerializer
 from .models import Episode, UserEpisodes
 
 
@@ -81,3 +81,19 @@ class EpisodeLikeSerializer(serializers.ModelSerializer):
 
 	episode = serializers.PrimaryKeyRelatedField(queryset=Episode.objects.all())
 	liked = serializers.BooleanField(required=False, allow_null=True)
+
+
+class UserProfileEpisodeSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = Episode
+		fields = ['id', 'number', 'anime']
+
+	anime = GenrelessAnimeSerializer()
+
+
+class UserProfileUserEpisodeSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = UserEpisodes
+		fields = ['episode', 'liked', 'date']
+
+	episode = UserProfileEpisodeSerializer()
