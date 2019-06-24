@@ -14,9 +14,9 @@ export default class Home extends React.Component {
             latest_anime: [],
             watched_anime: []
         };
-        this.getLatestEpisodes();
-        this.getLatestAnime();
-        this.getWatchedAnime();
+        // this.getLatestEpisodes();
+        // this.getLatestAnime();
+        // this.getWatchedAnime();
         console.log("HEy");
     }
 
@@ -62,7 +62,7 @@ export default class Home extends React.Component {
 
     render() {
         return (
-            <div>
+            <div className="breakpoint-container">
                 <h1 className="title"><span><i className="fas fa-newspaper"/>  Episódios:</span></h1>
                 <CardLayout card_type={"LatestEpisodeCard"} items={this.state.latest_episodes}/>
                 <h1 className="title"><span><i className="fas fa-newspaper"/>  Últimos Animes:</span></h1>
@@ -71,6 +71,11 @@ export default class Home extends React.Component {
                 <Carousel item_type="CarouselItemEpisode" items={this.state.watched_anime}/>
             </div>
         );
+        // return (
+        //     <div className="breakpoint-container">
+        //
+        //     </div>
+        // );
     }
 
 };
