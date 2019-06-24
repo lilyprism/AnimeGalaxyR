@@ -48,11 +48,13 @@ a
 	color: $light-text-color
 
 .breakpoint-container
-	@media (max-width: $breakpoint-md - 1)
-		width: 100%
+	width: 90%
+
+	@media (min-width: $breakpoint-sm)
+		width: 90%
 
 	@media (min-width: $breakpoint-md)
-		width: 550px
+		width: 530px
 
 	@media (min-width: $breakpoint-l)
 		width: 820px
@@ -101,16 +103,28 @@ a
 
 .title
 	color: $title-text-color
-	padding: 40px 0
+	font-size: 25px
 
 .title span
+	display: inline-block
 	border-bottom: 3px solid $title-border-color
 
 .pless-title
 	color: $light-text-color
+	padding-bottom: 3px
 
 .pless-title span
 	border-bottom: 3px solid $title-border-color
+
+.bg-title
+	padding: 10px
+	text-align: center
+	margin: 0 auto
+	max-width: 700px
+	background-image: url("/images/title-bg-5.png")
+	background-size: 100% 100%
+	background-position: center center
+	background-repeat: no-repeat
 
 ::-webkit-scrollbar
 	width: 5px
@@ -172,3 +186,14 @@ input[type="submit"]
 	border-radius: 5px
 	color: $light-text-color
 
+.bordered-btn
+	padding: 15px 30px
+	border: 1px solid $color_assets_2
+	font-size: 18px
+	outline: none
+	background-color: transparent
+	cursor: pointer
+	color: $color_assets_2
+
+.gradient-container
+	background: $content-gradient

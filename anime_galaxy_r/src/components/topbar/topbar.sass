@@ -7,14 +7,13 @@
 	justify-content: center
 	align-items: center
 	width: 100%
-	background-color: $background-color
+	background-color: transparentize($background-color, 0.6)
 
 .topbar-container
 	height: 65px
 	display: flex
 	justify-content: center
 	align-items: center
-	background-color: $background-color
 	overflow: visible
 
 .topbar.sticky
@@ -123,10 +122,10 @@
 		padding: 0 15px
 
 	.search-input-container
-		width: 75%
+		width: calc(100% - 43.2px)
 
-		@media (max-width: $breakpoint-sm - 1)
-			width: calc(100% - 48px)
+		@media (max-width: $breakpoint-md - 1)
+			width: calc(100% - 43.2px)
 			margin-left: 0
 
 	.search-icon
@@ -136,3 +135,38 @@
 .topbar .search-input-container .search-result-box.open
 	overflow-Y: auto
 	height: auto
+
+.user-area
+	position: relative
+	display: flex
+	color: $light-text-color
+	align-items: center
+
+.user-badge-avatar
+	height: 44px
+	margin-right: 10px
+
+.user-dropdown
+	display: none
+	background: white
+	position: absolute
+	right: 0
+	top: calc(100% + 10.5px)
+	z-index: 10
+	color: $background-color
+
+	.user-dropdown-option
+		display: flex
+		white-space: nowrap
+		padding: 7.5px 15px
+
+		.user-dropdown-option-text
+			flex-grow: 1
+			margin-left: 15px
+			text-align: center
+
+	.user-dropdown-option:hover
+		background-color: darken(white, 10%)
+
+.user-dropdown.open
+	display: block

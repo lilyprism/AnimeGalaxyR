@@ -76,7 +76,7 @@ export default class Profile extends React.Component {
 
     render() {
         return (
-            <div className="profile">
+            <div className="breakpoint-container profile">
                 <div className="profile-header">
                     <div className={`profile-header-img ${this.state.editable.is_img_editable ? "editable" : ""}`}>
                         <img className={`profile-img ${this.state.editable.is_img_editable ? "editable" : ""}`} src={this.state.userInfo !== null ? this.state.userInfo.user.avatar : "http://via.placeholder.com/500"} alt="User Profile"/>
@@ -93,11 +93,11 @@ export default class Profile extends React.Component {
                     </div>
                 </div>
                 <div className="profile-main-content">
-                    <h1 className="title"><span>Histórico de Episódios</span></h1>
+                    <p className="title"><span>Histórico de Episódios</span></p>
                     <EpisodeHistoryList items={this.state.userInfo !== null ? this.state.userInfo.last_seen : []}/>
-                    <h1 className="title"><span>Animes Vistos</span></h1>
+                    <p className="title"><span>Animes Vistos</span></p>
                     <AnimeList items={this.state.userInfo !== null ? this.state.userInfo.complete : []}/>
-                    <h1 className="title"><span>Animes em Progresso</span></h1>
+                    <p className="title"><span>Animes em Progresso</span></p>
                     <WatchingList items={this.state.userInfo !== null ? this.state.userInfo.watching : []}/>
                 </div>
             </div>

@@ -147,27 +147,25 @@ export default class App extends React.Component {
                 <div className="container w-100" onKeyPress={event => this.keyToClick(event)}>
                     <div className="content-wrapper h-100 w-100" onClick={App.hideSidebar}>
                         <div className="h-100 w-100 overlay position-absolute"/>
-                        <section className="breakpoint-container content">
-                            <Switch>
-                                <Route exact path="/" component={Home}/>
-                                <Route path="/v/:id" render={
-                                    props =>
-                                        <EpisodePage {...props} is_logged_in={this.state.is_logged_in}/>
-                                }/>
-                                <Route exact path="/anime/:id" render={
-                                    props =>
-                                        <AnimePage {...props}/>
-                                }/>
-                                <Route exact path="/profile" render={
-                                    props =>
-                                        <Profile {...props} is_logged_in={this.state.is_logged_in} self={true}/>
-                                }/>
-                                <Route exact path="/user/:id" render={
-                                    props =>
-                                        <Profile {...props} is_logged_in={this.state.is_logged_in} self={false}/>
-                                }/>
-                            </Switch>
-                        </section>
+                        <Switch>
+                            <Route exact path="/" component={Home}/>
+                            <Route path="/v/:id" render={
+                                props =>
+                                    <EpisodePage {...props} is_logged_in={this.state.is_logged_in}/>
+                            }/>
+                            <Route exact path="/anime/:id" render={
+                                props =>
+                                    <AnimePage {...props}/>
+                            }/>
+                            <Route exact path="/profile" render={
+                                props =>
+                                    <Profile {...props} is_logged_in={this.state.is_logged_in} self={true}/>
+                            }/>
+                            <Route exact path="/user/:id" render={
+                                props =>
+                                    <Profile {...props} is_logged_in={this.state.is_logged_in} self={false}/>
+                            }/>
+                        </Switch>
                     </div>
                 </div>
                 <ToastsContainer store={ToastsStore}/>

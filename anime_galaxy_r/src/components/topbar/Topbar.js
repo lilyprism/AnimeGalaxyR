@@ -98,6 +98,14 @@ export default class Topbar extends React.Component {
         }
     };
 
+    toggleUserDropdown = () => {
+        let this_el = ReactDOM.findDOMNode(this);
+
+        if (this_el instanceof HTMLElement) {
+            this_el.querySelector(".user-dropdown").classList.toggle("open");
+        }
+    };
+
     searchAnime = search_term => {
         if (search_term.length >= 3) {
             RequestUtilities.sendGetRequest(`anime/search?text=${search_term}`, false).then(res => {
@@ -161,6 +169,16 @@ export default class Topbar extends React.Component {
                         </div>
                         <div className="icon search-icon" role="button" tabIndex={0} onClick={event => this.toggleSearchBar()}>
                             <i className="fas fa-search fa-17x"/>
+                        </div>
+                    </div>
+                    <div className="user-area cursor-pointer" onClick={this.toggleUserDropdown}>
+                        <img className="user-badge-avatar circle" src="http://via.placeholder.com/100" alt="User Area Avatar"/>
+                        <i className="fas fa-caret-down"/>
+                        <div className="user-dropdown">
+                            <ul className="user-dropdown-option-list">
+                                <li className="user-dropdown-option"><i className="fas fa-sign-in-alt"/><span className="user-dropdown-option-text">Login</span></li>
+                                <li className="user-dropdown-option"><i className="fas fa-user-plus"/><span className="user-dropdown-option-text">Register</span></li>
+                            </ul>
                         </div>
                     </div>
                 </div>

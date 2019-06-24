@@ -1,0 +1,226 @@
+@import ../sass/page-units
+@import ../sass/colors
+
+$carousel-prev-width: 20px
+$carousel-prev-height: 20px
+$carousel-next-width: 20px
+$carousel-next-height: 20px
+
+$visible-slides-xl: 5
+$visible-slides-l: 4
+$visible-slides-md: 2
+$visible-slides-sm: 1
+
+.carousel
+	width: 100%
+	position: relative
+	overflow: hidden
+
+.carousel-prev
+	z-index: 1
+	position: absolute
+	top: calc(50% - #{$carousel-prev-height / 2})
+	left: 5px
+	background-color: rgba(0, 0, 0, 0.3)
+	border-radius: 50%
+	padding: 5px
+
+.carousel-next
+	position: absolute
+	top: calc(50% - #{$carousel-next-height / 2})
+	right: 5px
+	z-index: 1
+	background-color: rgba(0, 0, 0, 0.3)
+	border-radius: 50%
+	padding: 5px
+
+.carousel-item-group
+	position: relative
+	left: 0
+	transition: left 0.5s
+	width: 100%
+	display: flex
+	flex: auto
+
+.cyclable
+	@media (min-width: $breakpoint-md)
+		-webkit-transform: translateX(calc(-1 * (100% / #{$visible-slides-md} - 20px + 20px * #{$visible-slides-md} / #{$visible-slides-md - 1})))
+		-moz-transform: translateX(calc(-1 * (100% / #{$visible-slides-md} - 20px + 20px * #{$visible-slides-md} / #{$visible-slides-md - 1})))
+		-ms-transform: translateX(calc(-1 * (100% / #{$visible-slides-md} - 20px + 20px * #{$visible-slides-md} / #{$visible-slides-md - 1})))
+		-o-transform: translateX(calc(-1 * (100% / #{$visible-slides-md} - 20px + 20px * #{$visible-slides-md} / #{$visible-slides-md - 1})))
+		transform: translateX(calc(-1 * (100% / #{$visible-slides-md} - 20px + 20px * #{$visible-slides-md} / #{$visible-slides-md - 1})))
+
+	@media (min-width: $breakpoint-l)
+		-webkit-transform: translateX(calc(-1 * (100% / #{$visible-slides-l} - 20px + 20px * #{$visible-slides-l} / #{$visible-slides-l - 1})))
+		-moz-transform: translateX(calc(-1 * (100% / #{$visible-slides-l} - 20px + 20px * #{$visible-slides-l} / #{$visible-slides-l - 1})))
+		-ms-transform: translateX(calc(-1 * (100% / #{$visible-slides-l} - 20px + 20px * #{$visible-slides-l} / #{$visible-slides-l - 1})))
+		-o-transform: translateX(calc(-1 * (100% / #{$visible-slides-l} - 20px + 20px * #{$visible-slides-l} / #{$visible-slides-l - 1})))
+		transform: translateX(calc(-1 * (100% / #{$visible-slides-l} - 20px + 20px * #{$visible-slides-l} / #{$visible-slides-l - 1})))
+
+	@media (min-width: $breakpoint-xl)
+		-webkit-transform: translateX(calc(-1 * (100% / #{$visible-slides-xl} - 20px + 20px * #{$visible-slides-xl} / #{$visible-slides-xl - 1})))
+		-moz-transform: translateX(calc(-1 * (100% / #{$visible-slides-xl} - 20px + 20px * #{$visible-slides-xl} / #{$visible-slides-xl - 1})))
+		-ms-transform: translateX(calc(-1 * (100% / #{$visible-slides-xl} - 20px + 20px * #{$visible-slides-xl} / #{$visible-slides-xl - 1})))
+		-o-transform: translateX(calc(-1 * (100% / #{$visible-slides-xl} - 20px + 20px * #{$visible-slides-xl} / #{$visible-slides-xl - 1})))
+		transform: translateX(calc(-1 * (100% / #{$visible-slides-xl} - 20px + 20px * #{$visible-slides-xl} / #{$visible-slides-xl - 1})))
+
+.carousel-item
+	position: relative
+	display: block
+	flex-shrink: 0
+	-webkit-user-select: none
+	-moz-user-select: none
+	-ms-user-select: none
+	user-select: none
+
+	@media (max-width: $breakpoint-sm)
+		width: calc(100% / #{$visible-slides-sm})
+		margin-right: 0
+
+	@media (min-width: $breakpoint-sm)
+		width: calc(100% / #{$visible-slides-sm})
+		margin-right: 0
+
+	@media (min-width: $breakpoint-md)
+		width: calc(100% / #{$visible-slides-md} - 20px)
+		margin-right: 20px * $visible-slides-md / ($visible-slides-md - 1)
+
+	@media (min-width: $breakpoint-l)
+		width: calc(100% / #{$visible-slides-l} - 20px)
+		margin-right: 20px * $visible-slides-l / ($visible-slides-l - 1)
+
+	@media (min-width: $breakpoint-xl)
+		width: calc(100% / #{$visible-slides-xl} - 20px)
+		margin-right: 20px * $visible-slides-xl / ($visible-slides-xl - 1)
+
+.translate-transition
+	-webkit-transition: transform 0.3s
+	-moz-transition: transform 0.3s
+	-ms-transition: transform 0.3s
+	-o-transition: transform 0.3s
+	transition: transform 0.3s
+
+.move-left
+	@media (max-width: $breakpoint-md - 1)
+		-webkit-transform: translateX(-100%)
+		-moz-transform: translateX(-100%)
+		-ms-transform: translateX(-100%)
+		-o-transform: translateX(-100%)
+		transform: translateX(-100%)
+
+	@media (min-width: $breakpoint-md)
+		-webkit-transform: translateX(calc(-100% - 20px * #{$visible-slides-md} / #{$visible-slides-md - 1}))
+		-moz-transform: translateX(calc(-100% - 20px * #{$visible-slides-md} / #{$visible-slides-md - 1}))
+		-ms-transform: translateX(calc(-100% - 20px * #{$visible-slides-md} / #{$visible-slides-md - 1}))
+		-o-transform: translateX(calc(-100% - 20px * #{$visible-slides-md} / #{$visible-slides-md - 1}))
+		transform: translateX(calc(-100% - 20px * #{$visible-slides-md} / #{$visible-slides-md - 1}))
+
+	@media (min-width: $breakpoint-l)
+		-webkit-transform: translateX(calc(-100% - 20px * #{$visible-slides-l} / #{$visible-slides-l - 1}))
+		-moz-transform: translateX(calc(-100% - 20px * #{$visible-slides-l} / #{$visible-slides-l - 1}))
+		-ms-transform: translateX(calc(-100% - 20px * #{$visible-slides-l} / #{$visible-slides-l - 1}))
+		-o-transform: translateX(calc(-100% - 20px * #{$visible-slides-l} / #{$visible-slides-l - 1}))
+		transform: translateX(calc(-100% - 20px * #{$visible-slides-l} / #{$visible-slides-l - 1}))
+
+	@media (min-width: $breakpoint-xl)
+		-webkit-transform: translateX(calc(-100% - 20px * #{$visible-slides-xl} / #{$visible-slides-xl - 1}))
+		-moz-transform: translateX(calc(-100% - 20px * #{$visible-slides-xl} / #{$visible-slides-xl - 1}))
+		-ms-transform: translateX(calc(-100% - 20px * #{$visible-slides-xl} / #{$visible-slides-xl - 1}))
+		-o-transform: translateX(calc(-100% - 20px * #{$visible-slides-xl} / #{$visible-slides-xl - 1}))
+		transform: translateX(calc(-100% - 20px * #{$visible-slides-xl} / #{$visible-slides-xl - 1}))
+
+.move-right
+	@media (max-width: $breakpoint-md - 1)
+		-webkit-transform: translateX(100%)
+		-moz-transform: translateX(100%)
+		-ms-transform: translateX(100%)
+		-o-transform: translateX(100%)
+		transform: translateX(100%)
+
+	@media (min-width: $breakpoint-md)
+		-webkit-transform: translateX(calc(100% + 20px * #{$visible-slides-md} / #{$visible-slides-md - 1}))
+		-moz-transform: translateX(calc(100% + 20px * #{$visible-slides-md} / #{$visible-slides-md - 1}))
+		-ms-transform: translateX(calc(100% + 20px * #{$visible-slides-md} / #{$visible-slides-md - 1}))
+		-o-transform: translateX(calc(100% + 20px * #{$visible-slides-md} / #{$visible-slides-md - 1}))
+		transform: translateX(calc(100% + 20px * #{$visible-slides-md} / #{$visible-slides-md - 1}))
+
+	@media (min-width: $breakpoint-l)
+		-webkit-transform: translateX(calc(100% + 20px * #{$visible-slides-l} / #{$visible-slides-l - 1}))
+		-moz-transform: translateX(calc(100% + 20px * #{$visible-slides-l} / #{$visible-slides-l - 1}))
+		-ms-transform: translateX(calc(100% + 20px * #{$visible-slides-l} / #{$visible-slides-l - 1}))
+		-o-transform: translateX(calc(100% + 20px * #{$visible-slides-l} / #{$visible-slides-l - 1}))
+		transform: translateX(calc(100% + 20px * #{$visible-slides-l} / #{$visible-slides-l - 1}))
+
+	@media (min-width: $breakpoint-xl)
+		-webkit-transform: translateX(calc(100% + 20px * #{$visible-slides-xl} / #{$visible-slides-xl - 1}))
+		-moz-transform: translateX(calc(100% + 20px * #{$visible-slides-xl} / #{$visible-slides-xl - 1}))
+		-ms-transform: translateX(calc(100% + 20px * #{$visible-slides-xl} / #{$visible-slides-xl - 1}))
+		-o-transform: translateX(calc(100% + 20px * #{$visible-slides-xl} / #{$visible-slides-xl - 1}))
+		transform: translateX(calc(100% + 20px * #{$visible-slides-xl} / #{$visible-slides-xl - 1}))
+
+.carousel-body
+	height: 100%
+	width: 100%
+	position: absolute
+	top: 0
+	color: $light-text-color
+
+.carousel-title
+	border-radius: 15px 15px 0 0
+	padding: 5px
+	text-align: center
+	background-color: $carousel-card-bg-color
+	white-space: nowrap
+	overflow: hidden
+	text-overflow: ellipsis
+
+
+.carousel-desc
+	position: relative
+	display: flex
+	flex-direction: column
+	height: 0
+	width: 100%
+	overflow: hidden
+	-webkit-transition: height 0.5s
+	-moz-transition: height 0.5s
+	-ms-transition: height 0.5s
+	-o-transition: height 0.5s
+	transition: height 0.5s
+	background-color: $carousel-card-bg-color
+
+.carousel-item .carousel-img
+	width: 100%
+	border-radius: 17px 17px 0 0
+
+.carousel-title:hover ~ .carousel-desc
+	height: 100%
+
+.carousel-desc:hover
+	height: 100%
+
+.carousel-desc-text
+	text-align: justify
+	margin-bottom: 29px
+	overflow: hidden
+	padding: 5px
+
+.carousel-tags
+	display: flex
+	justify-content: center
+	flex-wrap: wrap
+	padding: 5px
+
+.carousel-tag
+	padding: 5px
+	margin: 2px
+
+.carousel-desc-text::-webkit-scrollbar
+	width: 5px
+
+.carousel-desc-text::-webkit-scrollbar-thumb
+	background: $alt-scrollbar-thumb-color
+	border-radius: 10px
+
+.carousel-desc-text::-webkit-scrollbar-thumb:hover
+	background: $alt-scrollbar-hover-color
