@@ -1,0 +1,59 @@
+@import ./../sass/page-units
+
+.carousel-list
+	position: relative
+	display: flex
+	width: 100%
+	height: 100vh
+	overflow: hidden
+
+	@media (max-width: $breakpoint-sm - 1)
+		height: calc(100vh - 65px)
+
+	@media (min-width: $breakpoint-sm)
+		height: calc(100vh - 65px - 80px)
+
+	@media (min-width: $breakpoint-md)
+		height: calc(100vh - 65px - 120px)
+
+	@media (min-width: $breakpoint-l)
+		height: calc(100vh - 65px - 180px)
+
+	@media (min-width: $breakpoint-xl)
+		height: calc(100vh - 65px - 240px)
+
+	.carousel-list-item
+		position: relative
+		flex-shrink: 0
+		width: 100%
+		list-style-type: none
+
+		.carousel-list-item-img
+			width: 100%
+			height: 100%
+
+		.carousel-list-item-play
+			position: absolute
+			top: 50%
+			left: 50%
+			transform: translate(-50%, -50%)
+			padding: 20px
+			background-color: rgba(0, 0, 0, 0.5)
+			border-radius: 50%
+			z-index: 1
+			font-size: 25px
+
+.prev-btn
+	position: absolute
+	left: 20px
+	top: 50%
+	transform: translateY(-50%) rotate(180deg)
+	z-index: 1
+	font-size: 25px
+.next-btn
+	position: absolute
+	right: 20px
+	top: 50%
+	transform: translateY(-50%)
+	z-index: 1
+	font-size: 25px
