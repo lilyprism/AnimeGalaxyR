@@ -3,6 +3,7 @@ import React from 'react';
 import CardLayout from "./../CardLayout";
 import {OldCarousel} from "./OldCarousel";
 import RequestUtilities from "../../util/RequestUtilities";
+import Carousel from "./Carousel";
 
 export default class Home extends React.Component {
 
@@ -73,7 +74,7 @@ export default class Home extends React.Component {
         // );
         return (
             <div>
-
+                <Carousel/>
                 <div className="border-bottom-red"/>
                 <div className="gradient-container">
                     <div className="breakpoint-container">
@@ -86,6 +87,9 @@ export default class Home extends React.Component {
                         <div className="spacer"/>
                         <div className="spacer"/>
                         <div className="spacer"/>
+                        <div className="text-center">
+                            <button className="bordered-btn">Ver mais</button>
+                        </div>
                         <div className="spacer"/>
                     </div>
                 </div>
@@ -101,6 +105,9 @@ export default class Home extends React.Component {
                         <div className="spacer"/>
                         <div className="spacer"/>
                         <div className="spacer"/>
+                        <div className="text-center">
+                            <button className="bordered-btn">Ver mais</button>
+                        </div>
                         <div className="spacer"/>
                     </div>
                 </div>
