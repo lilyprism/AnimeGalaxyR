@@ -6,7 +6,6 @@ from .models import Anime
 class AnimeIndex(indexes.SearchIndex, indexes.Indexable):
 	text = indexes.CharField(document=True)
 	name = indexes.NgramField(model_attr='name')
-	genres = indexes.NgramField(model_attr='genre_list')
 
 	def get_model(self):
 		return Anime
