@@ -149,7 +149,6 @@
 
 .user-dropdown
 	display: none
-	padding: 10px
 	background: white
 	position: absolute
 	right: 0
@@ -160,11 +159,15 @@
 	.user-dropdown-option
 		display: flex
 		white-space: nowrap
-		padding: 5px
+		padding: 7.5px 15px
 
 		.user-dropdown-option-text
 			flex-grow: 1
+			margin-left: 15px
 			text-align: center
+
+	.user-dropdown-option:hover
+		background-color: darken(white, 10%)
 
 .user-dropdown.open
 	display: block
