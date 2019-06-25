@@ -62,6 +62,9 @@ a
 	@media (min-width: $breakpoint-xl)
 		width: 1150px
 
+	@media (min-width: $breakpoint-xxl)
+		width: 1619px
+
 	-webkit-transition: width 0.5s
 	-moz-transition: width 0.5s
 	-ms-transition: width 0.5s
@@ -76,9 +79,6 @@ a
 .container
 	position: relative
 	flex-grow: 1
-
-.container.sticky
-	padding-top: $topbar-height
 
 .content-wrapper
 	position: relative
@@ -194,6 +194,11 @@ input[type="submit"]
 	background-color: transparent
 	cursor: pointer
 	color: $color_assets_2
+	transition: background-color 0.2s, color 0.2s
+
+.bordered-btn:hover
+	background-color: $color_assets_2
+	color: $color_assets_1
 
 .gradient-container
 	background: $content-gradient

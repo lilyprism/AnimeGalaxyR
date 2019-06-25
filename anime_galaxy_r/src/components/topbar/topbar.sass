@@ -2,6 +2,24 @@
 @import ../sass/page-units
 
 .topbar
+	position: fixed
+	z-index: 20
+
+	@media (max-width: $breakpoint-sm - 1)
+		top: 0
+
+	@media (min-width: $breakpoint-sm)
+		top: 80px
+
+	@media (min-width: $breakpoint-md)
+		top: 120px
+
+	@media (min-width: $breakpoint-l)
+		top: 180px
+
+	@media (min-width: $breakpoint-xl)
+		top: 240px
+
 	height: 65px
 	display: flex
 	justify-content: center
@@ -16,26 +34,15 @@
 	align-items: center
 	overflow: visible
 
-.topbar.sticky
-	z-index: 20
-	position: fixed
-	top: 0
-
 .topbar .icon
 	margin: 0 15px
 	padding: 8px
 	border-radius: 3px
 	color: $light-text-color
 	cursor: pointer
-	-webkit-transition: background-color 0.5s
-	-moz-transition: background-color 0.5s
-	-ms-transition: background-color 0.5s
-	-o-transition: background-color 0.5s
-	transition: background-color 0.5s
 
 .topbar .icon:hover, .topbar .icon:focus
-	background-color: $icon-hover-color
-	transition-delay: 0s
+	color: $color_assets_5
 
 .topbar .logo
 	@media (max-width: $breakpoint-md - 1)
@@ -49,6 +56,7 @@
 	flex-grow: 1
 	display: flex
 	justify-content: flex-end
+	align-items: center
 
 .topbar .search-input-container
 	width: 0
@@ -60,6 +68,7 @@
 	max-width: 250px
 	position: relative
 	margin-left: 15px
+	height: 34px
 
 .topbar .search-input-container .search-input
 	color: transparent
@@ -73,7 +82,7 @@
 	transition: all 0.5s
 	font-size: 18px
 	background-color: $topbar-input-color
-	border-radius: 3px 0 0 3px
+	border-radius: 17px
 
 .topbar .search-input-container .search-result-box
 	position: absolute
@@ -108,16 +117,11 @@
 			color: $light-text-color
 
 .topbar .search-icon
-	-webkit-transition: background-color 0.5s, border-radius 0.5s
-	-moz-transition: background-color 0.5s, border-radius 0.5s
-	-ms-transition: background-color 0.5s, border-radius 0.5s
-	-o-transition: background-color 0.5s, border-radius 0.5s
-	transition: background-color 0.5s, border-radius 0.5s
 	margin-left: 0
 
 .search-area.open
 	.search-input
-		color: $light-text-color
+		color: $color_assets_1
 		outline: none
 		padding: 0 15px
 
@@ -127,10 +131,6 @@
 		@media (max-width: $breakpoint-md - 1)
 			width: calc(100% - 43.2px)
 			margin-left: 0
-
-	.search-icon
-		background-color: $icon-hover-color
-		border-radius: 0 3px 3px 0
 
 .topbar .search-input-container .search-result-box.open
 	overflow-Y: auto

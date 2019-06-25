@@ -1,32 +1,24 @@
 @import ./../sass/page-units
 
+.carousel
+	overflow: hidden
+	position: relative
+	height: 100%
+
 .carousel-list
 	position: relative
 	display: flex
 	width: 100%
-	height: 100vh
-	overflow: hidden
-
-	@media (max-width: $breakpoint-sm - 1)
-		height: calc(100vh - 65px)
-
-	@media (min-width: $breakpoint-sm)
-		height: calc(100vh - 65px - 80px)
-
-	@media (min-width: $breakpoint-md)
-		height: calc(100vh - 65px - 120px)
-
-	@media (min-width: $breakpoint-l)
-		height: calc(100vh - 65px - 180px)
-
-	@media (min-width: $breakpoint-xl)
-		height: calc(100vh - 65px - 240px)
+	height: 100%
 
 	.carousel-list-item
 		position: relative
 		flex-shrink: 0
 		width: 100%
 		list-style-type: none
+		background-size: cover
+		background-position: center center
+		background-repeat: no-repeat
 
 		.carousel-list-item-img
 			width: 100%
@@ -42,6 +34,32 @@
 			border-radius: 50%
 			z-index: 1
 			font-size: 25px
+			cursor: pointer
+
+		.carousel-list-item-title
+			position: absolute
+			top: 100px
+			right: 10px
+			left: 100px
+			z-index: 1
+
+			@media (max-width: $breakpoint-md - 1)
+				text-align: center
+				left: 10px
+
+			.carousel-list-title-text
+				display: inline-block
+				background-color: rgba(0, 0, 0, 0.3)
+				padding: 8px 50px
+				border-radius: 15px
+				word-break: break-word
+
+				@media (max-width: $breakpoint-md - 1)
+					margin-left: 0
+					padding: 8px 8px
+
+	.carousel-list.cyclable
+		transform: translateX(-100%)
 
 .prev-btn
 	position: absolute
@@ -50,6 +68,7 @@
 	transform: translateY(-50%) rotate(180deg)
 	z-index: 1
 	font-size: 25px
+
 .next-btn
 	position: absolute
 	right: 20px
@@ -57,3 +76,11 @@
 	transform: translateY(-50%)
 	z-index: 1
 	font-size: 25px
+
+.move-left
+	transition: transform 0.3s
+	transform: translateX(-100%)
+
+.move-right
+	transition: transform 0.3s
+	transform: translateX(100%)
