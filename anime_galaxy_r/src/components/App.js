@@ -13,6 +13,7 @@ import LoginModal from "./login/LoginModal";
 import RequestUtilities from "./../util/RequestUtilities";
 import RegisterModal from "./register/RegisterModal";
 import Profile from "./profile/Profile";
+import Footer from "./footer/Footer";
 
 export default class App extends React.Component {
 
@@ -168,6 +169,7 @@ export default class App extends React.Component {
                         </Switch>
                     </div>
                 </div>
+                <Footer/>
                 <ToastsContainer store={ToastsStore}/>
                 {!this.state.is_logged_in ? <LoginModal element_id="login-modal" login={this.login}/> : ""}
                 {!this.state.is_logged_in ? <RegisterModal element_id="register-modal" register={this.register}/> : ""}
