@@ -1,7 +1,7 @@
 from drf_haystack.serializers import HaystackSerializerMixin
 from rest_framework import serializers
 
-from .models import Anime, Genre
+from .models import Anime, Genre, Season
 
 
 class GenreSerializer(serializers.ModelSerializer):
@@ -13,7 +13,7 @@ class GenreSerializer(serializers.ModelSerializer):
 class AnimeSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Anime
-		fields = ('id', 'name', 'genres', 'image', 'thumbnail', 'description', 'complete')
+		fields = ('id', 'name', 'genres', 'image', 'thumbnail', 'description')
 
 	genres = GenreSerializer(many=True)
 	image = serializers.SerializerMethodField()
@@ -46,3 +46,11 @@ class GenrelessAnimeSerializer(serializers.ModelSerializer):
 class AnimeSearchSerializer(HaystackSerializerMixin, SimpleAnimeSerializer):
 	class Meta(SimpleAnimeSerializer.Meta):
 		search_fields = ("name", "genres",)
+
+
+class SeasonSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = Season
+		fields = ['id', 'anime', 'complete', 'number']
+
+	anime = AnimeSerializer()

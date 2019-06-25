@@ -15,7 +15,7 @@ from main.paginators import StandardResultsSetPagination
 from main.throttles import NormalUserRateThrottle
 from main.views import BaseMVS
 from .models import Episode, UserEpisodes
-from .serializers import EpisodeCreateSerializer, EpisodeLikeSerializer, MultiEpisodeSerializer, PlaylistSerializer, SimpleMultiEpisodeSerializer, SingleEpisodeSerializer
+from .serializers import EpisodeCreateSerializer, EpisodeLikeSerializer, MultiEpisodeSerializer, PlaylistSerializer, SeasonEpisodeSerializer, SingleEpisodeSerializer
 
 
 class EpisodesView(BaseMVS):
@@ -36,8 +36,8 @@ class EpisodesView(BaseMVS):
 
 		# Set anime to currently being watched
 		watched = cache.get("watched_animes") or []
-		if queryset.anime_id not in watched:
-			watched.append(queryset.anime_id)
+		if queryset.season.anime_id not in watched:
+			watched.append(queryset.season.anime_id)
 			cache.set("watched_animes", watched, timeout=60 * 60)
 
 		# Send episode information
@@ -51,14 +51,14 @@ class EpisodesView(BaseMVS):
 	@method_decorator(cache_page(60 * 1))
 	def episodes(self, request, pk=None, *args, **kwargs):
 		self.pagination_class = StandardResultsSetPagination
-		queryset = get_object_or_404(Anime, id=pk).episodes.order_by("-number")
+		queryset = get_object_or_404(Anime, id=pk).seasons.order_by("-number")
 
 		page = self.paginate_queryset(queryset)
 		if page is not None:
-			serializer = SimpleMultiEpisodeSerializer(page, context={"request": request}, many=True)
+			serializer = SeasonEpisodeSerializer(page, context={"request": request}, many=True)
 			return self.get_paginated_response(serializer.data)
 
-		serializer = SimpleMultiEpisodeSerializer(queryset, context={"request": request}, many=True)
+		serializer = SeasonEpisodeSerializer(queryset, context={"request": request}, many=True)
 		return Response(serializer.data, status.HTTP_200_OK)
 
 
@@ -74,7 +74,7 @@ class UrlView(BaseMVS):
 		if not requested_episode:
 			return Response(status=status.HTTP_404_NOT_FOUND)
 
-		episodes = Episode.objects.filter(anime=requested_episode.anime, number__gte=requested_episode.number).order_by("number")[:12]
+		episodes = Episode.objects.filter(season=requested_episode.season, number__gte=requested_episode.number).order_by("number")[:12]
 		serializer = PlaylistSerializer(episodes, many=True, context={"request": request})
 		return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -83,6 +83,7 @@ class LikeView(BaseMVS):
 	permission_classes = [IsAuthenticated]
 	throttle_classes = [NormalUserRateThrottle]
 	queryset = UserEpisodes.objects.all()
+	serializer_class = EpisodeLikeSerializer
 
 	def episode(self, request, *args, **kwargs):
 

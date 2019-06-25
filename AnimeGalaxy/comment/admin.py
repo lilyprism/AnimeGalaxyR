@@ -6,4 +6,4 @@ from .models import Comment
 
 @admin.register(Comment)
 class CommentAdmin(DraggableMPTTAdmin):
-	list_filter = ['episode__anime']
+	list_filter = ['episode__season']
