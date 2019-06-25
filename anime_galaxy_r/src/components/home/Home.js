@@ -1,7 +1,7 @@
 import React from 'react';
 
-import CardLayout from "./../CardLayout";
-import {OldCarousel} from "./OldCarousel";
+import "./home.sass";
+
 import RequestUtilities from "../../util/RequestUtilities";
 import Carousel from "./Carousel";
 
@@ -17,8 +17,7 @@ export default class Home extends React.Component {
         };
         // this.getLatestEpisodes();
         // this.getLatestAnime();
-        // this.getWatchedAnime();
-        console.log("HEy");
+        this.getWatchedAnime();
     }
 
     getLatestEpisodes() {
@@ -49,6 +48,7 @@ export default class Home extends React.Component {
             this.setState({
                 watched_anime: res.data
             });
+            console.log(res.data);
         }).catch(res => {
             console.log("Error getting the watched anime");
             setTimeout(() => this.getWatchedAnime(), 5000);
@@ -74,7 +74,9 @@ export default class Home extends React.Component {
         // );
         return (
             <div>
-                <Carousel/>
+                <div className="home-carousel">
+                    <Carousel items={this.state.watched_anime}/>
+                </div>
                 <div className="border-bottom-red"/>
                 <div className="gradient-container">
                     <div className="breakpoint-container">
