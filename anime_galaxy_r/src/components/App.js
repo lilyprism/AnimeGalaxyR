@@ -119,20 +119,17 @@ export default class App extends React.Component {
         let topbar_el = document.querySelector(".topbar");
         let sidebar_el = document.querySelector(".sidebar");
         let banner_el = document.querySelector(".banner-top");
-        let container_el = document.querySelector(".container");
         document.addEventListener("scroll", function (event) {
-            if (window.pageYOffset > banner_el.offsetTop + banner_el.clientHeight) {
-                topbar_el.classList.add("sticky");
-                container_el.classList.add("sticky");
-            } else {
-                topbar_el.classList.remove("sticky");
-                container_el.classList.remove("sticky");
-            }
+            //Setting the topbar top style property to the position of the banner + the banner's height
+            topbar_el.style.top = `${Math.max(banner_el.getBoundingClientRect().top + banner_el.scrollHeight, 0)}px`;
             //Setting the sidebar top style property to the position of the topbar plus the topbar's height
             sidebar_el.style.top = `${topbar_el.getBoundingClientRect().top + topbar_el.scrollHeight}px`;
         });
 
         window.addEventListener("resize", function (event) {
+            //Setting the topbar top style property to the position of the banner + the banner's height
+            topbar_el.style.top = `${Math.max(banner_el.getBoundingClientRect().top + banner_el.scrollHeight, 0)}px`;
+            //Setting the sidebar top style property to the position of the topbar plus the topbar's height
             sidebar_el.style.top = `${topbar_el.getBoundingClientRect().top + topbar_el.scrollHeight}px`;
         });
     }
@@ -167,9 +164,9 @@ export default class App extends React.Component {
                                     <Profile {...props} is_logged_in={this.state.is_logged_in} self={false}/>
                             }/>
                         </Switch>
+                        <Footer/>
                     </div>
                 </div>
-                <Footer/>
                 <ToastsContainer store={ToastsStore}/>
                 {!this.state.is_logged_in ? <LoginModal element_id="login-modal" login={this.login}/> : ""}
                 {!this.state.is_logged_in ? <RegisterModal element_id="register-modal" register={this.register}/> : ""}
