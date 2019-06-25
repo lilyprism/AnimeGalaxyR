@@ -27,7 +27,7 @@ class AnimeView(BaseMVS):
 	@method_decorator(cache_page(60 * 1))
 	def watched(self, request, *args, **kwargs):
 		watched_list = cache.get("watched_animes") or []
-
+		
 		if len(watched_list) == 0:
 			return Response([], status.HTTP_200_OK)
 

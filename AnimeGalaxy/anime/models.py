@@ -39,7 +39,8 @@ class Anime(Model):
 	description = RichTextField(null=False, blank=False, verbose_name="Descrição")
 
 	def __str__(self) -> str:
-		return self.name
+		seasons = self.seasons.count()
+		return f"{self.name} ({seasons} Temporada{'s' if not seasons == 1 else ''})"
 
 
 class Season(Model):

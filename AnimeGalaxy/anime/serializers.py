@@ -15,6 +15,7 @@ class AnimeSerializer(serializers.ModelSerializer):
 		model = Anime
 		fields = ('id', 'name', 'genres', 'image', 'thumbnail', 'description')
 
+	name = serializers.CharField(source="__str__")
 	genres = GenreSerializer(many=True)
 	image = serializers.SerializerMethodField()
 
