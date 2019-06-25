@@ -51,6 +51,6 @@ class AnimeSearchSerializer(HaystackSerializerMixin, SimpleAnimeSerializer):
 class SeasonSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Season
-		fields = ['id', 'anime', 'complete', 'number']
+		fields = ['id', 'anime', 'complete', 'number', 'name']
 
 	anime = AnimeSerializer()

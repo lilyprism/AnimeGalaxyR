@@ -48,11 +48,12 @@ class Season(Model):
 		pass
 
 	def __str__(self):
-		return f"{self.anime} - T{self.number}"
+		return f"{self.anime} - T{self.number}" if not self.name else f"{self.anime} - {self.name}"
 
 	# Model Relations
 	anime = models.ForeignKey(Anime, on_delete=models.CASCADE, verbose_name="Anime", related_name="seasons", null=False, blank=False)
 
 	# Model Fields
 	number = models.IntegerField(default=1, null=False, validators=[MinValueValidator(0)], verbose_name="Número de Temporada")
+	name = models.CharField(max_length=150, default=None, null=True, blank=True, verbose_name="Nome")
 	complete = models.BooleanField(default=True, null=False, verbose_name="Completo")
