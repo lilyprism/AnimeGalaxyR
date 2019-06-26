@@ -39,8 +39,7 @@ class Anime(Model):
 	description = RichTextField(null=False, blank=False, verbose_name="Descrição")
 
 	def __str__(self) -> str:
-		seasons = self.seasons.count()
-		return f"{self.name} ({seasons} Temporada{'s' if not seasons == 1 else ''})"
+		return f"{self.name}"
 
 
 class Season(Model):
@@ -49,7 +48,7 @@ class Season(Model):
 		pass
 
 	def __str__(self):
-		return f"{self.anime} - T{self.number}" if not self.name else f"{self.anime} - {self.name}"
+		return f"{self.anime} - T{self.number}"
 
 	# Model Relations
 	anime = models.ForeignKey(Anime, on_delete=models.CASCADE, verbose_name="Anime", related_name="seasons", null=False, blank=False)

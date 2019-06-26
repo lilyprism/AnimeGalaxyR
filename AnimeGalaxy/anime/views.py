@@ -61,10 +61,10 @@ class AnimeSearchView(HaystackViewSet):
 		if not text or len(text) < 3 or len(text) >= 60:
 			return Response({"details": "Invalid request!"}, status.HTTP_400_BAD_REQUEST)
 
-		query = SearchQuerySet()
-		query.query.set_limits(low=0, high=12)
-		query1 = query.autocomplete(name__fuzzy=text)
-		query = query1
+		sqs = SearchQuerySet()
+		sqs.query.set_limits(low=0, high=12)
+		auto = sqs.autocomplete(name__fuzzy=text)
+		sqs = auto
 
-		serializer = AnimeSearchSerializer(query.query.get_results(), many=True, context={"request": request})
+		serializer = AnimeSearchSerializer(sqs.query.get_results(), many=True, context={"request": request})
 		return Response(serializer.data, status.HTTP_200_OK)
