@@ -59,6 +59,9 @@ class UserEpisodes(Model):
 
 	# Model Fields
 	liked = models.BooleanField(default=None, null=True, blank=True, verbose_name='Video Gostado')
+	favorite = models.BooleanField(default=False, null=False, blank=False, verbose_name="Video Favorito")
+	watch_later = models.BooleanField(default=False, null=False, blank=False, verbose_name="Ver Mais Tarde")
+	watched = models.BooleanField(default=False, null=False, blank=False, verbose_name="Visto")
 	date = models.DateTimeField(auto_now=True, null=False, editable=False)
 
 	def __str__(self):

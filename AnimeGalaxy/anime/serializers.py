@@ -55,3 +55,11 @@ class SeasonSerializer(serializers.ModelSerializer):
 		fields = ['id', 'anime', 'complete', 'number', 'name']
 
 	anime = AnimeSerializer()
+
+
+class SimpleSeasonSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = Season
+		fields = ['number', 'anime']
+
+	anime = GenrelessAnimeSerializer()

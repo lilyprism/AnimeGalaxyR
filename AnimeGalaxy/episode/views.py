@@ -11,7 +11,7 @@ from rest_framework.response import Response
 from rest_framework.throttling import BaseThrottle
 
 from anime.models import Anime
-from main.paginators import StandardResultsSetPagination
+from main.paginators import HomeResultsSetPagination, StandardResultsSetPagination
 from main.throttles import NormalUserRateThrottle
 from main.views import BaseMVS
 from .models import Episode, UserEpisodes
@@ -20,7 +20,7 @@ from .serializers import EpisodeCreateSerializer, EpisodeLikeSerializer, MultiEp
 
 class EpisodesView(BaseMVS):
 	# Query Options
-	queryset = Episode.objects.all().order_by("-pk")[:12]
+	queryset = Episode.objects.all().order_by("-pk")
 	serializer_class = MultiEpisodeSerializer
 	create_serializer = EpisodeCreateSerializer
 	throttle_classes: List[BaseThrottle] = []
@@ -32,6 +32,9 @@ class EpisodesView(BaseMVS):
 
 		# Increment view number
 		queryset.views += 1
+		user_episode = queryset.user_episodes.get_or_create(episode_id=pk, user=request.user)[0]
+		user_episode.watched = True
+		user_episode.save()
 		queryset.save()
 
 		# Set anime to currently being watched
@@ -44,8 +47,8 @@ class EpisodesView(BaseMVS):
 		serializer = SingleEpisodeSerializer(queryset, many=False, context={'request': request})
 		return Response(serializer.data, status=status.HTTP_200_OK)
 
-	@method_decorator(cache_page(60 * 1))
 	def list(self, request, *args, **kwargs):
+		self.pagination_class = HomeResultsSetPagination
 		return super(EpisodesView, self).list(request, *args, **kwargs)
 
 	@method_decorator(cache_page(60 * 1))
@@ -92,8 +95,34 @@ class LikeView(BaseMVS):
 
 		liked = request.data.get("liked", None)
 
-		instance = UserEpisodes.objects.get_or_create(user=request.user, episode=request.data["episode"])[0]
+		instance = UserEpisodes.objects.get_or_create(user=request.user, episode_id=request.data["episode"])[0]
 		instance.liked = liked
+
+		instance.save()
+		serializer = EpisodeLikeSerializer(instance=instance)
+
+		return Response(serializer.data)
+
+	def favorite(self, request, *args, **kwargs):
+
+		if not request.data.get("episode", None):
+			raise ValidationError("Episode is not valid!")
+
+		instance = UserEpisodes.objects.get_or_create(user=request.user, episode_id=request.data["episode"])[0]
+		instance.favorite = not instance.favorite
+
+		instance.save()
+		serializer = EpisodeLikeSerializer(instance=instance)
+
+		return Response(serializer.data)
+
+	def watch_later(self, request, *args, **kwargs):
+
+		if not request.data.get("episode", None):
+			raise ValidationError("Episode is not valid!")
+
+		instance = UserEpisodes.objects.get_or_create(user=request.user, episode_id=request.data["episode"])[0]
+		instance.watch_later = not instance.watch_later
 
 		instance.save()
 		serializer = EpisodeLikeSerializer(instance=instance)

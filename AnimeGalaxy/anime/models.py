@@ -43,9 +43,9 @@ class Anime(Model):
 
 
 class Season(Model):
-	# Meta configurations
+	# Meta configuration
 	class Meta:
-		pass
+		verbose_name = "Temporada"
 
 	def __str__(self):
 		return f"{self.anime} - T{self.number}"

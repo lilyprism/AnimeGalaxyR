@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from anime.models import Season
-from anime.serializers import SeasonSerializer
+from anime.serializers import SeasonSerializer, SimpleSeasonSerializer
 from .models import Episode, UserEpisodes
 
 
@@ -33,9 +33,29 @@ class SingleEpisodeSerializer(serializers.ModelSerializer):
 class MultiEpisodeSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Episode
-		fields = ['id', 'season', 'number']
+		fields = ['id', 'number', 'added', 'favorite', 'watch_later', 'season']
 
-	season = SeasonSerializer()
+	season = SimpleSeasonSerializer()
+	favorite = serializers.SerializerMethodField()
+	watch_later = serializers.SerializerMethodField()
+
+	def get_favorite(self, instance):
+		request = self.context.get("request", None)
+
+		if not request:
+			raise ValueError("Request is null")
+
+		user_episode = UserEpisodes.objects.filter(episode=instance.id).first()
+		return user_episode.favorite if user_episode else False
+
+	def get_watch_later(self, instance):
+		request = self.context.get("request", None)
+
+		if not request:
+			raise ValueError("Request is null")
+
+		user_episode = UserEpisodes.objects.filter(episode=instance.id).first()
+		return user_episode.watch_later if user_episode else False
 
 
 class SimpleMultiEpisodeSerializer(serializers.ModelSerializer):
@@ -76,7 +96,7 @@ class PlaylistSerializer(serializers.ModelSerializer):
 class EpisodeLikeSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = UserEpisodes
-		fields = ['episode', 'liked']
+		fields = ['episode', 'liked', 'favorite', 'watch_later']
 		read_only_fields = ['episode']
 
 	episode = serializers.PrimaryKeyRelatedField(queryset=Episode.objects.all())
