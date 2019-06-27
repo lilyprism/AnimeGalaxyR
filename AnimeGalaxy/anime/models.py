@@ -3,6 +3,7 @@ import os
 from ckeditor.fields import RichTextField
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
+from django.core.validators import MinValueValidator
 from django.db import models
 from django.db.models import Model
 
@@ -36,7 +37,23 @@ class Anime(Model):
 	image = models.ImageField(storage=anime_storage, null=False, blank=False, default='default.jpg', verbose_name="Imagem")
 	thumbnail = models.ImageField(storage=thumb_storage, null=False, blank=False, default='default.jpg', verbose_name="Thumbnail")
 	description = RichTextField(null=False, blank=False, verbose_name="Descrição")
-	complete = models.BooleanField(verbose_name="Completo", default=False, null=False, blank=False)
 
 	def __str__(self) -> str:
-		return self.name
+		return f"{self.name}"
+
+
+class Season(Model):
+	# Meta configuration
+	class Meta:
+		verbose_name = "Temporada"
+
+	def __str__(self):
+		return f"{self.anime} - T{self.number}"
+
+	# Model Relations
+	anime = models.ForeignKey(Anime, on_delete=models.CASCADE, verbose_name="Anime", related_name="seasons", null=False, blank=False)
+
+	# Model Fields
+	number = models.IntegerField(default=1, null=False, validators=[MinValueValidator(0)], verbose_name="Número de Temporada")
+	name = models.CharField(max_length=150, default=None, null=True, blank=True, verbose_name="Nome")
+	complete = models.BooleanField(default=True, null=False, verbose_name="Completo")

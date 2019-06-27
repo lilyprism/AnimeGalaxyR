@@ -1,13 +1,18 @@
 from django.conf import settings
 from django.db import models
 from django.db.models import Model
-from episode.models import Episode
-from main.models import CustomUser
 from mptt.fields import TreeForeignKey
 from mptt.models import MPTTModel
 
+from episode.models import Episode
+from main.models import CustomUser
+
 
 class Comment(MPTTModel):
+	# Meta configuration
+	class Meta:
+		verbose_name = "Comentário"
+
 	# Model Relations
 	episode = models.ForeignKey(Episode, related_name="comments", on_delete=models.CASCADE)
 	users = models.ManyToManyField(CustomUser, through='UserCommentRatings', related_name='comment_ratings', verbose_name='Comentários')

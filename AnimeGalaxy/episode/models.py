@@ -6,7 +6,7 @@ from django.db.models import Model
 from django.utils import timezone
 from rest_framework.compat import MinValueValidator
 
-from anime.models import Anime
+from anime.models import Season
 from main.helpers import get_sources_from_url
 from main.models import CustomUser
 
@@ -14,17 +14,17 @@ from main.models import CustomUser
 class Episode(Model):
 	# Meta configurations
 	class Meta:
-		unique_together = ['anime', 'number']
+		unique_together = ['season', 'number']
 		verbose_name = 'Episódio'
 
 	# Model relations
-	anime = models.ForeignKey(Anime, on_delete=models.CASCADE, verbose_name="Anime", related_name="episodes", null=False, blank=False)
+	season = models.ForeignKey(Season, on_delete=models.CASCADE, verbose_name="Temporada", related_name="episodes", null=False, blank=False)
 	users = models.ManyToManyField(CustomUser, through='UserEpisodes', related_name='users', verbose_name='Episódios')
 
 	# Model fields
-	number = models.FloatField(default=0, null=False, blank=False, validators=[MinValueValidator(0)], verbose_name="Número de Episódio")
+	number = models.FloatField(default=1, null=False, blank=False, validators=[MinValueValidator(0)], verbose_name="Número de Episódio")
 	views = models.IntegerField(default=0, null=False, validators=[MinValueValidator(0)], verbose_name="Visualizações")
-	blogger_url = models.URLField(max_length=1500, null=False, blank=False, verbose_name="URL de Blogger")
+	blogger_url = models.URLField(max_length=1500, null=False, blank=False, verbose_name="URL")
 
 	# Hidden Model fields
 	added = models.DateTimeField(default=timezone.now, editable=False)
@@ -34,7 +34,7 @@ class Episode(Model):
 		return self.number.__str__()[:-2] if self.number.__str__().endswith(".0") else self.number.__str__()
 
 	def __str__(self) -> str:
-		return f"{self.anime} - {self.str_number}"
+		return f"{self.season} E{self.str_number}"
 
 	@property
 	def sources(self) -> List:
@@ -59,6 +59,9 @@ class UserEpisodes(Model):
 
 	# Model Fields
 	liked = models.BooleanField(default=None, null=True, blank=True, verbose_name='Video Gostado')
+	favorite = models.BooleanField(default=False, null=False, blank=False, verbose_name="Video Favorito")
+	watch_later = models.BooleanField(default=False, null=False, blank=False, verbose_name="Ver Mais Tarde")
+	watched = models.BooleanField(default=False, null=False, blank=False, verbose_name="Visto")
 	date = models.DateTimeField(auto_now=True, null=False, editable=False)
 
 	def __str__(self):

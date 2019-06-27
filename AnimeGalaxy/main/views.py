@@ -74,7 +74,7 @@ class ProfileView(BaseMVS):
 		last_seen = UserEpisodes.objects.order_by("-date").filter(user=user_id)[:10]
 
 		# Animes Currently Watching
-		watch_episodes = UserEpisodes.objects.filter(user=user_id).distinct("episode__anime__id").order_by("episode__anime__id", "-episode__number")
+		watch_episodes = UserEpisodes.objects.filter(user=user_id, watched=True).distinct("episode__anime__id").order_by("episode__anime__id", "-episode__number")
 
 		# TODO(sayga231): Get complete and watching with queries to have more control and make it more efficient
 		complete = [anime for anime in watch_episodes if anime.episode.number >= anime.episode.anime.episodes.count()]
@@ -89,11 +89,10 @@ class ProfileView(BaseMVS):
 
 		# Other stats
 		finished_animes = len(complete)
-		episodes_watched = UserEpisodes.objects.filter(user=user_id).count()
 		# TODO(sayga231): Track player time and save on DB to get a better estimate and resume video times
-		time_watched = episodes_watched * 20
+		time_watched = UserEpisodes.objects.filter(user=user_id).count() * 20
 
-		return Response({"animes_finished": finished_animes, "episodes_watched": episodes_watched, "time_watched": time_watched, "user": user_data, "last_seen": seen_data, "watching": watch_data, "complete": comp_data})
+		return Response({"animes_finished": finished_animes, "time_watched": time_watched, "user": user_data, "last_seen": seen_data, "watching": watch_data, "complete": comp_data})
 
 
 class UserChangeView(RetrieveUpdateAPIView):

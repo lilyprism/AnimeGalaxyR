@@ -13,6 +13,9 @@ from .serializers import CommentLikeSerializer, CommentSerializer, CreateComment
 
 
 class CommentsView(BaseMVS):
+	queryset = Comment.objects.all()
+	serializer_class = CommentSerializer
+
 	def comments(self, request, pk=None, *args, **kwargs):
 		queryset = get_object_or_404(Episode, id=pk)
 
@@ -47,6 +50,7 @@ class LikeView(BaseMVS):
 	permission_classes = [IsAuthenticated]
 	throttle_classes = [NormalUserRateThrottle]
 	queryset = UserCommentRatings.objects.all()
+	serializer_class = CommentLikeSerializer
 
 	def comment(self, request, *args, **kwargs):
 
