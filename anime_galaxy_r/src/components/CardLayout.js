@@ -19,6 +19,7 @@ export default class CardLayout extends React.Component {
             setTimeout(function () {
                 this_el.classList.remove("h-0");
                 this_el.style.height = "";
+                this_el.removeAttribute("style");
             }, 1000);
         }
     };
