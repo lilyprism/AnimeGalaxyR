@@ -1,0 +1,45 @@
+@import ./../sass/colors
+
+.home-anime-card
+	position: relative
+	width: 100%
+
+	.card-image-container
+		position: relative
+		overflow: hidden
+
+		.card-img
+			width: 100%
+
+		.card-hover-desc
+			position: absolute
+			top: 100%
+			right: 0
+			left: 0
+			height: 100%
+			transition: top 0.5s
+			z-index: 1
+			background-color: $color_assets_1
+
+	.card-body
+		position: relative
+		background-color: $color_assets_1
+
+		.card-anime-info
+			padding: 20px 0
+			text-align: center
+
+			.card-anime-name
+				padding-bottom: 10px
+
+	.card-gradient-overlay
+		position: absolute
+		top: 0
+		right: 0
+		bottom: 0
+		left: 0
+		background: linear-gradient(to bottom, rgba($color_assets_1, 0.8), rgba($color_assets_1, 0))
+
+	&:hover
+		.card-hover-desc
+			top: 0

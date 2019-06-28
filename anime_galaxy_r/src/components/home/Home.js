@@ -20,7 +20,7 @@ export default class Home extends React.Component {
             watched_anime: []
         };
         this.getLatestEpisodes();
-        // this.getLatestAnime();
+        this.getLatestAnime();
         this.getWatchedAnime();
     }
 
@@ -59,6 +59,7 @@ export default class Home extends React.Component {
             this.setState({
                 latest_anime: res.data
             });
+            console.log(res.data);
         }).catch(res => {
             console.log("Error getting the latest anime");
             setTimeout(() => this.getLatestAnime(), 5000);
@@ -89,7 +90,15 @@ export default class Home extends React.Component {
         if (this.state.latest_episodes.results !== undefined) {
             for (let i = 0; i < parseInt(Math.ceil(this.state.latest_episodes.results.length / 8)); i++) {
                 latest_episodes_cards.push(
-                    <CardLayout items={this.state.latest_episodes.results !== undefined ? this.state.latest_episodes.results.slice(i * 8, (i + 1) * 8) : []} type={1} xl={4} l={4} md={2} sm={2} is_logged_in={this.props.is_logged_in}/>
+                    <CardLayout items={this.state.latest_episodes.results !== undefined ? this.state.latest_episodes.results.slice(i * 8, (i + 1) * 8) : []} type={1} xl={4} l={4} md={2} sm={2} is_logged_in={this.props.is_logged_in} key={this.state.latest_episodes.results[i * 8].id}/>
+                );
+            }
+        }
+        let latest_anime_cards = [];
+        if (this.state.latest_anime !== undefined) {
+            for (let i = 0; i < parseInt(Math.ceil(this.state.latest_anime.length / 8)); i++) {
+                latest_anime_cards.push(
+                    <CardLayout items={this.state.latest_anime !== undefined ? this.state.latest_anime.slice(i * 8, (i + 1) * 8) : []} type={2} xl={4} l={4} md={2} sm={2} is_logged_in={this.props.is_logged_in} key={this.state.latest_anime[i * 8].id}/>
                 );
             }
         }
@@ -108,11 +117,14 @@ export default class Home extends React.Component {
                             </div>
                         </h2>
                         <div className="spacer"/>
-                        {latest_episodes_cards}
+                        <div className="latest-episodes-container">
+                            {latest_episodes_cards}
+                        </div>
                         {/*<CardLayout key={0} items={this.state.latest_episodes !== undefined ? this.state.latest_episodes.results : []} type={1} xl={4} l={4} md={2} sm={2} is_logged_in={this.props.is_logged_in}/>*/}
                         {
                             this.state.latest_episodes.next !== null ?
                                 <div className="text-center">
+                                    <div className="spacer"/>
                                     <button className="bordered-btn" onClick={this.getMoreLatestEpisodes}>Ver mais</button>
                                 </div>
                                 :
@@ -130,11 +142,12 @@ export default class Home extends React.Component {
                             </div>
                         </h2>
                         <div className="spacer"/>
-                        <div className="spacer"/>
-                        <div className="spacer"/>
-                        <div className="spacer"/>
+                        <div className="latest-anime-container">
+                            <CardLayout key={0} items={this.state.latest_anime !== undefined ? this.state.latest_anime : []} type={2} xl={6} l={4} md={2} sm={2} is_logged_in={this.props.is_logged_in}/>
+                        </div>
                         <div className="text-center">
-                            <button className="bordered-btn">Ver mais</button>
+                            <div className="spacer"/>
+                            <button className="bordered-btn">Ver Todos</button>
                         </div>
                         <div className="spacer"/>
                     </div>
