@@ -31,10 +31,13 @@ class EpisodesView(BaseMVS):
 
 		# Increment view number
 		queryset.views += 1
-		user_episode = queryset.user_episodes.get_or_create(episode_id=pk, user=request.user)[0]
-		user_episode.watched = True
-		user_episode.save()
 		queryset.save()
+
+		# TODO(sayga231): Change this to another API Endpoint with better control over time watched
+		if request.user.id:
+			user_episode = queryset.user_episodes.get_or_create(episode_id=pk, user=request.user)[0]
+			user_episode.watched = True
+			user_episode.save()
 
 		# Set anime to currently being watched
 		watched = cache.get("watched_animes") or []
