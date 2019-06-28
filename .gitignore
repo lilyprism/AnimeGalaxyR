@@ -103,5 +103,7 @@ venv.bak/
 # mypy
 .mypy_cache/
 
+
+#AnimeGalaxy Frontend Ignored Files
 anime_galaxy_r/node_modules
 .idea

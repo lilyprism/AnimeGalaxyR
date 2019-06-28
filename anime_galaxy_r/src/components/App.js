@@ -146,7 +146,10 @@ export default class App extends React.Component {
                     <div className="content-wrapper h-100 w-100" onClick={App.hideSidebar}>
                         <div className="h-100 w-100 overlay position-absolute"/>
                         <Switch>
-                            <Route exact path="/" component={Home}/>
+                            <Route exact path="/" render={
+                                props =>
+                                    <Home {...props} is_logged_in={this.state.is_logged_in}/>
+                            }/>
                             <Route path="/v/:id" render={
                                 props =>
                                     <EpisodePage {...props} is_logged_in={this.state.is_logged_in}/>
