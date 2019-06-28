@@ -37,7 +37,7 @@ class AnimeView(BaseMVS):
 
 	@method_decorator(cache_page(60 * 1))
 	def latest(self, request, *args, **kwargs):
-		queryset = Anime.objects.order_by("-pk")[:8]
+		queryset = Anime.objects.order_by("-pk")[:6]
 		serializer = AnimeSerializer(queryset, context={"request": request}, many=True)
 		return Response(serializer.data, status.HTTP_200_OK)
 
