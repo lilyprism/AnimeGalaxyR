@@ -60,3 +60,7 @@ class Season(Model):
 	number = models.IntegerField(default=1, null=False, validators=[MinValueValidator(0)], verbose_name="Número de Temporada")
 	name = models.CharField(max_length=150, default=None, null=True, blank=True, verbose_name="Nome")
 	complete = models.BooleanField(default=True, null=False, verbose_name="Completo")
+
+
+# noinspection PyUnresolvedReferences
+from . import signals
