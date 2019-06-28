@@ -12,7 +12,6 @@ from rest_framework.throttling import BaseThrottle
 
 from anime.models import Anime
 from main.paginators import HomeResultsSetPagination, StandardResultsSetPagination
-from main.throttles import NormalUserRateThrottle
 from main.views import BaseMVS
 from .models import Episode, UserEpisodes
 from .serializers import EpisodeCreateSerializer, EpisodeLikeSerializer, MultiEpisodeSerializer, PlaylistSerializer, SeasonEpisodeSerializer, SingleEpisodeSerializer
@@ -84,7 +83,7 @@ class UrlView(BaseMVS):
 
 class LikeView(BaseMVS):
 	permission_classes = [IsAuthenticated]
-	throttle_classes = [NormalUserRateThrottle]
+	throttle_classes: List[BaseThrottle] = []
 	queryset = UserEpisodes.objects.all()
 	serializer_class = EpisodeLikeSerializer
 
@@ -98,7 +97,7 @@ class LikeView(BaseMVS):
 		instance = UserEpisodes.objects.get_or_create(user=request.user, episode_id=request.data["episode"])[0]
 		instance.liked = liked
 
-		instance.save()
+		instance = self.delete_or_save(instance)
 		serializer = EpisodeLikeSerializer(instance=instance)
 
 		return Response(serializer.data)
@@ -111,7 +110,7 @@ class LikeView(BaseMVS):
 		instance = UserEpisodes.objects.get_or_create(user=request.user, episode_id=request.data["episode"])[0]
 		instance.favorite = not instance.favorite
 
-		instance.save()
+		instance = self.delete_or_save(instance)
 		serializer = EpisodeLikeSerializer(instance=instance)
 
 		return Response(serializer.data)
@@ -124,7 +123,15 @@ class LikeView(BaseMVS):
 		instance = UserEpisodes.objects.get_or_create(user=request.user, episode_id=request.data["episode"])[0]
 		instance.watch_later = not instance.watch_later
 
-		instance.save()
+		instance = self.delete_or_save(instance)
 		serializer = EpisodeLikeSerializer(instance=instance)
 
 		return Response(serializer.data)
+
+	@staticmethod
+	def delete_or_save(instance: UserEpisodes) -> UserEpisodes:
+		if not instance.watch_later and not instance.favorite and instance.liked is None and not instance.watched:
+			instance.delete()
+		else:
+			instance.save()
+		return instance
