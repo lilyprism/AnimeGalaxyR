@@ -13,7 +13,10 @@ export default class Home extends React.Component {
 
         this.state = {
             latest_episodes: [],
-            latest_anime: [],
+            latest_anime: {
+                next: null,
+                results: []
+            },
             watched_anime: []
         };
         this.getLatestEpisodes();
@@ -35,7 +38,7 @@ export default class Home extends React.Component {
     }
 
     getMoreLatestEpisodes = () => {
-        if (this.state.latest_episodes.next !== null) {
+        if (this.state.latest_episodes.next !== null && this.state.latest_episodes.next !== undefined) {
             let startIndex = this.state.latest_episodes.next.indexOf("api/") + 4;
             let endpoint = this.state.latest_episodes.next.substring(startIndex);
 
@@ -45,7 +48,7 @@ export default class Home extends React.Component {
                     latest_episodes: res.data
                 });
             }).catch(res => {
-                console.log("Error getting the latest episodes");
+                console.log("Error getting more latest episodes");
                 setTimeout(() => this.getLatestEpisodes(), 5000);
             });
         }
