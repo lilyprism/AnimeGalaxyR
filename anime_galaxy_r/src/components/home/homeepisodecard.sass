@@ -1,0 +1,95 @@
+@import ./../sass/colors
+
+.home-episode-card
+	position: relative
+	width: 100%
+
+	.card-image-container
+		width: 100%
+
+		.card-img
+			width: 100%
+
+	.card-body
+		position: absolute
+		top: 0
+		right: 0
+		bottom: 0
+		left: 0
+		display: flex
+		flex-direction: column
+		justify-content: space-between
+		z-index: 1
+
+		.card-episode-top-container
+			display: flex
+			justify-content: space-between
+
+			.card-episode-number-container
+				background: linear-gradient(to bottom, $color_assets_1 0%, rgba($color_assets_1, 0.92) 100%)
+				clip-path: polygon(0 0, 100% 0, calc(100% - 20px) 100%, 0 100%)
+
+				.card-episode-number
+					background-color: rgba($color_assets_5, 0)
+					padding: 2px 25px 2px 12px
+					transition: background-color 0.3s
+
+		.card-episode-options
+			position: absolute
+			top: 0
+			right: 0
+			padding: 2px
+			opacity: 0
+			transition: opacity 0.3s
+
+			.card-option
+				cursor: pointer
+
+			.card-option.active
+				color: $color_assets_5
+	
+		.card-episode-info
+			.card-episode-name
+				text-align: center
+				font-size: 25px
+
+			.card-episode-time
+				padding: 10px 0 20px 0
+				font-size: 12px
+				text-align: center
+
+	.card-play-icon
+		position: absolute
+		top: 50%
+		left: 50%
+		transform: translate(-50%, -50%)
+		padding: 20px
+		background-color: rgba($color_assets_1, 0.92)
+		border-radius: 50%
+		z-index: 3
+		cursor: pointer
+		opacity: 0
+		transition: opacity 0.3s
+
+	.card-gradient-overlay
+		position: absolute
+		top: 0
+		right: 0
+		bottom: 0
+		left: 0
+		background: linear-gradient(to top, $color_assets_1, rgba($color_assets_1, 0))
+
+.home-episode-card:hover
+	.card-body
+		.card-episode-number-container
+			.card-episode-number
+				background-color: $color_assets_5
+
+		.card-episode-options
+			opacity: 1
+
+			.card-option:hover
+				color: $color_assets_5
+
+	.card-play-icon
+		opacity: 1

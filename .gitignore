@@ -100,9 +100,14 @@ venv.bak/
 # mypy
 .mypy_cache/
 
+<<<<<<< HEAD
 /AnimeGalaxy/static/
 /AnimeGalaxy/media/
 /nginx/logs/
 /AnimeGalaxy/whoosh_index/
+=======
+
+#AnimeGalaxy Frontend Ignored Files
+>>>>>>> frontend
 anime_galaxy_r/node_modules
 .idea

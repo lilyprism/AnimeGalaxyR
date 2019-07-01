@@ -9,12 +9,22 @@ export default class Carousel extends React.Component {
 
         this.state = {
             items: this.props.items,
-            isMoving: false
+            isMoving: false,
+            cycleInterval: null
         };
     }
 
     componentDidMount() {
         this.initOrder();
+        if (this.props.cycle) {
+            this.addAutomaticCycle();
+        }
+    }
+
+    componentWillUnmount() {
+        if (this.props.cycle) {
+            this.removeAutomaticCycle();
+        }
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
@@ -43,6 +53,21 @@ export default class Carousel extends React.Component {
         }
         this.setState({items: items});
     }
+
+    addAutomaticCycle = () => {
+        this.setState({
+            cycleInterval: setInterval(() => {
+                this.moveLeft();
+            }, 5000)
+        });
+    };
+
+    removeAutomaticCycle = () => {
+        if (this.state.cycleInterval !== null) {
+            clearInterval(this.state.cycleInterval);
+            this.setState({cycleInterval: null});
+        }
+    };
 
     moveLeft = () => {
         if (this.state.isMoving === false) {
@@ -87,7 +112,7 @@ export default class Carousel extends React.Component {
                 <ul className={`carousel-list ${this.state.items.length > 1 ? "cyclable" : ""}`}>
                     {this.state.items.map((item, index) => {
                         return (
-                            <li style={{order: item.order, backgroundImage: `url(${item.image})`}} key={item.id} className={`carousel-list-item ${this.state.isMoving ? this.state.isMoving : ""}`}>
+                            <li style={{order: item.order, backgroundImage: `url(${item.image})`}} key={index} className={`carousel-list-item ${this.state.isMoving ? this.state.isMoving : ""}`}>
                                 <span className="carousel-list-item-play"><i className="fas fa-play fa-fw"/></span>
                                 <div className="carousel-list-item-title">
                                     <span className="carousel-list-title-text">{item.name}</span>

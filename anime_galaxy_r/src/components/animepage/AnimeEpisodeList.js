@@ -1,6 +1,6 @@
 import React from 'react';
 
-import CardLayout from "../CardLayout";
+// import OldCardLayout from "../OldCardLayout";
 import RequestUtilities from "../../util/RequestUtilities";
 
 import "./animeepisodelist.sass";
@@ -68,7 +68,7 @@ export default class AnimeEpisodeList extends React.Component {
             return (
                 <div className="episode-pagination-container">
                     <h1 className="title"><span>Episódios</span></h1>
-                    <CardLayout card_type="EpisodeListCard" items={this.state.pagination.results} image={this.props.anime.image}/>
+                    {/*<OldCardLayout card_type="EpisodeListCard" items={this.state.pagination.results} image={this.props.anime.image}/>*/}
                     <div className="spacer"/>
                     {
                         max_pages > 1 ?
