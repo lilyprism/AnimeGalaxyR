@@ -14,8 +14,8 @@ from rest_framework.response import Response
 from rest_framework.throttling import BaseThrottle
 
 from main.views import BaseMVS
-from .models import Anime
-from .serializers import AnimeSearchSerializer, AnimeSerializer, ExtraAnimeSerializer
+from .models import Anime, Genre
+from .serializers import AnimeSearchSerializer, AnimeSerializer, ExtraAnimeSerializer, GenreSerializer
 
 
 # noinspection PyMethodMayBeStatic
@@ -62,6 +62,11 @@ class AnimeView(BaseMVS):
 		random_object = Anime.objects.all()[randint(0, count - 1)]
 
 		return Response({"id": random_object.pk}, status.HTTP_200_OK)
+
+
+class GenreView(BaseMVS):
+	serializer_class = GenreSerializer
+	queryset = Genre.objects.all()
 
 
 class AnimeSearchView(HaystackViewSet):

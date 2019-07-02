@@ -6,6 +6,7 @@ from . import views
 urlpatterns = [
 	path('search', views.AnimeSearchView.as_view({"get": "search"}), name="search-anime"),
 	path('list', views.AnimeView.as_view({"get": "list"}), name="list-anime"),
+	path('genres', views.GenreView.as_view({"get": "list"}), name="list-genre"),
 	path('random', views.AnimeView.as_view({"get": "random"}), name="random-anime"),
 	path('latest', views.AnimeView.as_view({"get": "latest"}), name="latest-anime"),
 	path('watched', views.AnimeView.as_view({"get": "watched"}), name="watched-anime"),
