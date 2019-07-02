@@ -27,9 +27,12 @@ class AnimeView(BaseMVS):
 	throttle_classes: List[BaseThrottle] = []
 	permission_classes: List[BasePermission] = []
 
+	@method_decorator(cache_page(60 * 1))
 	def list(self, request, *args, **kwargs):
 		self.serializer_class = ExtraAnimeSerializer
 		self.pagination_class = AnimeListResultsSetPagination
+
+		# Filters
 		self.filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
 		self.filterset_fields = ['genres']
 		self.search_fields = ['^name']
