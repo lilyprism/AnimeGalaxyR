@@ -2,6 +2,8 @@
 
 .home-anime-card
 	position: relative
+	display: flex
+	flex-direction: column
 	width: 100%
 
 	.card-image-container
@@ -22,10 +24,15 @@
 			background-color: $color_assets_1
 
 	.card-body
+		flex-grow: 1
 		position: relative
 		background-color: $color_assets_1
 
 		.card-anime-info
+			display: flex
+			height: 100%
+			flex-direction: column
+			justify-content: center
 			padding: 20px 0
 			text-align: center
 
@@ -43,3 +50,28 @@
 	&:hover
 		.card-hover-desc
 			top: 0
+
+	.card-hover-desc
+		display: flex
+		flex-direction: column
+
+		.anime-genres
+			display: flex
+			justify-content: center
+			flex-wrap: wrap
+
+			.anime-genre
+				padding: 5px
+				margin: 10px 10px 0 10px
+				border: 1px solid $color_assets_5
+
+		.anime-desc
+			display: flex
+			flex-grow: 1
+			padding: 20px
+			justify-content: center
+			flex-direction: column
+
+			.anime-desc-text
+				width: 100%
+				text-align: justify

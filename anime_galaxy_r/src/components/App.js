@@ -14,6 +14,7 @@ import RequestUtilities from "./../util/RequestUtilities";
 import RegisterModal from "./register/RegisterModal";
 import Profile from "./profile/Profile";
 import Footer from "./footer/Footer";
+import AnimeList from "./animelist/AnimeList";
 
 export default class App extends React.Component {
 
@@ -138,7 +139,11 @@ export default class App extends React.Component {
         return (
             <Router>
                 <header className="page-header" onKeyPress={event => this.keyToClick(event)}>
-                    <div className="banner-top"/>
+                    <div className="banner-top">
+                        <div className="breakpoint-container h-100 d-flex align-items-center">
+                            <img src="/images/banner_logo.png" alt="Banner Logo" className="banner-logo"/>
+                        </div>
+                    </div>
                     <Topbar/>
                 </header>
                 <Sidebar is_logged_in={this.state.is_logged_in} logout={this.logout}/>
@@ -153,6 +158,10 @@ export default class App extends React.Component {
                             <Route path="/v/:id" render={
                                 props =>
                                     <EpisodePage {...props} is_logged_in={this.state.is_logged_in}/>
+                            }/>
+                            <Route exact path="/anime" render={
+                                props =>
+                                    <AnimeList {...props}/>
                             }/>
                             <Route exact path="/anime/:id" render={
                                 props =>
