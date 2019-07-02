@@ -14,7 +14,7 @@ def resize_image(image: InMemoryUploadedFile, size: Tuple[int, int] = (100, 100)
 
 	output = BytesIO()
 	im = ImageOps.fit(im, size, ANTIALIAS)
-	im.save(output, format='JPEG', optimize=True, quality=85)
+	im.save(output, format='WEBP', optimize=True, quality=85)
 	output.seek(0)
 
 	return output
@@ -25,8 +25,8 @@ def resize_in_memory_uploaded_image(image: InMemoryUploadedFile, size: Tuple[int
 	return InMemoryUploadedFile(
 			image_bytes,
 			'ImageField',
-			f'{image.name.split(".")[0]}.jpg',
-			'image/jpeg',
+			f'{image.name.split(".")[0]}.webp',
+			'image/webp',
 			sys.getsizeof(image_bytes),
 			None)
 

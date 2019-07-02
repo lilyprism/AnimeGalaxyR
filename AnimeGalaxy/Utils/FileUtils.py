@@ -2,4 +2,4 @@ import uuid
 
 
 def unique_filename(instance, filename):
-	return f"{uuid.uuid4()}.jpg"
+	return f"{uuid.uuid4()}.webp"
