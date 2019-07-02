@@ -13,6 +13,7 @@ from rest_framework.permissions import BasePermission
 from rest_framework.response import Response
 from rest_framework.throttling import BaseThrottle
 
+from main.paginators import AnimeListResultsSetPagination
 from main.views import BaseMVS
 from .models import Anime, Genre
 from .serializers import AnimeSearchSerializer, AnimeSerializer, ExtraAnimeSerializer, GenreSerializer
@@ -28,6 +29,7 @@ class AnimeView(BaseMVS):
 
 	def list(self, request, *args, **kwargs):
 		self.serializer_class = ExtraAnimeSerializer
+		self.pagination_class = AnimeListResultsSetPagination
 		self.filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
 		self.filterset_fields = ['genres']
 		self.search_fields = ['^name']

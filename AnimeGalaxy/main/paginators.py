@@ -9,3 +9,8 @@ class StandardResultsSetPagination(PageNumberPagination):
 class HomeResultsSetPagination(PageNumberPagination):
 	page_size = 8
 	template = None
+
+
+class AnimeListResultsSetPagination(PageNumberPagination):
+	page_size = 28
+	template = None
