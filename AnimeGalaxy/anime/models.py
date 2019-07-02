@@ -51,7 +51,7 @@ class Season(Model):
 		verbose_name = "Temporada"
 
 	def __str__(self):
-		return f"{self.anime} - T{self.number}"
+		return f"{self.anime} - T{self.number}" if not self.name else f"{self.anime}: {self.name}"
 
 	# Model Relations
 	anime = models.ForeignKey(Anime, on_delete=models.CASCADE, verbose_name="Anime", related_name="seasons", null=False, blank=False)

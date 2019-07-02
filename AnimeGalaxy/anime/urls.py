@@ -1,10 +1,11 @@
 from django.urls import path
-from episode import views as episode_views
 
+from episode import views as episode_views
 from . import views
 
 urlpatterns = [
 	path('search', views.AnimeSearchView.as_view({"get": "search"}), name="search-anime"),
+	path('list', views.AnimeView.as_view({"get": "list"}), name="list-anime"),
 	path('random', views.AnimeView.as_view({"get": "random"}), name="random-anime"),
 	path('latest', views.AnimeView.as_view({"get": "latest"}), name="latest-anime"),
 	path('watched', views.AnimeView.as_view({"get": "watched"}), name="watched-anime"),

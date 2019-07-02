@@ -1,3 +1,4 @@
+from django.db.models import Sum
 from drf_haystack.serializers import HaystackSerializerMixin
 from rest_framework import serializers
 
@@ -13,11 +14,16 @@ class GenreSerializer(serializers.ModelSerializer):
 class AnimeSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Anime
-		fields = ('id', 'name', 'genres', 'image', 'thumbnail', 'description')
+		fields = ('id', 'name', 'genres', 'image', 'thumbnail', 'description', 'views')
 
 	name = serializers.CharField(source="__str__")
 	genres = GenreSerializer(many=True)
 	image = serializers.SerializerMethodField()
+	views = serializers.SerializerMethodField()
+
+	def get_views(self, instance: Anime):
+		count = instance.seasons.aggregate(Sum("episodes__views"))
+		return count.get("episodes__views__sum", 0)
 
 	def get_image(self, instance):
 		request = self.context.get('request')

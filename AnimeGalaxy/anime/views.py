@@ -4,9 +4,11 @@ from typing import List
 from django.core.cache import cache
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
+from django_filters.rest_framework import DjangoFilterBackend
 from drf_haystack.viewsets import HaystackViewSet
 from haystack.query import SearchQuerySet
 from rest_framework import status
+from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.permissions import BasePermission
 from rest_framework.response import Response
 from rest_framework.throttling import BaseThrottle
@@ -24,14 +26,22 @@ class AnimeView(BaseMVS):
 	throttle_classes: List[BaseThrottle] = []
 	permission_classes: List[BasePermission] = []
 
+	def list(self, request, *args, **kwargs):
+		self.filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+		self.filterset_fields = ['genres']
+		self.search_fields = ['^name']
+		self.ordering_fields = ['name', 'id']
+
+		return super(AnimeView, self).list(request, *args, **kwargs)
+
 	@method_decorator(cache_page(60 * 1))
 	def watched(self, request, *args, **kwargs):
 		watched_list = cache.get("watched_animes") or []
-		
+
 		if len(watched_list) == 0:
 			return Response([], status.HTTP_200_OK)
 
-		queryset = Anime.objects.filter(pk__in=watched_list)[:8]
+		queryset = Anime.objects.filter(pk__in=watched_list).order_by("-id")[:8]
 		serializer = AnimeSerializer(queryset, context={"request": request}, many=True)
 		return Response(serializer.data, status.HTTP_200_OK)
 
