@@ -15,7 +15,7 @@ from rest_framework.throttling import BaseThrottle
 
 from main.views import BaseMVS
 from .models import Anime
-from .serializers import AnimeSearchSerializer, AnimeSerializer
+from .serializers import AnimeSearchSerializer, AnimeSerializer, ExtraAnimeSerializer
 
 
 # noinspection PyMethodMayBeStatic
@@ -27,10 +27,16 @@ class AnimeView(BaseMVS):
 	permission_classes: List[BasePermission] = []
 
 	def list(self, request, *args, **kwargs):
+		self.serializer_class = ExtraAnimeSerializer
 		self.filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
 		self.filterset_fields = ['genres']
 		self.search_fields = ['^name']
 		self.ordering_fields = ['name', 'id']
+
+		# Enable searching for anime names that start with "special" characters
+		if request.query_params.get("search") == "#":
+			self.search_fields = []
+			self.queryset = Anime.objects.filter(name__iregex=r"^[^a-zA-Z].+")
 
 		return super(AnimeView, self).list(request, *args, **kwargs)
 

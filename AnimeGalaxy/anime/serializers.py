@@ -1,4 +1,4 @@
-from django.db.models import Sum
+from django.db.models import Count, Sum
 from drf_haystack.serializers import HaystackSerializerMixin
 from rest_framework import serializers
 
@@ -36,6 +36,31 @@ class AnimeSerializer(serializers.ModelSerializer):
 		return request.build_absolute_uri(image_url)
 
 
+class ExtraAnimeSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = Anime
+		fields = ['id', 'name', 'genres', 'image', 'description', 'views', 'episodes']
+
+	name = serializers.CharField(source="__str__")
+	genres = GenreSerializer(many=True)
+	image = serializers.SerializerMethodField()
+	views = serializers.SerializerMethodField()
+	episodes = serializers.SerializerMethodField()
+
+	def get_views(self, instance: Anime):
+		count = instance.seasons.aggregate(Sum("episodes__views"))
+		return count.get("episodes__views__sum", 0)
+
+	def get_episodes(self, instance: Anime):
+		count = instance.seasons.aggregate(Count("episodes"))
+		return count.get("episodes__count", 0)
+
+	def get_image(self, instance):
+		request = self.context.get('request')
+		image_url = instance.image.url
+		return request.build_absolute_uri(image_url)
+
+
 class SimpleAnimeSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Anime
@@ -50,8 +75,8 @@ class GenrelessAnimeSerializer(serializers.ModelSerializer):
 		fields = ['id', 'name', 'image']
 
 
-class AnimeSearchSerializer(HaystackSerializerMixin, SimpleAnimeSerializer):
-	class Meta(SimpleAnimeSerializer.Meta):
+class AnimeSearchSerializer(HaystackSerializerMixin, ExtraAnimeSerializer):
+	class Meta(ExtraAnimeSerializer.Meta):
 		search_fields = ("name", "genres",)
 
 
