@@ -50,9 +50,10 @@ class AnimeView(BaseMVS):
 		watched_list = cache.get("watched_animes") or []
 
 		if len(watched_list) == 0:
-			return Response([], status.HTTP_200_OK)
+			queryset = Anime.objects.all().order_by("-id")[:8]
+		else:
+			queryset = Anime.objects.filter(pk__in=watched_list).order_by("-id")[:8]
 
-		queryset = Anime.objects.filter(pk__in=watched_list).order_by("-id")[:8]
 		serializer = AnimeSerializer(queryset, context={"request": request}, many=True)
 		return Response(serializer.data, status.HTTP_200_OK)
 

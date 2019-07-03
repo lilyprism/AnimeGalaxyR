@@ -49,6 +49,7 @@ class EpisodesView(BaseMVS):
 		serializer = SingleEpisodeSerializer(queryset, many=False, context={'request': request})
 		return Response(serializer.data, status=status.HTTP_200_OK)
 
+	@method_decorator(cache_page(60 * 1))
 	def list(self, request, *args, **kwargs):
 		self.pagination_class = HomeResultsSetPagination
 		return super(EpisodesView, self).list(request, *args, **kwargs)
