@@ -20,6 +20,7 @@ export default class AnimeList extends React.Component {
                 {
                     id: 1,
                     name: "Fairy Tail",
+                    description: "<This is a description>",
                     image: "http://via.placeholder.com/400x700",
                     episodes: 450,
                     views: 199212,
@@ -33,6 +34,7 @@ export default class AnimeList extends React.Component {
                 },{
                     id: 2,
                     name: "Fairy Tail",
+                    description: "<This is a description>",
                     image: "http://via.placeholder.com/400x700",
                     episodes: 450,
                     views: 199212,
@@ -46,6 +48,7 @@ export default class AnimeList extends React.Component {
                 },{
                     id: 3,
                     name: "Fairy Tail",
+                    description: "<This is a description>",
                     image: "http://via.placeholder.com/400x700",
                     episodes: 450,
                     views: 199212,
@@ -59,6 +62,7 @@ export default class AnimeList extends React.Component {
                 },{
                     id: 4,
                     name: "Fairy Tail",
+                    description: "<This is a description>",
                     image: "http://via.placeholder.com/400x700",
                     episodes: 450,
                     views: 199212,
@@ -72,6 +76,7 @@ export default class AnimeList extends React.Component {
                 },{
                     id: 5,
                     name: "Fairy Tail",
+                    description: "<This is a description>",
                     image: "http://via.placeholder.com/400x700",
                     episodes: 450,
                     views: 199212,
@@ -111,6 +116,7 @@ export default class AnimeList extends React.Component {
     render() {
         return (
             <div className="anime-list-container">
+                <div className="border-bottom-red"/>
                 <div className="gradient-container">
                     <div className="breakpoint-container">
                         <h2 className="bg-title">
@@ -137,12 +143,12 @@ export default class AnimeList extends React.Component {
                                 </select>
                             </div>
                             <div className="results-info">
-                                Exibindo {this.state.items.length} resultados de {this.state.count} - Página {this.state.page} de {Math.ceil(this.state.count / 28)}
+                                Exibindo {this.state.items.length} resultados de {this.state.count} - Página {this.state.page} de {Math.ceil(this.state.count / 24)}
                             </div>
                         </div>
                         <div className="spacer"/>
                         <div className="results-container">
-                            <CardLayout type={3} items={this.state.items} xl={4} l={4} md={2} sm={2}/>
+                            <CardLayout type={3} items={this.state.items} xl={4} l={3} md={2} sm={2}/>
                         </div>
                     </div>
                 </div>

@@ -3,6 +3,7 @@
 
 .anime-list-card
 	position: relative
+	overflow: hidden
 
 	.card-image-container
 		width: 100%
@@ -19,6 +20,7 @@
 		display: flex
 		flex-direction: column
 		justify-content: space-between
+		z-index: 2
 
 		.card-top-container
 			width: 100%
@@ -37,26 +39,26 @@
 					clip-path: polygon(0 0, 100% 0, calc(100% - 20px) 100%, 0 100%)
 
 				.card-anime-episodes
-					transition: background-color 0.3s
-					padding: 2px 5px
+					transition: background-color 0.5s, color 0.5s
+					padding: 5px 5px
 					width: 100%
 					text-align: center
 
 					@media (min-width: $breakpoint-md)
 						width: auto
-						padding: 2px 20px 2px 7px
+						padding: 5px 20px 2px 7px
 						clip-path: polygon(0 0, 100% 0, calc(100% - 20px) 100%, 0 100%)
 
 				.card-anime-views
 					background-color: $color_assets_5
-					padding: 2px 5px
+					padding: 5px 5px
 					width: 100%
 					text-align: center
 
 					@media (min-width: $breakpoint-md)
 						width: auto
 						margin-right: -20px
-						padding: 2px 20px
+						padding: 5px 20px
 						clip-path: polygon(20px 0, 100% 0, calc(100% - 20px) 100%, 0 100%)
 						position: relative
 						left: -20px
@@ -67,6 +69,52 @@
 		text-align: center
 		padding: 20px
 		font-size: 20px
+
+	.card-hover-desc
+		position: absolute
+		top: 100%
+		right: 0
+		left: 0
+		height: 100%
+		display: flex
+		flex-direction: column
+		background-color: $color_assets_1
+		z-index: 1
+		transition: top 0.5s
+		padding-top: 35px
+
+		@media (max-width: $breakpoint-md - 1)
+			padding-top: 60px
+
+		.anime-genres
+			display: flex
+			justify-content: center
+			flex-wrap: wrap
+
+			.anime-genre
+				padding: 5px
+				margin: 10px 10px 0 10px
+				border: 1px solid $color_assets_5
+
+		.anime-desc
+			display: flex
+			flex-grow: 1
+			padding: 20px
+			margin-bottom: 90px
+
+			.anime-desc-text
+				height: 100%
+				width: 100%
+				text-align: justify
+				overflow: hidden
+
+	&:hover
+		.card-body .card-top-container .card-top-info-container .card-anime-episodes
+			background-color: rgba($color_assets_2, 0.93)
+			color: $color_assets_1
+
+		.card-hover-desc
+			top: 0
 
 	.card-gradient-overlay
 		position: absolute

@@ -141,7 +141,7 @@ export default class App extends React.Component {
                 <header className="page-header" onKeyPress={event => this.keyToClick(event)}>
                     <div className="banner-top">
                         <div className="breakpoint-container h-100 d-flex align-items-center">
-                            <img src="/images/banner_logo.png" alt="Banner Logo" className="banner-logo"/>
+                            <img src="/images/banner_logo.webp" alt="Banner Logo" className="banner-logo"/>
                         </div>
                     </div>
                     <Topbar/>
