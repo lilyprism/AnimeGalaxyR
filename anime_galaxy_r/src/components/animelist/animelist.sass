@@ -1,0 +1,45 @@
+@import ./../sass/page-units
+@import ./../sass/colors
+
+.anime-list-container
+	padding-top: 65px
+
+	.anime-list-search-area
+		text-align: center
+
+		.anime-list-search-input
+			font-size: 20px
+			padding: 6px 15px
+			outline: none
+			border: none
+			border-radius: 17px
+			margin-bottom: 20px
+
+		.anime-list-filters
+			display: flex
+			justify-content: center
+			flex-wrap: wrap
+			margin-bottom: 20px
+
+			& > *
+				color: $color_assets_2
+				background-color: $color_assets_1
+				border: 1px solid $color_assets_4
+				margin: 0 10px
+				width: 25%
+				padding: 5px
+
+				@media (max-width: $breakpoint-md - 1)
+					margin: 0 0 10px 0
+					width: 100%
+
+			.search-type-toggle-btn
+				outline: none
+
+		.results-info
+			text-align: center
+			border: 2px solid $color_assets_5
+			color: $color_assets_5
+			border-radius: 5px
+			padding: 5px
+

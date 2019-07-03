@@ -5,6 +5,7 @@ import 'moment/locale/pt';
 import "./homeepisodecard.sass";
 
 import RequestUtilities from "./../../util/RequestUtilities";
+import {Link} from "react-router-dom";
 
 export default class HomeEpisodeCard extends React.Component {
 
@@ -62,37 +63,39 @@ export default class HomeEpisodeCard extends React.Component {
 
         return (
             <div className={`${this.props.className} home-episode-card`}>
-                <div className="card-image-container">
-                    <img className="card-img" src={this.props.item.season.anime.image} alt="Episode"/>
-                </div>
-                <div className="card-body">
-                    <div className="card-episode-top-container">
-                        <div className="card-episode-number-container">
-                            <div className="card-episode-number">
-                                {`T${this.state.item.season.number} E${this.state.item.number}`}
+                <Link to={`/v/${this.props.item.id}`}>
+                    <div className="card-image-container">
+                        <img className="card-img" src={this.props.item.season.anime.image} alt="Episode"/>
+                    </div>
+                    <div className="card-body">
+                        <div className="card-episode-top-container">
+                            <div className="card-episode-number-container">
+                                <div className="card-episode-number">
+                                    {`T${this.state.item.season.number} E${this.state.item.number}`}
+                                </div>
+                            </div>
+                        </div>
+                        {
+                            this.props.is_logged_in ?
+                                <div className="card-episode-options">
+                                    <span onClick={this.favEpisode}><i className={`card-option fas fa-heart fa-fw ${this.state.item.favorite ? "active" : ""}`}/></span>
+                                    <span onClick={this.addEpisodeToWatchLater}><i className={`card-option fas fa-clock fa-fw ${this.state.item.watch_later ? "active" : ""}`}/></span>
+                                </div>
+                                :
+                                ""
+                        }
+                        <div className="card-episode-info">
+                            <div className="card-episode-name">
+                                {this.props.item.season.anime.name}
+                            </div>
+                            <div className="card-episode-time">
+                                {time.fromNow()}
                             </div>
                         </div>
                     </div>
-                    {
-                        this.props.is_logged_in ?
-                            <div className="card-episode-options">
-                                <span onClick={this.favEpisode}><i className={`card-option fas fa-heart fa-fw ${this.state.item.favorite ? "active" : ""}`}/></span>
-                                <span onClick={this.addEpisodeToWatchLater}><i className={`card-option fas fa-clock fa-fw ${this.state.item.watch_later ? "active" : ""}`}/></span>
-                            </div>
-                            :
-                            ""
-                    }
-                    <div className="card-episode-info">
-                        <div className="card-episode-name">
-                            {this.props.item.season.anime.name}
-                        </div>
-                        <div className="card-episode-time">
-                            {time.fromNow()}
-                        </div>
-                    </div>
-                </div>
-                <span className="card-play-icon"><i className="fas fa-play fa-fw"/></span>
-                <div className="card-gradient-overlay"/>
+                    <span className="card-play-icon"><i className="fas fa-play fa-fw"/></span>
+                    <div className="card-gradient-overlay"/>
+                </Link>
             </div>
         );
     }

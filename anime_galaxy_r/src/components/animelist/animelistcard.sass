@@ -1,0 +1,125 @@
+@import ./../sass/colors
+@import ./../sass/page-units
+
+.anime-list-card
+	position: relative
+	overflow: hidden
+
+	.card-image-container
+		width: 100%
+
+		.card-img
+			width: 100%
+
+	.card-body
+		position: absolute
+		top: 0
+		right: 0
+		bottom: 0
+		left: 0
+		display: flex
+		flex-direction: column
+		justify-content: space-between
+		z-index: 2
+
+		.card-top-container
+			width: 100%
+			display: flex
+
+			.card-top-info-container
+				width: 100%
+				display: block
+				background: linear-gradient(to bottom, $color_assets_1, rgba($color_assets_1, 0.92))
+
+				@media (min-width: $breakpoint-md)
+					display: flex
+					width: auto
+					flex-shrink: 0
+					flex-wrap: nowrap
+					clip-path: polygon(0 0, 100% 0, calc(100% - 20px) 100%, 0 100%)
+
+				.card-anime-episodes
+					transition: background-color 0.5s, color 0.5s
+					padding: 5px 5px
+					width: 100%
+					text-align: center
+
+					@media (min-width: $breakpoint-md)
+						width: auto
+						padding: 5px 20px 2px 7px
+						clip-path: polygon(0 0, 100% 0, calc(100% - 20px) 100%, 0 100%)
+
+				.card-anime-views
+					background-color: $color_assets_5
+					padding: 5px 5px
+					width: 100%
+					text-align: center
+
+					@media (min-width: $breakpoint-md)
+						width: auto
+						margin-right: -20px
+						padding: 5px 20px
+						clip-path: polygon(20px 0, 100% 0, calc(100% - 20px) 100%, 0 100%)
+						position: relative
+						left: -20px
+
+	.card-anime-info
+		color: $color_assets_2
+		z-index: 2
+		text-align: center
+		padding: 20px
+		font-size: 20px
+
+	.card-hover-desc
+		position: absolute
+		top: 100%
+		right: 0
+		left: 0
+		height: 100%
+		display: flex
+		flex-direction: column
+		background-color: $color_assets_1
+		z-index: 1
+		transition: top 0.5s
+		padding-top: 35px
+
+		@media (max-width: $breakpoint-md - 1)
+			padding-top: 60px
+
+		.anime-genres
+			display: flex
+			justify-content: center
+			flex-wrap: wrap
+
+			.anime-genre
+				padding: 5px
+				margin: 10px 10px 0 10px
+				border: 1px solid $color_assets_5
+
+		.anime-desc
+			display: flex
+			flex-grow: 1
+			padding: 20px
+			margin-bottom: 90px
+
+			.anime-desc-text
+				height: 100%
+				width: 100%
+				text-align: justify
+				overflow: hidden
+
+	&:hover
+		.card-body .card-top-container .card-top-info-container .card-anime-episodes
+			background-color: rgba($color_assets_2, 0.93)
+			color: $color_assets_1
+
+		.card-hover-desc
+			top: 0
+
+	.card-gradient-overlay
+		position: absolute
+		top: 0
+		right: 0
+		bottom: 0
+		left: 0
+		background: linear-gradient(to top, $color_assets_1, rgba($color_assets_1, 0))
