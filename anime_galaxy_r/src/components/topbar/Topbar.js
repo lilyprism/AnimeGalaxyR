@@ -143,7 +143,7 @@ export default class Topbar extends React.Component {
             <nav className="topbar">
                 <div className="topbar-container breakpoint-container">
                     <div className="logo-burger-container">
-                        <i className="fas fa-bars fa-17x icon" role="button" name="burger-button" onClick={this.toggleSidebar} tabIndex="1"/>
+                        <i className="fas fa-bars fa-17x icon" role="button" aria-label="Sidebar button toggler" onClick={this.toggleSidebar} tabIndex="1"/>
                         <Link to="/" tabIndex="3"
                               onClick={
                                   event => {
@@ -156,7 +156,7 @@ export default class Topbar extends React.Component {
                     </div>
                     <div className="search-area">
                         <div className="search-input-container">
-                            <input className="search-input" name="search-input" tabIndex={-1} id="search-input" placeholder="eg: Fairy Tail" spellCheck={false} type="text"
+                            <input className="search-input" name="search-input" aria-label="Search input field" tabIndex={-1} id="search-input" placeholder="eg: Fairy Tail" spellCheck={false} type="text"
                                    onChange={
                                        event => {
                                            this.searchAnime(event.target.value)
@@ -167,12 +167,12 @@ export default class Topbar extends React.Component {
                                 <SearchResultBox results={this.state.search_results} results_open={this.state.results_open}/>
                             </div>
                         </div>
-                        <div className="icon search-icon" role="button" name="search-button" tabIndex={0} onClick={event => this.toggleSearchBar()}>
+                        <div className="icon search-icon" role="button" aria-label="Search Button" tabIndex={0} onClick={event => this.toggleSearchBar()}>
                             <i className="fas fa-search fa-17x"/>
                         </div>
                     </div>
                     <div className="user-area cursor-pointer" onClick={this.toggleUserDropdown}>
-                        <img className="user-badge-avatar circle" src="http://via.placeholder.com/100" alt="User Area Avatar"/>
+                        <img className="user-badge-avatar circle" src="/images/avatar.webp" alt="User Area Avatar"/>
                         <i className="fas fa-caret-down"/>
                         <div className="user-dropdown">
                             <ul className="user-dropdown-option-list">

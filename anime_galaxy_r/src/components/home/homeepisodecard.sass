@@ -5,10 +5,14 @@
 	width: 100%
 
 	.card-image-container
+		position: relative
 		width: 100%
+		padding-bottom: calc(360/255 * 100%)
 
 		.card-img
+			position: absolute
 			width: 100%
+			height: auto
 
 	.card-body
 		position: absolute
@@ -26,6 +30,7 @@
 			justify-content: space-between
 
 			.card-episode-number-container
+				margin-top: -1px
 				background: linear-gradient(to bottom, $color_assets_1 0%, rgba($color_assets_1, 0.92) 100%)
 				clip-path: polygon(0 0, 100% 0, calc(100% - 20px) 100%, 0 100%)
 

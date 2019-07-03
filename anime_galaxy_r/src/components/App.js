@@ -113,6 +113,25 @@ export default class App extends React.Component {
 
     componentDidMount() {
         this.handleScrollAndResize();
+        this.handleEasterEggCode();
+    }
+
+    handleEasterEggCode() {
+        let code = ["ArrowUp", "ArrowUp", "ArrowDown", "ArrowDown", "ArrowLeft", "ArrowRight", "ArrowLeft", "ArrowRight", "b", "a"];
+
+        let count = 0;
+
+        document.addEventListener("keydown", event => {
+            if (event.key === code[count]) {
+                count++;
+            }else{
+                count = 0;
+            }
+            if (count === code.length) {
+                document.querySelector("html").classList.toggle("filter-invert");
+                count = 0;
+            }
+        });
     }
 
     //This function is responsible for adding the events needed to handle sticky-like behaviours in the website

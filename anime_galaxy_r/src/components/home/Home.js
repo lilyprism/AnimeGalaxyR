@@ -12,11 +12,182 @@ export default class Home extends React.Component {
         super(props);
 
         this.state = {
-            latest_episodes: [],
-            latest_anime: {
-                next: null,
-                results: []
+            latest_episodes: {
+                results: [
+                    {
+                        id: -1,
+                        added: "2019-07-02T09:29:53.310375+01:00",
+                        favorite: false,
+                        number: "",
+                        watch_later: false,
+                        season: {
+                            number: "",
+                            anime: {
+                                id: 1,
+                                image: "/images/card_placeholder.webp",
+                                name: ""
+                            }
+                        }
+                    }, {
+                        id: -2,
+                        added: "2019-07-02T09:29:53.310375+01:00",
+                        favorite: false,
+                        number: "",
+                        watch_later: false,
+                        season: {
+                            number: "",
+                            anime: {
+                                id: 1,
+                                image: "/images/card_placeholder.webp",
+                                name: ""
+                            }
+                        }
+                    }, {
+                        id: -3,
+                        added: "2019-07-02T09:29:53.310375+01:00",
+                        favorite: false,
+                        number: "",
+                        watch_later: false,
+                        season: {
+                            number: "",
+                            anime: {
+                                id: 1,
+                                image: "/images/card_placeholder.webp",
+                                name: ""
+                            }
+                        }
+                    }, {
+                        id: -4,
+                        added: "2019-07-02T09:29:53.310375+01:00",
+                        favorite: false,
+                        number: "",
+                        watch_later: false,
+                        season: {
+                            number: "",
+                            anime: {
+                                id: 1,
+                                image: "/images/card_placeholder.webp",
+                                name: ""
+                            }
+                        }
+                    }, {
+                        id: -5,
+                        added: "2019-07-02T09:29:53.310375+01:00",
+                        favorite: false,
+                        number: "",
+                        watch_later: false,
+                        season: {
+                            number: "",
+                            anime: {
+                                id: 1,
+                                image: "/images/card_placeholder.webp",
+                                name: ""
+                            }
+                        }
+                    }, {
+                        id: -6,
+                        added: "2019-07-02T09:29:53.310375+01:00",
+                        favorite: false,
+                        number: "",
+                        watch_later: false,
+                        season: {
+                            number: "",
+                            anime: {
+                                id: 1,
+                                image: "/images/card_placeholder.webp",
+                                name: ""
+                            }
+                        }
+                    }, {
+                        id: -7,
+                        added: "2019-07-02T09:29:53.310375+01:00",
+                        favorite: false,
+                        number: "",
+                        watch_later: false,
+                        season: {
+                            number: "",
+                            anime: {
+                                id: 1,
+                                image: "/images/card_placeholder.webp",
+                                name: ""
+                            }
+                        }
+                    }, {
+                        id: -8,
+                        added: "2019-07-02T09:29:53.310375+01:00",
+                        favorite: false,
+                        number: "",
+                        watch_later: false,
+                        season: {
+                            number: "",
+                            anime: {
+                                id: -1,
+                                image: "/images/card_placeholder.webp",
+                                name: ""
+                            }
+                        }
+                    },
+                ]
             },
+            latest_anime: [
+                {
+                    id: -1,
+                    description: "",
+                    genres: [],
+                    name: "Anime Name Here",
+                    views: 0,
+                    image: "/images/card_placeholder.webp"
+                }, {
+                    id: -2,
+                    description: " ",
+                    genres: [],
+                    name: "Anime Name Here",
+                    views: 0,
+                    image: "/images/card_placeholder.webp"
+                }, {
+                    id: -3,
+                    description: "",
+                    genres: [],
+                    name: "Anime Name Here",
+                    views: 0,
+                    image: "/images/card_placeholder.webp"
+                }, {
+                    id: -4,
+                    description: "",
+                    genres: [],
+                    name: "Anime Name Here",
+                    views: 0,
+                    image: "/images/card_placeholder.webp"
+                }, {
+                    id: -5,
+                    description: "",
+                    genres: [],
+                    name: "Anime Name Here",
+                    views: 0,
+                    image: "/images/card_placeholder.webp"
+                }, {
+                    id: -6,
+                    description: "",
+                    genres: [],
+                    name: "Anime Name Here",
+                    views: 0,
+                    image: "/images/card_placeholder.webp"
+                }, {
+                    id: -7,
+                    description: "",
+                    genres: [],
+                    name: "Anime Name Here",
+                    views: 0,
+                    image: "/images/card_placeholder.webp"
+                }, {
+                    id: -8,
+                    description: "",
+                    genres: [],
+                    name: "Anime Name Here",
+                    views: 0,
+                    image: "/images/card_placeholder.webp"
+                }
+            ],
             watched_anime: []
         };
         this.getLatestEpisodes();
@@ -90,14 +261,14 @@ export default class Home extends React.Component {
         if (this.state.latest_episodes.results !== undefined) {
             for (let i = 0; i < parseInt(Math.ceil(this.state.latest_episodes.results.length / 8)); i++) {
                 latest_episodes_cards.push(
-                    <CardLayout items={this.state.latest_episodes.results !== undefined ? this.state.latest_episodes.results.slice(i * 8, (i + 1) * 8) : []} type={1} xl={4} l={4} md={2} sm={2} is_logged_in={this.props.is_logged_in} animate={true} key={this.state.latest_episodes.results[i * 8].id}/>
+                    <CardLayout items={this.state.latest_episodes.results !== undefined ? this.state.latest_episodes.results.slice(i * 8, (i + 1) * 8) : []} type={1} xl={4} l={4} md={2} sm={2} is_logged_in={this.props.is_logged_in} animate={i !== 0} key={this.state.latest_episodes.results[i * 8].id}/>
                 );
             }
         }
 
         return (
             <div>
-                <div className={`home-carousel ${this.state.watched_anime.length === 0 ? "hidden" : ""}`}>
+                <div className={`home-carousel`}>
                     <Carousel items={this.state.watched_anime} cycle={this.state.watched_anime.length > 0}/>
                 </div>
                 <div className="border-bottom-red"/>
@@ -134,7 +305,7 @@ export default class Home extends React.Component {
                         </h2>
                         <div className="spacer"/>
                         <div className="latest-anime-container">
-                            <CardLayout key={0} items={this.state.latest_anime !== undefined ? this.state.latest_anime : []} type={2} xl={4} l={4} md={2} sm={2} is_logged_in={this.props.is_logged_in} animate={true}/>
+                            <CardLayout key={0} items={this.state.latest_anime !== undefined ? this.state.latest_anime : []} type={2} xl={4} l={4} md={2} sm={2} is_logged_in={this.props.is_logged_in} animate={false}/>
                         </div>
                         <div className="text-center">
                             <div className="spacer"/>
