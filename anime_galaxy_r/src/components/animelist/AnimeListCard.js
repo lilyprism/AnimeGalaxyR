@@ -33,7 +33,6 @@ export default class AnimeListCard extends React.Component {
                 <div className="card-hover-desc">
                     <div className="anime-genres">
                         {this.props.item.genres.slice(0, 3).map((genre, index) => {
-                            console.log(genre.id);
                             return (
                                 <div key={genre.id} className="anime-genre"> {genre.name}</div>
                             )

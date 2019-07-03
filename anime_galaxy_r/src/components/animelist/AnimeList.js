@@ -13,89 +13,212 @@ export default class AnimeList extends React.Component {
             page: 1,
             genres: [],
             search: "",
-            ordering: "",
-            genre: "",
+            ordering: "name",
+            genre: "-1",
             count: 0,
             items: [
                 {
-                    id: 1,
-                    name: "Fairy Tail",
-                    description: "<This is a description>",
-                    image: "http://via.placeholder.com/400x700",
-                    episodes: 450,
-                    views: 199212,
-                    genres: [
-                        {
-                            name: "Ação",
-                        },{
-                            name: "Magia"
-                        }
-                    ]
-                },{
-                    id: 2,
-                    name: "Fairy Tail",
-                    description: "<This is a description>",
-                    image: "http://via.placeholder.com/400x700",
-                    episodes: 450,
-                    views: 199212,
-                    genres: [
-                        {
-                            name: "Ação",
-                        },{
-                            name: "Magia"
-                        }
-                    ]
-                },{
-                    id: 3,
-                    name: "Fairy Tail",
-                    description: "<This is a description>",
-                    image: "http://via.placeholder.com/400x700",
-                    episodes: 450,
-                    views: 199212,
-                    genres: [
-                        {
-                            name: "Ação",
-                        },{
-                            name: "Magia"
-                        }
-                    ]
-                },{
-                    id: 4,
-                    name: "Fairy Tail",
-                    description: "<This is a description>",
-                    image: "http://via.placeholder.com/400x700",
-                    episodes: 450,
-                    views: 199212,
-                    genres: [
-                        {
-                            name: "Ação",
-                        },{
-                            name: "Magia"
-                        }
-                    ]
-                },{
-                    id: 5,
-                    name: "Fairy Tail",
-                    description: "<This is a description>",
-                    image: "http://via.placeholder.com/400x700",
-                    episodes: 450,
-                    views: 199212,
-                    genres: [
-                        {
-                            name: "Ação",
-                        },{
-                            name: "Magia"
-                        }
-                    ]
+                    id: -1,
+                    name: "",
+                    description: "",
+                    image: "/images/card_placeholder.webp",
+                    episodes: "",
+                    views: "",
+                    genres: []
+                }, {
+                    id: -2,
+                    name: "",
+                    description: "",
+                    image: "/images/card_placeholder.webp",
+                    episodes: "",
+                    views: "",
+                    genres: []
+                }, {
+                    id: -3,
+                    name: "",
+                    description: "",
+                    image: "/images/card_placeholder.webp",
+                    episodes: "",
+                    views: "",
+                    genres: []
+                }, {
+                    id: -4,
+                    name: "",
+                    description: "",
+                    image: "/images/card_placeholder.webp",
+                    episodes: "",
+                    views: "",
+                    genres: []
+                }, {
+                    id: -5,
+                    name: "",
+                    description: "",
+                    image: "/images/card_placeholder.webp",
+                    episodes: "",
+                    views: "",
+                    genres: []
+                }, {
+                    id: -6,
+                    name: "",
+                    description: "",
+                    image: "/images/card_placeholder.webp",
+                    episodes: "",
+                    views: "",
+                    genres: []
+                }, {
+                    id: -7,
+                    name: "",
+                    description: "",
+                    image: "/images/card_placeholder.webp",
+                    episodes: "",
+                    views: "",
+                    genres: []
+                }, {
+                    id: -8,
+                    name: "",
+                    description: "",
+                    image: "/images/card_placeholder.webp",
+                    episodes: "",
+                    views: "",
+                    genres: []
+                }, {
+                    id: -9,
+                    name: "",
+                    description: "",
+                    image: "/images/card_placeholder.webp",
+                    episodes: "",
+                    views: "",
+                    genres: []
+                }, {
+                    id: -10,
+                    name: "",
+                    description: "",
+                    image: "/images/card_placeholder.webp",
+                    episodes: "",
+                    views: "",
+                    genres: []
+                }, {
+                    id: -11,
+                    name: "",
+                    description: "",
+                    image: "/images/card_placeholder.webp",
+                    episodes: "",
+                    views: "",
+                    genres: []
+                }, {
+                    id: -12,
+                    name: "",
+                    description: "",
+                    image: "/images/card_placeholder.webp",
+                    episodes: "",
+                    views: "",
+                    genres: []
+                }, {
+                    id: -13,
+                    name: "",
+                    description: "",
+                    image: "/images/card_placeholder.webp",
+                    episodes: "",
+                    views: "",
+                    genres: []
+                }, {
+                    id: -14,
+                    name: "",
+                    description: "",
+                    image: "/images/card_placeholder.webp",
+                    episodes: "",
+                    views: "",
+                    genres: []
+                }, {
+                    id: -15,
+                    name: "",
+                    description: "",
+                    image: "/images/card_placeholder.webp",
+                    episodes: "",
+                    views: "",
+                    genres: []
+                }, {
+                    id: -16,
+                    name: "",
+                    description: "",
+                    image: "/images/card_placeholder.webp",
+                    episodes: "",
+                    views: "",
+                    genres: []
+                }, {
+                    id: -17,
+                    name: "",
+                    description: "",
+                    image: "/images/card_placeholder.webp",
+                    episodes: "",
+                    views: "",
+                    genres: []
+                }, {
+                    id: -18,
+                    name: "",
+                    description: "",
+                    image: "/images/card_placeholder.webp",
+                    episodes: "",
+                    views: "",
+                    genres: []
+                }, {
+                    id: -19,
+                    name: "",
+                    description: "",
+                    image: "/images/card_placeholder.webp",
+                    episodes: "",
+                    views: "",
+                    genres: []
+                }, {
+                    id: -20,
+                    name: "",
+                    description: "",
+                    image: "/images/card_placeholder.webp",
+                    episodes: "",
+                    views: "",
+                    genres: []
+                }, {
+                    id: -21,
+                    name: "",
+                    description: "",
+                    image: "/images/card_placeholder.webp",
+                    episodes: "",
+                    views: "",
+                    genres: []
+                }, {
+                    id: -22,
+                    name: "",
+                    description: "",
+                    image: "/images/card_placeholder.webp",
+                    episodes: "",
+                    views: "",
+                    genres: []
+                }, {
+                    id: -23,
+                    name: "",
+                    description: "",
+                    image: "/images/card_placeholder.webp",
+                    episodes: "",
+                    views: "",
+                    genres: []
+                }, {
+                    id: -24,
+                    name: "",
+                    description: "",
+                    image: "/images/card_placeholder.webp",
+                    episodes: "",
+                    views: "",
+                    genres: []
                 },
             ]
         };
         this.getAnime();
+        this.getGenres();
     }
 
     getAnime = () => {
-        console.log(`anime/list?ordering=${this.state.ordering}&search=${this.state.search}?page=${this.state.page}${this.state.genre !== "" ? `&genre=${this.state.genre}` : ""}`);
-        RequestUtilities.sendGetRequest(`anime/list?ordering=${this.state.ordering}&search=${this.state.search}${this.state.genre !== "" ? `&genre=${this.state.genre}` : ""}`).then(res => {
+        console.log(`anime/list?ordering=${this.state.ordering}&search=${this.state.search}?page=${this.state.page}${this.state.genre !== "-1" ? `&genres=${this.state.genre}` : ""}`);
+        RequestUtilities.sendGetRequest(`anime/list?ordering=${this.state.ordering}&search=${this.state.search}${this.state.genre !== "-1" ? `&genres=${this.state.genre}` : ""}`).then(res => {
             console.log("Fuck this shit im out");
             console.log(res.data);
             this.setState({
@@ -126,20 +249,28 @@ export default class AnimeList extends React.Component {
                         </h2>
                         <div className="spacer"/>
                         <div className="anime-list-search-area">
-                            <input type="text" className="anime-list-search-input" placeholder="Eg: Fairy Tail"/>
+                            <input type="text" className="anime-list-search-input" name="animelist-search" aria-label="Anime List search field" placeholder="Eg: Fairy Tail"/>
                             <div className="anime-list-filters">
                                 <button className="search-type-toggle-btn">Mudar modo de pesquisa</button>
-                                <select name="ordering" className="anime-list-ordering-select" defaultValue={"name"} onChange={event => this.setState({ordering: event.target.value})}>
-                                    <option value="name">Ordem Alfabética</option>
-                                    <option value="id">Data de Lançamento</option>
+                                <select name="ordering" aria-label="Anime order" className="anime-list-ordering-select" defaultValue={"name"} onChange={event => {
+                                    this.setState({ordering: event.target.value}, () => {
+                                        this.getAnime();
+                                    });
+                                }}>
+                                    <option value="name">Ordem Alfabética ↑</option>
+                                    <option value="-name">Ordem Alfabética ↓</option>
+                                    <option value="-id">Data de Lançamento ↑</option>
+                                    <option value="id">Data de Lançamento ↓</option>
                                 </select>
-                                <select name="genres" className="anime-list-genres-select" defaultValue={""} onChange={event => this.setState({genre: event.target.value})}>
-                                    <option value="">Géneros</option>
-                                    <option value="Ação">Ação</option>
-                                    <option value="Aventura">Aventura</option>
-                                    <option value="Isekai">Isekai</option>
-                                    <option value="Yuri">Yuri</option>
-                                    <option value="Sports">Sports</option>
+                                <select name="genres" aria-label="Genre filter" className="anime-list-genres-select" defaultValue={""} onChange={event => {
+                                    this.setState({genre: event.target.value}, () => {
+                                        this.getAnime();
+                                    });
+                                }}>
+                                    <option value="-1">Géneros</option>
+                                    {this.state.genres.map(function (genre, index) {
+                                        return <option value={genre.id} key={genre.id}>{genre.name}</option>;
+                                    })}
                                 </select>
                             </div>
                             <div className="results-info">

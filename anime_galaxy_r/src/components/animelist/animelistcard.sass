@@ -6,10 +6,14 @@
 	overflow: hidden
 
 	.card-image-container
+		position: relative
 		width: 100%
+		padding-bottom: calc(360/255 * 100%)
 
 		.card-img
+			position: absolute
 			width: 100%
+			height: auto
 
 	.card-body
 		position: absolute
@@ -29,6 +33,7 @@
 			.card-top-info-container
 				width: 100%
 				display: block
+				margin-top: -1px
 				background: linear-gradient(to bottom, $color_assets_1, rgba($color_assets_1, 0.92))
 
 				@media (min-width: $breakpoint-md)
