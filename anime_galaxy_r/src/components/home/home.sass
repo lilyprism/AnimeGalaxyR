@@ -2,23 +2,20 @@
 @import ../sass/page-units
 
 .home-carousel
-	height: 100vh
-
-	@media (max-width: $breakpoint-sm - 1)
-		height: calc(100vh)
+	height: calc(100vh - 2px)
 
 	@media (max-width: $breakpoint-md - 1)
 		padding-top: 65px
 		height: 0
 
 	@media (min-width: $breakpoint-md)
-		height: calc(100vh - 120px)
+		height: calc(100vh - 120px - 2px)
 
 	@media (min-width: $breakpoint-l)
-		height: calc(100vh - 180px)
+		height: calc(100vh - 180px - 2px)
 
 	@media (min-width: $breakpoint-xl)
-		height: calc(100vh - 240px)
+		height: calc(100vh - 240px - 2px)
 
 .home-carousel.hidden
 	padding-top: 65px
