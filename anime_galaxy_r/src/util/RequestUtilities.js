@@ -11,6 +11,7 @@ export default class RequestUtilities {
     };
 
     static sendGetRequest(endpoint, authorized, config) {
+        console.log(endpoint);
         if (authorized) {
             if (config !== undefined) {
                 if (config.headers === undefined) {

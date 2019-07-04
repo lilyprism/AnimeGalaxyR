@@ -26,6 +26,8 @@ class Sidebar extends React.Component {
     goToRandomAnime() {
         RequestUtilities.sendGetRequest("anime/random", false).then(res => {
             this.props.history.push(`/anime/${res.data.id}`);
+        }).catch(err => {
+            console.log(err.response);
         });
     }
 
@@ -48,50 +50,50 @@ class Sidebar extends React.Component {
     };
 
     render() {
-        let login_logout = "";
-        let register = "";
-        if (!this.props.is_logged_in) {
-            login_logout =
-                <Link to="/login"
-                      onClick={
-                          event => {
-                              event.preventDefault();
-                              this.handleLoginClick();
-                          }
-                      }>
-                    <div className="sidebar-item cursor-pointer">
-                        <i className="fas fa-sign-in-alt fa-fw"/> Entrar
-                    </div>
-                </Link>;
-            register =
-                <Link to="/register"
-                      onClick={
-                          event => {
-                              event.preventDefault();
-                              this.handleRegisterClick();
-                          }
-                      }>
-                    <div className="sidebar-item">
-                        <i className="fas fa-user-plus fa-fw"/> Registar
-                    </div>
-                </Link>;
-        } else {
-            login_logout =
-                <Link to="/logout"
-                      onClick={
-                          event => {
-                              event.preventDefault();
-                              this.handleLogoutClick();
-                          }
-                      }>
-                    <div className="cursor-pointer">
-                        <div className="sidebar-item">
-                            <i className="fas fa-sign-out-alt fa-fw"/> Sair
-                        </div>
-                    </div>
-                </Link>;
-            register = "";
-        }
+        // let login_logout = "";
+        // let register = "";
+        // if (!this.props.is_logged_in) {
+        //     login_logout =
+        //         <Link to="/login"
+        //               onClick={
+        //                   event => {
+        //                       event.preventDefault();
+        //                       this.handleLoginClick();
+        //                   }
+        //               }>
+        //             <div className="sidebar-item cursor-pointer">
+        //                 <i className="fas fa-sign-in-alt fa-fw"/> Entrar
+        //             </div>
+        //         </Link>;
+        //     register =
+        //         <Link to="/register"
+        //               onClick={
+        //                   event => {
+        //                       event.preventDefault();
+        //                       this.handleRegisterClick();
+        //                   }
+        //               }>
+        //             <div className="sidebar-item">
+        //                 <i className="fas fa-user-plus fa-fw"/> Registar
+        //             </div>
+        //         </Link>;
+        // } else {
+        //     login_logout =
+        //         <Link to="/logout"
+        //               onClick={
+        //                   event => {
+        //                       event.preventDefault();
+        //                       this.handleLogoutClick();
+        //                   }
+        //               }>
+        //             <div className="cursor-pointer">
+        //                 <div className="sidebar-item">
+        //                     <i className="fas fa-sign-out-alt fa-fw"/> Sair
+        //                 </div>
+        //             </div>
+        //         </Link>;
+        //     register = "";
+        // }
 
         return (
             <div className="sidebar sidebar-transition">
@@ -131,19 +133,19 @@ class Sidebar extends React.Component {
                         <i className="fas fa-random fa-fw"/> Aleatório
                     </div>
                 </a>
-                <div className="login-item-container">
-                    {this.props.is_logged_in ?
-                        <Link to="/profile" onClick={this.handleNavItemClick}>
-                            <div className="sidebar-item">
-                                <i className="fas fa-address-card fa-fw"/> Profile
-                            </div>
-                        </Link>
-                        :
-                        ""
-                    }
-                    {login_logout}
-                    {register}
-                </div>
+                {/*<div className="login-item-container">*/}
+                {/*    {this.props.is_logged_in ?*/}
+                {/*        <Link to="/profile" onClick={this.handleNavItemClick}>*/}
+                {/*            <div className="sidebar-item">*/}
+                {/*                <i className="fas fa-address-card fa-fw"/> Profile*/}
+                {/*            </div>*/}
+                {/*        </Link>*/}
+                {/*        :*/}
+                {/*        ""*/}
+                {/*    }*/}
+                {/*    {login_logout}*/}
+                {/*    {register}*/}
+                {/*</div>*/}
             </div>
         );
     }

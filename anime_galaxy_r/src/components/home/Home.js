@@ -5,6 +5,7 @@ import "./home.sass";
 import RequestUtilities from "./../../util/RequestUtilities";
 import Carousel from "./Carousel";
 import CardLayout from "./../CardLayout";
+import {Link} from "react-router-dom";
 
 export default class Home extends React.Component {
 
@@ -267,7 +268,7 @@ export default class Home extends React.Component {
         }
 
         return (
-            <div>
+            <div className="home">
                 <div className={`home-carousel`}>
                     <Carousel items={this.state.watched_anime} cycle={this.state.watched_anime.length > 0}/>
                 </div>
@@ -309,7 +310,9 @@ export default class Home extends React.Component {
                         </div>
                         <div className="text-center">
                             <div className="spacer"/>
-                            <button className="bordered-btn">Ver Todos</button>
+                            <Link to="/anime">
+                                <button className="bordered-btn">Ver Todos</button>
+                            </Link>
                         </div>
                         <div className="spacer"/>
                     </div>

@@ -15,6 +15,7 @@ import RegisterModal from "./register/RegisterModal";
 import Profile from "./profile/Profile";
 import Footer from "./footer/Footer";
 import AnimeList from "./animelist/AnimeList";
+import Search from "./search/Search";
 
 export default class App extends React.Component {
 
@@ -24,7 +25,8 @@ export default class App extends React.Component {
         super(props);
 
         this.state = {
-            is_logged_in: App.isLoggedIn()
+            is_logged_in: App.isLoggedIn(),
+            search: ""
         };
         App.app_instance = this;
         RequestUtilities.setAppInstance(this);
@@ -50,6 +52,21 @@ export default class App extends React.Component {
 
     static removeAuthToken() {
         localStorage.removeItem("anime_galaxy_auth_token");
+    }
+
+    static hideSidebar() {
+        document.querySelector(".sidebar").classList.remove("open");
+        document.querySelector(".content-wrapper").classList.remove("dimmed");
+
+        let sidebar_items = document.querySelectorAll(".sidebar a");
+
+        for (let i = 0; i < sidebar_items.length; i++) {
+            sidebar_items[i].tabIndex = "-1";
+        }
+    }
+
+    static loseFocus() {
+        document.activeElement.blur();
     }
 
     login = (username, password) => {
@@ -89,21 +106,6 @@ export default class App extends React.Component {
         })
     };
 
-    static hideSidebar() {
-        document.querySelector(".sidebar").classList.remove("open");
-        document.querySelector(".content-wrapper").classList.remove("dimmed");
-
-        let sidebar_items = document.querySelectorAll(".sidebar a");
-
-        for (let i = 0; i < sidebar_items.length; i++) {
-            sidebar_items[i].tabIndex = "-1";
-        }
-    }
-
-    static loseFocus() {
-        document.activeElement.blur();
-    }
-
     //Handles Enter key presses and clicks the target element
     keyToClick = event => {
         if (event.which === 13) {
@@ -113,19 +115,20 @@ export default class App extends React.Component {
 
     componentDidMount() {
         this.handleScrollAndResize();
-        this.handleEasterEggCode();
+        this.handleKonamiCode();
     }
 
-    handleEasterEggCode() {
+    handleKonamiCode() {
         let code = ["ArrowUp", "ArrowUp", "ArrowDown", "ArrowDown", "ArrowLeft", "ArrowRight", "ArrowLeft", "ArrowRight", "b", "a"];
 
         let count = 0;
 
         document.addEventListener("keydown", event => {
+            if (event.key !== code[count]) {
+                count = 0;
+            }
             if (event.key === code[count]) {
                 count++;
-            }else{
-                count = 0;
             }
             if (count === code.length) {
                 document.querySelector("html").classList.toggle("filter-invert");
@@ -154,6 +157,10 @@ export default class App extends React.Component {
         });
     }
 
+    setSearch = search => {
+        this.setState({search: search});
+    };
+
     render() {
         return (
             <Router>
@@ -163,38 +170,43 @@ export default class App extends React.Component {
                             <img src="/images/banner_logo.webp" alt="Banner Logo" className="banner-logo"/>
                         </div>
                     </div>
-                    <Topbar/>
+                    <Topbar setSearch={this.setSearch}/>
                 </header>
                 <Sidebar is_logged_in={this.state.is_logged_in} logout={this.logout}/>
                 <div className="container w-100" onKeyPress={event => this.keyToClick(event)}>
                     <div className="content-wrapper h-100 w-100" onClick={App.hideSidebar}>
                         <div className="h-100 w-100 overlay position-absolute"/>
-                        <Switch>
-                            <Route exact path="/" render={
-                                props =>
-                                    <Home {...props} is_logged_in={this.state.is_logged_in}/>
-                            }/>
-                            <Route path="/v/:id" render={
-                                props =>
-                                    <EpisodePage {...props} is_logged_in={this.state.is_logged_in}/>
-                            }/>
-                            <Route exact path="/anime" render={
-                                props =>
-                                    <AnimeList {...props}/>
-                            }/>
-                            <Route exact path="/anime/:id" render={
-                                props =>
-                                    <AnimePage {...props}/>
-                            }/>
-                            <Route exact path="/profile" render={
-                                props =>
-                                    <Profile {...props} is_logged_in={this.state.is_logged_in} self={true}/>
-                            }/>
-                            <Route exact path="/user/:id" render={
-                                props =>
-                                    <Profile {...props} is_logged_in={this.state.is_logged_in} self={false}/>
-                            }/>
-                        </Switch>
+                        <div className={this.state.search.length >= 3 ? "d-none" : ""}>
+                            <Switch>
+                                <Route exact path="/" render={
+                                    props =>
+                                        <Home {...props} is_logged_in={this.state.is_logged_in}/>
+                                }/>
+                                <Route path="/v/:id" render={
+                                    props =>
+                                        <EpisodePage {...props} is_logged_in={this.state.is_logged_in}/>
+                                }/>
+                                <Route exact path="/anime" render={
+                                    props =>
+                                        <AnimeList {...props}/>
+                                }/>
+                                <Route exact path="/anime/:id" render={
+                                    props =>
+                                        <AnimePage {...props}/>
+                                }/>
+                                <Route exact path="/profile" render={
+                                    props =>
+                                        <Profile {...props} is_logged_in={this.state.is_logged_in} self={true}/>
+                                }/>
+                                <Route exact path="/user/:id" render={
+                                    props =>
+                                        <Profile {...props} is_logged_in={this.state.is_logged_in} self={false}/>
+                                }/>
+                            </Switch>
+                        </div>
+                        <div className={this.state.search.length >= 3 ? "" : "d-none"}>
+                            <Search search={this.state.search}/>
+                        </div>
                         <Footer/>
                     </div>
                 </div>

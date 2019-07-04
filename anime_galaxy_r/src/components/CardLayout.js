@@ -6,6 +6,7 @@ import "./sass/cardlayout.sass";
 import HomeEpisodeCard from "./home/HomeEpisodeCard";
 import HomeAnimeCard from "./home/HomeAnimeCard";
 import AnimeListCard from "./animelist/AnimeListCard";
+import SearchAnimeCard from "./search/SearchAnimeCard";
 
 export default class CardLayout extends React.Component {
 
@@ -43,6 +44,10 @@ export default class CardLayout extends React.Component {
                 } else if (this.props.type === 3) {
                     cards.push(
                         <AnimeListCard className={`card card-sm-${this.props.sm} card-md-${this.props.md} card-l-${this.props.l} card-xl-${this.props.xl}`} item={this.props.items[i]} is_logged_in={this.props.is_logged_in} key={this.props.items[i].id} updateHeight={this.updateHeight}/>
+                    );
+                } else if (this.props.type === 4) {
+                    cards.push(
+                        <SearchAnimeCard className={`card card-sm-${this.props.sm} card-md-${this.props.md} card-l-${this.props.l} card-xl-${this.props.xl}`} item={this.props.items[i]} is_logged_in={this.props.is_logged_in} key={this.props.items[i].id} updateHeight={this.updateHeight}/>
                     );
                 }
             }
