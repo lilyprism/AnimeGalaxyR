@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-07-04 11:20+0100\n"
+"POT-Creation-Date: 2019-07-04 12:27+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,94 +18,102 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: .\Admin\dashboard.py:17
+#: .\Admin\dashboard.py:21
 msgid "Quick Links"
 msgstr "Atalhos"
 
-#: .\Admin\dashboard.py:20
+#: .\Admin\dashboard.py:24
 msgid "Return to site"
 msgstr "Voltar ao Site"
 
-#: .\Admin\dashboard.py:25
+#: .\Admin\dashboard.py:29
 msgid "Change password"
 msgstr "Mudar Password"
 
-#: .\Admin\dashboard.py:30
+#: .\Admin\dashboard.py:34
 msgid "Log out"
 msgstr "Sair"
 
-#: .\Admin\dashboard.py:42
+#: .\Admin\dashboard.py:46
 msgid "Applications"
 msgstr "Aplicações"
 
-#: .\Admin\dashboard.py:47
+#: .\Admin\dashboard.py:51
 msgid "Recent Actions"
 msgstr "Ações Recentes"
 
-#: .\AnimeGalaxy\settings.py:243
+#: .\AnimeGalaxy\settings.py:244
 msgid "Default"
 msgstr "Padrão"
 
-#: .\AnimeGalaxy\settings.py:248
+#: .\AnimeGalaxy\settings.py:249
 msgid "Green"
 msgstr "Verde"
 
-#: .\AnimeGalaxy\settings.py:253
+#: .\AnimeGalaxy\settings.py:254
 msgid "Light Green"
 msgstr "Verde Claro"
 
-#: .\AnimeGalaxy\settings.py:258
+#: .\AnimeGalaxy\settings.py:259
 msgid "Light Violet"
 msgstr "Violeta Claro"
 
-#: .\AnimeGalaxy\settings.py:263
+#: .\AnimeGalaxy\settings.py:264
 msgid "Light Blue"
 msgstr "Azul Claro"
 
-#: .\AnimeGalaxy\settings.py:268
+#: .\AnimeGalaxy\settings.py:269
 msgid "Light Gray"
 msgstr "Cinzento"
 
-#: .\AnimeGalaxy\settings.py:273
+#: .\AnimeGalaxy\settings.py:274
 msgid "General"
 msgstr "Geral"
 
-#: .\AnimeGalaxy\settings.py:275
+#: .\AnimeGalaxy\settings.py:276
 msgid "Animes"
 msgstr "Animes"
 
-#: .\AnimeGalaxy\settings.py:276
+#: .\AnimeGalaxy\settings.py:277
 msgid "Seasons"
 msgstr "Temporadas"
 
-#: .\AnimeGalaxy\settings.py:277
+#: .\AnimeGalaxy\settings.py:278
 msgid "Episodes"
 msgstr "Episódios"
 
-#: .\AnimeGalaxy\settings.py:278
+#: .\AnimeGalaxy\settings.py:279
 msgid "Comments"
 msgstr "Comentários"
 
-#: .\AnimeGalaxy\settings.py:279
+#: .\AnimeGalaxy\settings.py:280
 msgid "Genres"
 msgstr "Géneros"
 
-#: .\AnimeGalaxy\settings.py:280
+#: .\AnimeGalaxy\settings.py:281
 msgid "Reports"
 msgstr "Reports"
 
-#: .\AnimeGalaxy\settings.py:284
+#: .\AnimeGalaxy\settings.py:285
 msgid "User Related"
-msgstr "Utilizador-Relacionado"
-
-#: .\AnimeGalaxy\settings.py:286
-msgid "Users"
 msgstr "Utilizadores"
 
 #: .\AnimeGalaxy\settings.py:287
+msgid "Users"
+msgstr "Utilizadores"
+
+#: .\AnimeGalaxy\settings.py:288
 msgid "User Comments"
 msgstr "Comentários de Utilizador"
 
-#: .\AnimeGalaxy\settings.py:288
+#: .\AnimeGalaxy\settings.py:289
 msgid "User Episodes"
 msgstr "Episódios de Utilizador"
+
+#: .\AnimeGalaxy\urls.py:20
+msgid "Administration"
+msgstr "Administração"
+
+#: .\AnimeGalaxy\urls.py:21
+msgid "Site Administration"
+msgstr "Administração do Site"

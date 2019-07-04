@@ -23,6 +23,7 @@ django-jet = "*"
 djangorestframework-jwt = "*"
 feedparser = "*"
 psycopg2 = "*"
+python-dotenv = "*"
 
 [requires]
 python_version = "3.6"
