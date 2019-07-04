@@ -1,15 +1,15 @@
 import React from 'react';
 
-import "./animelistcard.sass";
+import "./searchanimecard.sass";
 
-export default class AnimeListCard extends React.Component {
+export default class SearchAnimeCard extends React.Component {
 
     render() {
         let taglessDesc = this.props.item.description.replace(/<.+?>/g, "");
         let description = taglessDesc.substring(0, taglessDesc.substring(0, 150).lastIndexOf(" ")).trim() + "...";
 
         return (
-            <div className={`${this.props.className} anime-list-card`}>
+            <div className={`${this.props.className} search-anime-card`}>
                 <div className="card-image-container">
                     <img className="card-img" src={this.props.item.image} alt="Anime"/>
                 </div>
