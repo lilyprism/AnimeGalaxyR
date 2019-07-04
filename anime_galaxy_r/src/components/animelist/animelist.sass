@@ -15,6 +15,24 @@
 			border-radius: 17px
 			margin-bottom: 20px
 
+		.anime-char-list
+			display: flex
+			flex-wrap: wrap
+			justify-content: center
+			margin-bottom: 20px
+
+			.anime-char-list-item
+				padding: 5px 10px
+				border: 1px solid $color_assets_2
+				background-color: $color_assets_1
+				color: $color_assets_2
+				list-style-type: none
+				cursor: pointer
+
+			.anime-char-list-item:hover, .anime-char-list-item.active
+				background-color: $color_assets_2
+				color: $color_assets_1
+
 		.anime-list-filters
 			display: flex
 			justify-content: center
@@ -34,7 +52,11 @@
 					width: 100%
 
 			.search-type-toggle-btn
-				outline: none
+				cursor: pointer
+
+				&:hover
+					background-color: $color_assets_2
+					color: $color_assets_1
 
 		.results-info
 			text-align: center

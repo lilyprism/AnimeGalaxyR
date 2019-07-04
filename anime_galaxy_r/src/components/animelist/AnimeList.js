@@ -3,8 +3,11 @@ import React from 'react';
 import "./animelist.sass";
 import CardLayout from "../CardLayout";
 import RequestUtilities from "../../util/RequestUtilities";
+import * as ReactDOM from "react-dom";
 
 export default class AnimeList extends React.Component {
+
+    search_chars = ['#', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
 
     constructor(props) {
         super(props);
@@ -16,6 +19,7 @@ export default class AnimeList extends React.Component {
             ordering: "name",
             genre: "-1",
             count: 0,
+            searchMode: 1,
             items: [
                 {
                     id: -1,
@@ -217,8 +221,8 @@ export default class AnimeList extends React.Component {
     }
 
     getAnime = () => {
-        console.log(`anime/list?ordering=${this.state.ordering}&search=${this.state.search}?page=${this.state.page}${this.state.genre !== "-1" ? `&genres=${this.state.genre}` : ""}`);
-        RequestUtilities.sendGetRequest(`anime/list?ordering=${this.state.ordering}&search=${this.state.search}${this.state.genre !== "-1" ? `&genres=${this.state.genre}` : ""}`).then(res => {
+        console.log(`anime/list?ordering=${this.state.ordering}&search=${this.state.search}&page=${this.state.page}${this.state.genre !== "-1" ? `&genres=${this.state.genre}` : ""}`);
+        RequestUtilities.sendGetRequest(`anime/list?ordering=${this.state.ordering}&search=${this.state.search}&page=${this.state.page}${this.state.genre !== "-1" ? `&genres=${this.state.genre}` : ""}`).then(res => {
             console.log("Fuck this shit im out");
             console.log(res.data);
             this.setState({
@@ -236,6 +240,25 @@ export default class AnimeList extends React.Component {
         });
     };
 
+    toggleSearchMode = () => {
+        this.setState({search: "", searchMode: -this.state.searchMode});
+    };
+
+    handleCharClick(event, char) {
+        let this_el = ReactDOM.findDOMNode(this);
+        if (this_el instanceof HTMLElement) {
+            let previousChar = this_el.querySelector(".anime-char-list-item.active");
+            if (previousChar != null) {
+                previousChar.classList.remove("active");
+            }
+        }
+        event.target.classList.add("active");
+
+        this.setState({search: char}, () => {
+            this.getAnime();
+        });
+    }
+
     render() {
         return (
             <div className="anime-list-container">
@@ -249,9 +272,30 @@ export default class AnimeList extends React.Component {
                         </h2>
                         <div className="spacer"/>
                         <div className="anime-list-search-area">
-                            <input type="text" className="anime-list-search-input" name="animelist-search" aria-label="Anime List search field" placeholder="Eg: Fairy Tail"/>
+                            {
+                                this.state.searchMode === 1 ?
+                                    <input type="text" className="anime-list-search-input" name="animelist-search" aria-label="Anime List search field" placeholder="Eg: Fairy Tail"
+                                           onChange={
+                                               event => {
+                                                   this.setState({search: event.target.value}, () => this.getAnime());
+                                               }
+                                           }
+                                    />
+                                    :
+                                    <ul className="anime-char-list">
+                                        {
+                                            this.search_chars.map((char, index) => {
+                                                return (
+                                                    <li className="anime-char-list-item" onClick={event => this.handleCharClick(event, encodeURIComponent(char))} key={index}>
+                                                        {char}
+                                                    </li>
+                                                );
+                                            })
+                                        }
+                                    </ul>
+                            }
                             <div className="anime-list-filters">
-                                <button className="search-type-toggle-btn">Mudar modo de pesquisa</button>
+                                <button className="search-type-toggle-btn" onClick={this.toggleSearchMode}>Mudar modo de pesquisa</button>
                                 <select name="ordering" aria-label="Anime order" className="anime-list-ordering-select" defaultValue={"name"} onChange={event => {
                                     this.setState({ordering: event.target.value}, () => {
                                         this.getAnime();
