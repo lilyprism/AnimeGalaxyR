@@ -3,21 +3,9 @@ import {Link} from "react-router-dom";
 import * as ReactDOM from "react-dom";
 
 import './topbar.sass';
-
-import SearchResultBox from "./SearchResultBox";
-import RequestUtilities from "../../util/RequestUtilities";
 import App from "../App";
 
 export default class Topbar extends React.Component {
-
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            results_open: false,
-            search_results: []
-        }
-    }
 
     toggleSidebar = () => {
         let sidebar_el = document.querySelector(".sidebar");
@@ -42,30 +30,12 @@ export default class Topbar extends React.Component {
     toggleSearchBar = value => {
         let this_el = ReactDOM.findDOMNode(this);
 
-
         if (this_el instanceof HTMLElement) {
             if (value === undefined) {
-                if (this.state.results_open) {
-                    this.toggleSearchResults("hide");
-                    setTimeout(function () {
-                        this_el.querySelector(".search-area").classList.toggle("open");
-                    }, 300);
-                } else {
-                    this.toggleSearchResults("hide");
-                    this_el.querySelector(".search-area").classList.toggle("open");
-                }
+                this_el.querySelector(".search-area").classList.toggle("open");
             } else if (value === "hide") {
-                if (this.state.results_open) {
-                    this.toggleSearchResults("hide");
-                    setTimeout(function () {
-                        this_el.querySelector(".search-area").classList.remove("open");
-                    }, 300);
-                } else {
-                    this.toggleSearchResults("hide");
-                    this_el.querySelector(".search-area").classList.remove("open");
-                }
+                this_el.querySelector(".search-area").classList.remove("open");
             } else if (value === "show") {
-                this.toggleSearchResults("hide");
                 this_el.querySelector(".search-area").classList.add("open");
             }
 
@@ -80,45 +50,11 @@ export default class Topbar extends React.Component {
         }
     };
 
-    toggleSearchResults = value => {
-        let this_el = ReactDOM.findDOMNode(this);
-
-        if (this_el instanceof HTMLElement) {
-            let search_result_box = this_el.querySelector(".search-result-box");
-            if (value === undefined) {
-                this.setState({results_open: !this.state.results_open});
-                search_result_box.classList.toggle("open");
-            } else if (value === "hide") {
-                this.setState({results_open: false});
-                search_result_box.classList.remove("open");
-            } else if (value === "show") {
-                this.setState({results_open: true});
-                search_result_box.classList.add("open");
-            }
-        }
-    };
-
     toggleUserDropdown = () => {
         let this_el = ReactDOM.findDOMNode(this);
 
         if (this_el instanceof HTMLElement) {
             this_el.querySelector(".user-dropdown").classList.toggle("open");
-        }
-    };
-
-    searchAnime = search_term => {
-        if (search_term.length >= 3) {
-            RequestUtilities.sendGetRequest(`anime/search?text=${search_term}`, false).then(res => {
-                this.setState({search_results: res.data}, () => {
-                    this.toggleSearchResults("show");
-                });
-            }).catch(err => {
-                this.setState({search_results: []});
-                this.toggleSearchResults("hide");
-            });
-        } else {
-            this.toggleSearchResults("hide");
-            this.setState({search_results: []});
         }
     };
 
@@ -128,10 +64,9 @@ export default class Topbar extends React.Component {
         if (this_el instanceof HTMLElement) {
             let search_input_container = this_el.querySelector(".search-input-container");
             let search_icon = this_el.querySelector(".search-icon");
-            let search_result_box = this_el.querySelector(".search-result-box");
 
             document.addEventListener("mousedown", event => {
-                if (!search_input_container.contains(event.target) && !search_icon.contains(event.target) && !search_result_box.contains(event.target)) {
+                if (!search_input_container.contains(event.target) && !search_icon.contains(event.target)) {
                     this.toggleSearchBar("hide");
                 }
             });
@@ -147,6 +82,7 @@ export default class Topbar extends React.Component {
                         <Link to="/" tabIndex="3"
                               onClick={
                                   event => {
+                                      this.props.setSearch("");
                                       App.hideSidebar();
                                       App.loseFocus();
                                   }
@@ -159,13 +95,10 @@ export default class Topbar extends React.Component {
                             <input className="search-input" name="search-input" aria-label="Search input field" tabIndex={-1} id="search-input" placeholder="eg: Fairy Tail" spellCheck={false} type="text"
                                    onChange={
                                        event => {
-                                           this.searchAnime(event.target.value)
+                                           this.props.setSearch(event.target.value);
                                        }
                                    }
                             />
-                            <div className="search-result-box-container">
-                                <SearchResultBox results={this.state.search_results} results_open={this.state.results_open}/>
-                            </div>
                         </div>
                         <div className="icon search-icon" role="button" aria-label="Search Button" tabIndex={0} onClick={event => this.toggleSearchBar()}>
                             <i className="fas fa-search fa-17x"/>
