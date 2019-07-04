@@ -15,6 +15,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
+from django.utils.translation import ugettext_lazy as _
+
+admin.site.site_header = _("Administration")
+admin.site.site_title = _("Site Administration")
+admin.site.site_url = "http://localhost"
 
 urlpatterns = [
 	path('api/', include('main.urls')),
