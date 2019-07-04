@@ -81,7 +81,7 @@ export default class Topbar extends React.Component {
                         <i className="fas fa-bars fa-17x icon" role="button" aria-label="Sidebar button toggler" onClick={this.toggleSidebar} tabIndex="1"/>
                         <Link to="/" tabIndex="3"
                               onClick={
-                                  event => {
+                                  () => {
                                       this.props.setSearch("");
                                       App.hideSidebar();
                                       App.loseFocus();
