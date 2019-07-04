@@ -74,11 +74,11 @@ class ProfileView(BaseMVS):
 		last_seen = UserEpisodes.objects.order_by("-date").filter(user=user_id)[:10]
 
 		# Animes Currently Watching
-		watch_episodes = UserEpisodes.objects.filter(user=user_id, watched=True).distinct("episode__anime__id").order_by("episode__anime__id", "-episode__number")
+		watch_episodes = UserEpisodes.objects.filter(user=user_id, watched=True).distinct("episode__season__anime__id").order_by("episode__season__anime__id", "-episode__number")
 
 		# TODO(sayga231): Get complete and watching with queries to have more control and make it more efficient
-		complete = [anime for anime in watch_episodes if anime.episode.number >= anime.episode.anime.episodes.count()]
-		watching = [anime for anime in watch_episodes if anime.episode.number < anime.episode.anime.episodes.count()]
+		complete = [anime for anime in watch_episodes if anime.episode.number >= anime.episode.season.episodes.count()]
+		watching = [anime for anime in watch_episodes if anime.episode.number < anime.episode.season.episodes.count()]
 
 		user = get_object_or_404(CustomUser, pk=user_id)
 
