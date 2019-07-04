@@ -1,0 +1,111 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-07-04 11:20+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: .\Admin\dashboard.py:17
+msgid "Quick Links"
+msgstr "Atalhos"
+
+#: .\Admin\dashboard.py:20
+msgid "Return to site"
+msgstr "Voltar ao Site"
+
+#: .\Admin\dashboard.py:25
+msgid "Change password"
+msgstr "Mudar Password"
+
+#: .\Admin\dashboard.py:30
+msgid "Log out"
+msgstr "Sair"
+
+#: .\Admin\dashboard.py:42
+msgid "Applications"
+msgstr "Aplicações"
+
+#: .\Admin\dashboard.py:47
+msgid "Recent Actions"
+msgstr "Ações Recentes"
+
+#: .\AnimeGalaxy\settings.py:243
+msgid "Default"
+msgstr "Padrão"
+
+#: .\AnimeGalaxy\settings.py:248
+msgid "Green"
+msgstr "Verde"
+
+#: .\AnimeGalaxy\settings.py:253
+msgid "Light Green"
+msgstr "Verde Claro"
+
+#: .\AnimeGalaxy\settings.py:258
+msgid "Light Violet"
+msgstr "Violeta Claro"
+
+#: .\AnimeGalaxy\settings.py:263
+msgid "Light Blue"
+msgstr "Azul Claro"
+
+#: .\AnimeGalaxy\settings.py:268
+msgid "Light Gray"
+msgstr "Cinzento"
+
+#: .\AnimeGalaxy\settings.py:273
+msgid "General"
+msgstr "Geral"
+
+#: .\AnimeGalaxy\settings.py:275
+msgid "Animes"
+msgstr "Animes"
+
+#: .\AnimeGalaxy\settings.py:276
+msgid "Seasons"
+msgstr "Temporadas"
+
+#: .\AnimeGalaxy\settings.py:277
+msgid "Episodes"
+msgstr "Episódios"
+
+#: .\AnimeGalaxy\settings.py:278
+msgid "Comments"
+msgstr "Comentários"
+
+#: .\AnimeGalaxy\settings.py:279
+msgid "Genres"
+msgstr "Géneros"
+
+#: .\AnimeGalaxy\settings.py:280
+msgid "Reports"
+msgstr "Reports"
+
+#: .\AnimeGalaxy\settings.py:284
+msgid "User Related"
+msgstr "Utilizador-Relacionado"
+
+#: .\AnimeGalaxy\settings.py:286
+msgid "Users"
+msgstr "Utilizadores"
+
+#: .\AnimeGalaxy\settings.py:287
+msgid "User Comments"
+msgstr "Comentários de Utilizador"
+
+#: .\AnimeGalaxy\settings.py:288
+msgid "User Episodes"
+msgstr "Episódios de Utilizador"

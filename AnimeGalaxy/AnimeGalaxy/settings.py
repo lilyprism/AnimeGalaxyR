@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 import datetime
 import os
 
+from django.utils.translation import ugettext_lazy as _
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -74,6 +76,9 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+	# Internationalization Middleware
+	'django.middleware.locale.LocaleMiddleware',
+
 	# Security Middleware
 	'corsheaders.middleware.CorsMiddleware',
 
@@ -86,7 +91,6 @@ MIDDLEWARE = [
 	'django.contrib.messages.middleware.MessageMiddleware',
 	'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
-	# Cache Middleware
 ]
 
 ROOT_URLCONF = 'AnimeGalaxy.urls'
@@ -207,7 +211,7 @@ HAYSTACK_CONNECTIONS = {
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
-LANGUAGE_CODE = 'pt-pt'
+LANGUAGE_CODE = 'pt'
 
 TIME_ZONE = 'Europe/Lisbon'
 
@@ -230,6 +234,63 @@ CKEDITOR_CONFIGS = {
 	}
 }
 
+# Admin dashboard configuration
+JET_INDEX_DASHBOARD = 'Admin.dashboard.CustomIndexDashboard'
+JET_SIDE_MENU_COMPACT = True
+JET_THEMES = [
+	{
+		'theme': 'default',  # theme folder name
+		'color': '#47bac1',  # color of the theme's button in user menu
+		'title': _('Default')  # theme title
+	},
+	{
+		'theme': 'green',
+		'color': '#44b78b',
+		'title': _('Green')
+	},
+	{
+		'theme': 'light-green',
+		'color': '#2faa60',
+		'title': _('Light Green')
+	},
+	{
+		'theme': 'light-violet',
+		'color': '#a464c4',
+		'title': _('Light Violet')
+	},
+	{
+		'theme': 'light-blue',
+		'color': '#5EADDE',
+		'title': _('Light Blue')
+	},
+	{
+		'theme': 'light-gray',
+		'color': '#222',
+		'title': _('Light Gray')
+	}
+]
+JET_SIDE_MENU_ITEMS = [
+	{
+		'label': _('General'),
+		'items': [
+			{'name': 'anime.anime', 'label': _('Animes')},
+			{'name': 'anime.season', 'label': _('Seasons')},
+			{'name': 'episode.episode', 'label': _('Episodes')},
+			{'name': 'comment.comment', 'label': _('Comments')},
+			{'name': 'anime.genre', 'label': _('Genres')},
+			{'name': 'report.report', 'label': _('Reports')},
+		]
+	},
+	{
+		'label': _('User Related'),
+		'items': [
+			{'name': 'main.customuser', 'label': _('Users')},
+			{'name': 'comment.usercommentratings', 'label': _('User Comments')},
+			{'name': 'episode.userepisodes', 'label': _('User Episodes')},
+		]
+	},
+]
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
@@ -238,6 +299,7 @@ MEDIA_URL = '/media/'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+LOCALE_PATHS = [os.path.join(BASE_DIR, 'locale'), ]
 
 # Databse Logging
 LOG_DB = False
