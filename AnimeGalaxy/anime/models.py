@@ -7,7 +7,10 @@ from django.core.validators import MinValueValidator
 from django.db import models
 from django.db.models import Model
 
+from Utils.FileUtils import unique_filename
+
 # File Storage
+
 anime_storage = FileSystemStorage(location=os.path.join(settings.MEDIA_ROOT, 'animes'), base_url=os.path.join(settings.MEDIA_URL, 'animes'))
 thumb_storage = FileSystemStorage(location=os.path.join(settings.MEDIA_ROOT, 'thumbs'), base_url=os.path.join(settings.MEDIA_URL, 'thumbs'))
 
@@ -34,8 +37,8 @@ class Anime(Model):
 
 	# Model fields
 	name = models.CharField(max_length=200, null=False, blank=False, unique=True, verbose_name="Nome")
-	image = models.ImageField(storage=anime_storage, null=False, blank=False, default='default.jpg', verbose_name="Imagem")
-	thumbnail = models.ImageField(storage=thumb_storage, null=False, blank=False, default='default.jpg', verbose_name="Thumbnail")
+	image = models.ImageField(storage=anime_storage, null=False, blank=False, default='default.jpg', verbose_name="Imagem", upload_to=unique_filename)
+	thumbnail = models.ImageField(storage=thumb_storage, null=False, blank=False, default='default.jpg', verbose_name="Thumbnail", upload_to=unique_filename)
 	description = RichTextField(null=False, blank=False, verbose_name="Descrição")
 
 	def __str__(self) -> str:
@@ -48,7 +51,7 @@ class Season(Model):
 		verbose_name = "Temporada"
 
 	def __str__(self):
-		return f"{self.anime} - T{self.number}"
+		return f"{self.anime} - T{self.number}" if not self.name else f"{self.anime}{self.name}"
 
 	# Model Relations
 	anime = models.ForeignKey(Anime, on_delete=models.CASCADE, verbose_name="Anime", related_name="seasons", null=False, blank=False)
@@ -57,3 +60,7 @@ class Season(Model):
 	number = models.IntegerField(default=1, null=False, validators=[MinValueValidator(0)], verbose_name="Número de Temporada")
 	name = models.CharField(max_length=150, default=None, null=True, blank=True, verbose_name="Nome")
 	complete = models.BooleanField(default=True, null=False, verbose_name="Completo")
+
+
+# noinspection PyUnresolvedReferences
+from . import signals

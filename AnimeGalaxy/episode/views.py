@@ -12,7 +12,6 @@ from rest_framework.throttling import BaseThrottle
 
 from anime.models import Anime
 from main.paginators import HomeResultsSetPagination, StandardResultsSetPagination
-from main.throttles import NormalUserRateThrottle
 from main.views import BaseMVS
 from .models import Episode, UserEpisodes
 from .serializers import EpisodeCreateSerializer, EpisodeLikeSerializer, MultiEpisodeSerializer, PlaylistSerializer, SeasonEpisodeSerializer, SingleEpisodeSerializer
@@ -32,10 +31,13 @@ class EpisodesView(BaseMVS):
 
 		# Increment view number
 		queryset.views += 1
-		user_episode = queryset.user_episodes.get_or_create(episode_id=pk, user=request.user)[0]
-		user_episode.watched = True
-		user_episode.save()
 		queryset.save()
+
+		# TODO(sayga231): Change this to another API Endpoint with better control over time watched
+		if request.user.id:
+			user_episode = queryset.user_episodes.get_or_create(episode_id=pk, user=request.user)[0]
+			user_episode.watched = True
+			user_episode.save()
 
 		# Set anime to currently being watched
 		watched = cache.get("watched_animes") or []
@@ -47,6 +49,7 @@ class EpisodesView(BaseMVS):
 		serializer = SingleEpisodeSerializer(queryset, many=False, context={'request': request})
 		return Response(serializer.data, status=status.HTTP_200_OK)
 
+	@method_decorator(cache_page(60 * 1))
 	def list(self, request, *args, **kwargs):
 		self.pagination_class = HomeResultsSetPagination
 		return super(EpisodesView, self).list(request, *args, **kwargs)
@@ -84,7 +87,7 @@ class UrlView(BaseMVS):
 
 class LikeView(BaseMVS):
 	permission_classes = [IsAuthenticated]
-	throttle_classes = [NormalUserRateThrottle]
+	throttle_classes: List[BaseThrottle] = []
 	queryset = UserEpisodes.objects.all()
 	serializer_class = EpisodeLikeSerializer
 
@@ -98,7 +101,7 @@ class LikeView(BaseMVS):
 		instance = UserEpisodes.objects.get_or_create(user=request.user, episode_id=request.data["episode"])[0]
 		instance.liked = liked
 
-		instance.save()
+		instance = self.delete_or_save(instance)
 		serializer = EpisodeLikeSerializer(instance=instance)
 
 		return Response(serializer.data)
@@ -111,7 +114,7 @@ class LikeView(BaseMVS):
 		instance = UserEpisodes.objects.get_or_create(user=request.user, episode_id=request.data["episode"])[0]
 		instance.favorite = not instance.favorite
 
-		instance.save()
+		instance = self.delete_or_save(instance)
 		serializer = EpisodeLikeSerializer(instance=instance)
 
 		return Response(serializer.data)
@@ -124,7 +127,15 @@ class LikeView(BaseMVS):
 		instance = UserEpisodes.objects.get_or_create(user=request.user, episode_id=request.data["episode"])[0]
 		instance.watch_later = not instance.watch_later
 
-		instance.save()
+		instance = self.delete_or_save(instance)
 		serializer = EpisodeLikeSerializer(instance=instance)
 
 		return Response(serializer.data)
+
+	@staticmethod
+	def delete_or_save(instance: UserEpisodes) -> UserEpisodes:
+		if not instance.watch_later and not instance.favorite and instance.liked is None and not instance.watched:
+			instance.delete()
+		else:
+			instance.save()
+		return instance
