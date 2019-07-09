@@ -3,7 +3,9 @@ import {Link} from "react-router-dom";
 import * as ReactDOM from "react-dom";
 
 import './topbar.sass';
+
 import App from "../App";
+import ModalWindow from "../modalwindow/ModalWindow.js";
 
 export default class Topbar extends React.Component {
 
@@ -58,6 +60,10 @@ export default class Topbar extends React.Component {
         }
     };
 
+    handleLoginClick = () => {
+        ModalWindow.openModal("login-modal");
+    };
+
     componentDidMount() {
         let this_el = ReactDOM.findDOMNode(this);
 
@@ -109,8 +115,18 @@ export default class Topbar extends React.Component {
                         <i className="fas fa-caret-down"/>
                         <div className="user-dropdown">
                             <ul className="user-dropdown-option-list">
-                                <li className="user-dropdown-option"><i className="fas fa-sign-in-alt"/><span className="user-dropdown-option-text">Login</span></li>
-                                <li className="user-dropdown-option"><i className="fas fa-user-plus"/><span className="user-dropdown-option-text">Register</span></li>
+                                {
+                                    this.props.is_logged_in ?
+                                        <li className="user-dropdown-option" onClick={this.props.logout}><i className="fas fa-sign-out-alt"/><span className="user-dropdown-option-text">Logout</span></li>
+                                        :
+                                        <li className="user-dropdown-option" onClick={this.handleLoginClick}><i className="fas fa-sign-in-alt"/><span className="user-dropdown-option-text">Login</span></li>
+                                }
+                                {
+                                    this.props.is_logged_in ?
+                                        ""
+                                        :
+                                        < li className="user-dropdown-option"><i className="fas fa-user-plus"/><span className="user-dropdown-option-text">Register</span></li>
+                                }
                             </ul>
                         </div>
                     </div>
