@@ -11,9 +11,30 @@ export default class AnimePage extends React.Component {
         super(props);
 
         this.state = {
-            anime: null
+            anime: {
+                name: "Fairy Tail",
+                description: "Ola",
+                image: "http://via.placeholder.com/250x350",
+                thumbnail: "http://via.placeholder.com/1920x1080",
+                genres: [
+                    {
+                        name: "Ação",
+                    }, {
+                        name: "Aventura",
+                    }, {
+                        name: "Magia",
+                    }, {
+                        name: "Isekai",
+                    }, {
+                        name: "Shounen",
+                    }
+                ],
+                rating: 48,
+                trailer: ""
+            },
+            mouseOverRating: 0
         };
-        this.getAnimeDetails();
+        // this.getAnimeDetails();
     }
 
     getAnimeDetails = () => {
@@ -41,39 +62,58 @@ export default class AnimePage extends React.Component {
         }
     };
 
+    handleMouseMoveRating = event => {
+        let boundingRect = event.currentTarget.getBoundingClientRect();
+        let relativeX = event.clientX - boundingRect.left;
+        let relativePercentage = Math.round(relativeX / (event.currentTarget.scrollWidth - 1) * 100);
+        this.setState({mouseOverRating: relativePercentage});
+    };
+
+    handleMouseEnterRating = event => {
+        this.setState({ratingMode: 1});
+    };
+
+    handleMouseLeaveRating = event => {
+        this.setState({ratingMode: 0});
+    };
+
     render() {
         if (this.state.anime !== null) {
             let description = this.state.anime.description;
-
-            let initialRating = 8.1;
-            let integerRating = Math.round(initialRating);
+            // let integerRating = Math.round(rating);
 
             let stars_html = [];
-            for (let i = 0; i < Math.floor(integerRating / 2); i++) {
+
+            for (let i = 0; i < 5; i++) {
                 stars_html.push(
-                    <div className="star-container" key={i}>
-                        <i className="fas fa-star"/>
-                    </div>
+                    <i className="fas fa-star star" key={i}/>
                 );
             }
-            if (integerRating % 2 === 1) {
-                stars_html.push(
-                    <div className="half-star-container" key="0.5">
-                        <i className="fas fa-star-half"/>
-                        <i className="fas fa-star-half empty-half-star"/>
-                    </div>
-                );
-            }
-            for (let i = 0; i < 5 - Math.ceil(integerRating / 2); i++) {
-                stars_html.push(<div className="star-container" key={(i + 1) * 10}><i className="fas fa-star empty-star"/></div>);
-            }
+
+            // for (let i = 0; i < Math.floor(integerRating / 2); i++) {
+            //     stars_html.push(
+            //         <div className="star-container" key={i}>
+            //             <i className="fas fa-star star"/>
+            //         </div>
+            //     );
+            // }
+            // if (integerRating % 2 === 1) {
+            //     stars_html.push(
+            //         <div className="star-container" key="0.5">
+            //             <i className="fas fa-star star half-star"/>
+            //         </div>
+            //     );
+            // }
+            // for (let i = 0; i < 5 - Math.ceil(integerRating / 2); i++) {
+            //     stars_html.push(<div className="star-container star" key={(i + 1) * 10}><i className="fas fa-star star empty-star"/></div>);
+            // }
 
             return (
                 <div className="anime-page">
                     <div className="trailer-container">
                         <div className="trailer-container-overlay" onClick={this.handleThumbnailOverlayClick}/>
                         <div className="trailer">
-                            <iframe id="trailer-player" src={``} frameBorder="0" autoplay/>
+                            <iframe id="trailer-player" src={``} frameBorder="0" autoPlay/>
                         </div>
                     </div>
 
@@ -104,7 +144,7 @@ export default class AnimePage extends React.Component {
                                         </div>
                                         <div className="genres-container">
                                             {this.state.anime.genres.map(function (genre, index) {
-                                                return <span className="genre">{genre.name}</span>
+                                                return <span className="genre" key={index}>{genre.name}</span>
                                             })}
                                         </div>
                                     </div>
@@ -112,7 +152,7 @@ export default class AnimePage extends React.Component {
                                         <div className="anime-details-rating">
                                             <p className="font-size-20px text-center rating-title">Rating</p>
                                             <p className="rating-vote-number">(Based on 300 votes)</p>
-                                            <div className="rating-container" title={initialRating}>
+                                            <div className="rating-container" style={{background: `linear-gradient(to right, gold 0 ${this.state.ratingMode === 1 ? this.state.mouseOverRating : this.state.anime.rating}%, #646464 ${this.state.ratingMode === 1 ? this.state.mouseOverRating : this.state.anime.rating}% 100%)`}} title={this.state.ratingMode === 1 ? this.state.mouseOverRating : this.state.anime.rating} onMouseEnter={this.handleMouseEnterRating} onMouseMove={this.handleMouseMoveRating} onMouseLeave={this.handleMouseLeaveRating}>
                                                 {stars_html}
                                             </div>
                                         </div>
