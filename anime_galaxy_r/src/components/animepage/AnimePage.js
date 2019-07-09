@@ -32,7 +32,8 @@ export default class AnimePage extends React.Component {
                 rating: 48,
                 trailer: ""
             },
-            mouseOverRating: 0
+            mouseOverRating: 0,
+            ratingInterval: 100 / 10 // 100 / <Number of intervals you want>
         };
         // this.getAnimeDetails();
     }
@@ -65,7 +66,7 @@ export default class AnimePage extends React.Component {
     handleMouseMoveRating = event => {
         let boundingRect = event.currentTarget.getBoundingClientRect();
         let relativeX = event.clientX - boundingRect.left;
-        let relativePercentage = Math.round(relativeX / (event.currentTarget.scrollWidth - 1) * 100);
+        let relativePercentage = Math.round(Math.round(relativeX / (event.currentTarget.scrollWidth - 1) * 100 / this.state.ratingInterval) * this.state.ratingInterval);
         this.setState({mouseOverRating: relativePercentage});
     };
 
@@ -80,33 +81,13 @@ export default class AnimePage extends React.Component {
     render() {
         if (this.state.anime !== null) {
             let description = this.state.anime.description;
-            // let integerRating = Math.round(rating);
 
             let stars_html = [];
-
             for (let i = 0; i < 5; i++) {
                 stars_html.push(
                     <i className="fas fa-star star" key={i}/>
                 );
             }
-
-            // for (let i = 0; i < Math.floor(integerRating / 2); i++) {
-            //     stars_html.push(
-            //         <div className="star-container" key={i}>
-            //             <i className="fas fa-star star"/>
-            //         </div>
-            //     );
-            // }
-            // if (integerRating % 2 === 1) {
-            //     stars_html.push(
-            //         <div className="star-container" key="0.5">
-            //             <i className="fas fa-star star half-star"/>
-            //         </div>
-            //     );
-            // }
-            // for (let i = 0; i < 5 - Math.ceil(integerRating / 2); i++) {
-            //     stars_html.push(<div className="star-container star" key={(i + 1) * 10}><i className="fas fa-star star empty-star"/></div>);
-            // }
 
             return (
                 <div className="anime-page">
@@ -152,8 +133,10 @@ export default class AnimePage extends React.Component {
                                         <div className="anime-details-rating">
                                             <p className="font-size-20px text-center rating-title">Rating</p>
                                             <p className="rating-vote-number">(Based on 300 votes)</p>
-                                            <div className="rating-container" style={{background: `linear-gradient(to right, gold 0 ${this.state.ratingMode === 1 ? this.state.mouseOverRating : this.state.anime.rating}%, #646464 ${this.state.ratingMode === 1 ? this.state.mouseOverRating : this.state.anime.rating}% 100%)`}} title={this.state.ratingMode === 1 ? this.state.mouseOverRating : this.state.anime.rating} onMouseEnter={this.handleMouseEnterRating} onMouseMove={this.handleMouseMoveRating} onMouseLeave={this.handleMouseLeaveRating}>
-                                                {stars_html}
+                                            <div className="rating-container">
+                                                <div className="rating" style={{backgroundImage: `linear-gradient(to right, gold 0 ${this.state.ratingMode === 1 ? this.state.mouseOverRating : this.state.anime.rating}%, gray ${this.state.ratingMode === 1 ? this.state.mouseOverRating : this.state.anime.rating}% 100%)`}} title={this.state.ratingMode === 1 ? this.state.mouseOverRating : this.state.anime.rating} onMouseEnter={this.handleMouseEnterRating} onMouseMove={this.handleMouseMoveRating} onMouseLeave={this.handleMouseLeaveRating}>
+                                                    {stars_html}
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
