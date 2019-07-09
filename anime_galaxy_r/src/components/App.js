@@ -8,7 +8,7 @@ import Home from "./home/Home";
 import Sidebar from "./Sidebar";
 import Topbar from "./topbar/Topbar";
 import EpisodePage from "./episodepage/EpisodePage";
-import AnimePage from "./animepage/AnimePage";
+import OldAnimePage from "./animepage/OldAnimePage";
 import LoginModal from "./login/LoginModal";
 import RequestUtilities from "./../util/RequestUtilities";
 import RegisterModal from "./register/RegisterModal";
@@ -16,6 +16,7 @@ import Profile from "./profile/Profile";
 import Footer from "./footer/Footer";
 import AnimeList from "./animelist/AnimeList";
 import Search from "./search/Search";
+import AnimePage from "./animepage/AnimePage";
 
 export default class App extends React.Component {
 
@@ -172,12 +173,12 @@ export default class App extends React.Component {
                             </div>
                         </div>
                     </div>
-                    <Topbar setSearch={this.setSearch}/>
+                    <Topbar setSearch={this.setSearch} is_logged_in={this.state.is_logged_in} logout={this.logout}/>
                 </header>
-                <Sidebar is_logged_in={this.state.is_logged_in} logout={this.logout}/>
-                <div className="container w-100" onKeyPress={event => this.keyToClick(event)}>
-                    <div className="content-wrapper h-100 w-100" onClick={App.hideSidebar}>
-                        <div className="h-100 w-100 overlay position-absolute"/>
+                <Sidebar/>
+                <div className="container" onKeyPress={event => this.keyToClick(event)}>
+                    <div className="content-wrapper" onClick={App.hideSidebar}>
+                        <div className="overlay"/>
                         <div className={this.state.search.length >= 3 ? "d-none" : ""}>
                             <Switch>
                                 <Route exact path="/" render={

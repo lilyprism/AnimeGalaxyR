@@ -1,15 +1,15 @@
 import React from 'react';
 
-import "./animedetails.sass";
+import "./oldanimedetails.sass";
 
-export default class AnimeDetails extends React.Component {
+export default class OldAnimeDetails extends React.Component {
 
     render() {
         if (this.props.anime !== null) {
             let desc_html = {__html: this.props.anime.description};
 
             return (
-                <div className="anime-details">
+                <div className="anime-info">
                     <div className="anime-details-img">
                         <img src={this.props.anime.image} alt="" width="150"/>
                     </div>

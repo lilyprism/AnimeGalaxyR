@@ -3,9 +3,9 @@ import React from 'react';
 // import OldCardLayout from "../OldCardLayout";
 import RequestUtilities from "../../util/RequestUtilities";
 
-import "./animeepisodelist.sass";
+import "./oldanimeepisodelist.sass";
 
-export default class AnimeEpisodeList extends React.Component {
+export default class OldAnimeEpisodeList extends React.Component {
 
     constructor(props) {
         super(props);

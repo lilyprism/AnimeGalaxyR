@@ -1,0 +1,180 @@
+@import ./../sass/colors
+@import ./../sass/page-units
+
+.anime-page
+	margin-top: 65px
+
+	.trailer-container
+		display: none
+		position: fixed
+		top: 0
+		right: 0
+		bottom: 0
+		left: 0
+		z-index: 20
+
+		.trailer-container-overlay
+			position: absolute
+			top: 0
+			right: 0
+			bottom: 0
+			left: 0
+			background-color: rgba($color_assets_1, 0.8)
+			z-index: 21
+
+		.trailer
+			position: relative
+			width: 70%
+			height: 70%
+			z-index: 29
+
+			iframe
+				width: 100%
+				height: 100%
+
+		&.show
+			display: flex
+			justify-content: center
+			align-items: center
+
+	.anime-details
+
+		.anime-thumbnail
+			position: relative
+			height: 300px
+			width: 100%
+			background-size: cover
+			background-position: center 0
+			background-repeat: no-repeat
+
+			.breadcrumbs
+				background-color: rgba($color_assets_1, 0.8)
+				position: absolute
+				top: 0
+				left: 0
+				right: 0
+				padding: 10px
+				color: $color_assets_4
+
+			.thumbnail-play-btn
+				position: absolute
+				top: 50%
+				left: 50%
+				padding: 20px
+				background-color: rgba($color_assets_1, 0.6)
+				border-radius: 50%
+				transform: translate(-50%, -50%)
+				cursor: pointer
+
+			&:before
+				content: ''
+				position: absolute
+				top: 0
+				left: 0
+				right: 0
+				bottom: 0
+				background-color: rgba($color_assets_1, 0.4)
+
+		.anime-details
+			display: flex
+			background-color: $color_assets_1
+			padding: 20px
+
+			@media (max-width: $breakpoint-l - 1)
+				display: block
+
+			.anime-details-left
+				flex-grow: 1
+
+				.anime-image-description
+					display: flex
+
+					@media (max-width: $breakpoint-l - 1)
+						display: block
+
+					.anime-image-container
+						position: relative
+						flex-shrink: 0
+						margin-top: -60px
+						padding: 10px
+						background-color: $color_assets_1
+						width: 200px
+						z-index: 1
+
+						@media (max-width: $breakpoint-l - 1)
+							z-index: 1
+							width: 80%
+							margin: -60px auto 20px auto
+
+						.anime-image
+							z-index: 1
+							width: 100%
+
+					.anime-description-title
+						height: auto
+						overflow: hidden
+
+						@media (min-width: $breakpoint-l)
+							height: 204px
+							padding: 0 0 0 20px
+
+						.anime-title
+							margin-bottom: 10px
+
+						.anime-description
+							text-align: justify
+							height: 165px
+							line-height: 21px
+							
+				.genres-container
+					display: flex
+					flex-wrap: wrap
+					padding: 10px
+					margin-right: -10px
+					margin-bottom: -10px
+
+					@media (max-width: $breakpoint-l - 1)
+						padding: 10px 0
+
+					.genre
+						display: inline-block
+						border: 1px solid $color_assets_5
+						padding: 5px 10px
+						margin-bottom: 10px
+						margin-right: 10px
+
+			.anime-details-right
+				display: flex
+				flex-direction: column
+				justify-content: center
+				padding: 0 30px 0 50px
+
+				@media (max-width: $breakpoint-l - 1)
+					margin-top: 30px
+
+				.anime-details-rating
+					.rating-title
+						font-size: 34px
+						text-align: center
+
+					.rating-vote-number
+						text-align: center
+						white-space: nowrap
+						font-size: 14px
+						margin-bottom: 10px
+						color: $color_assets_4
+
+					.rating-container
+						display: flex
+						flex-wrap: nowrap
+						justify-content: center
+						font-size: 26px
+
+						.rating
+							display: inline-flex
+							-webkit-background-clip: text
+							-webkit-text-fill-color: transparent
+
+					.rating
+						display: block
+						background-color: gold

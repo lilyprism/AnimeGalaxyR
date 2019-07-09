@@ -245,7 +245,9 @@ export default class AnimeList extends React.Component {
     };
 
     toggleSearchMode = () => {
-        this.setState({search: "", searchMode: -this.state.searchMode});
+        this.setState({search: "", searchMode: -this.state.searchMode}, () => {
+            this.getAnime();
+        });
     };
 
     handleCharClick(event, char) {
@@ -331,15 +333,15 @@ export default class AnimeList extends React.Component {
                             }
                             <div className="anime-list-filters">
                                 <button className="search-type-toggle-btn" onClick={this.toggleSearchMode}>Mudar modo de pesquisa</button>
-                                <select name="ordering" aria-label="Anime order" className="anime-list-ordering-select" defaultValue={"name"} onChange={event => {
+                                <select name="ordering" aria-label="Anime order" className="anime-list-ordering-select fas" defaultValue={"name"} onChange={event => {
                                     this.setState({ordering: event.target.value}, () => {
                                         this.getAnime();
                                     });
                                 }}>
-                                    <option value="name">Ordem Alfabética ↑</option>
-                                    <option value="-name">Ordem Alfabética ↓</option>
-                                    <option value="-id">Data de Lançamento ↑</option>
-                                    <option value="id">Data de Lançamento ↓</option>
+                                    <option value="name">Ordem Alfabética &nbsp;&#xf0d8;</option>
+                                    <option value="-name">Ordem Alfabética &nbsp;&#xf0d7;</option>
+                                    <option value="-id">Data de Lançamento &nbsp;&#xf0d8;</option>
+                                    <option value="id">Data de Lançamento &nbsp;&#xf0d7;</option>
                                 </select>
                                 <select name="genres" aria-label="Genre filter" className="anime-list-genres-select" defaultValue={""} onChange={event => {
                                     this.setState({genre: event.target.value}, () => {
@@ -359,20 +361,20 @@ export default class AnimeList extends React.Component {
                         <div className="spacer"/>
                         <div className="results-container">
                             <CardLayout type={3} items={this.state.items} xl={4} l={3} md={2} sm={2}/>
+                            <div className="spacer"/>
+                            {
+                                max_pages > 1 ?
+                                    <div className="pagination-controls">
+                                        {this.state.page > 1 ? <div className="pagination-control previous-page-control" onClick={() => this.setPage(1)} tabIndex={0}><i className="fas fa-backward fa-fw"/></div> : <div className="pagination-control previous-page-control disabled"><i className="fas fa-backward fa-fw"/></div>}
+                                        {this.state.previous !== null && this.state.previous !== undefined ? <div className="pagination-control previous-page-control" tabIndex={0} onClick={this.previousPage}><i className="fas fa-caret-left fa-fw"/></div> : <div className="pagination-control previous-page-control pagination-control-disabled"><i className="fas fa-caret-left fa-fw"/></div>}
+                                        {page_controls}
+                                        {this.state.next !== null && this.state.next !== undefined ? <div className="pagination-control next-page-control" tabIndex={0} onClick={this.nextPage}><i className="fas fa-caret-right fa-fw"/></div> : <div className="pagination-control next-page-control pagination-control-disabled"><i className="fas fa-caret-right fa-fw"/></div>}
+                                        {this.state.page < max_pages ? <div className="pagination-control previous-page-control" tabIndex={0} onClick={() => this.setPage(max_pages)}><i className="fas fa-forward fa-fw"/></div> : <div className="pagination-control previous-page-control disabled"><i className="fas fa-forward fa-fw"/></div>}
+                                    </div>
+                                    :
+                                    ""
+                            }
                         </div>
-                        <div className="spacer"/>
-                        {
-                            max_pages > 1 ?
-                                <div className="pagination-controls">
-                                    {this.state.page > 1 ? <div className="pagination-control previous-page-control" onClick={() => this.setPage(1)} tabIndex={0}><i className="fas fa-backward fa-fw"/></div> : <div className="pagination-control previous-page-control pagination-control-disabled"><i className="fas fa-backward fa-fw"/></div>}
-                                    {this.state.previous !== null && this.state.previous !== undefined ? <div className="pagination-control previous-page-control" tabIndex={0} onClick={this.previousPage}><i className="fas fa-caret-left fa-fw"/></div> : <div className="pagination-control previous-page-control pagination-control-disabled"><i className="fas fa-caret-left fa-fw"/></div>}
-                                    {page_controls}
-                                    {this.state.next !== null && this.state.next !== undefined ? <div className="pagination-control next-page-control" tabIndex={0} onClick={this.nextPage}><i className="fas fa-caret-right fa-fw"/></div> : <div className="pagination-control next-page-control pagination-control-disabled"><i className="fas fa-caret-right fa-fw"/></div>}
-                                    {this.state.page < max_pages ? <div className="pagination-control previous-page-control" tabIndex={0} onClick={() => this.setPage(max_pages)}><i className="fas fa-forward fa-fw"/></div> : <div className="pagination-control previous-page-control pagination-control-disabled"><i className="fas fa-forward fa-fw"/></div>}
-                                </div>
-                                :
-                                ""
-                        }
                     </div>
                 </div>
             </div>

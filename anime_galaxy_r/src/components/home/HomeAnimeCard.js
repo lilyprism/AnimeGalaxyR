@@ -34,7 +34,7 @@ export default class HomeAnimeCard extends React.Component {
                                 {this.props.item.name}
                             </div>
                             <div className="card-anime-views">
-                                <i className={`card-option fas fa-eye fa-fw`}/> {this.props.item.views.toString().replace(/(\d+?)(?=(\d{3})+(?!\d)|$)/g, "$&,").slice(0, -1)}
+                                <i className={`card-option fas fa-eye fa-fw`}/> {this.props.item.views != null ? this.props.item.views.toString().replace(/(\d+?)(?=(\d{3})+(?!\d)|$)/g, "$&,").slice(0, -1) : ""}
                             </div>
                         </div>
                     </div>
