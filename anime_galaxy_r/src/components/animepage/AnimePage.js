@@ -7,6 +7,11 @@ import ReactDOM from "react-dom";
 
 export default class AnimePage extends React.Component {
 
+    defaultColor = "#ffd700";
+    currentSelectionColor = "#ff3b44";
+    overlapColor = "#ff3200";
+    remainderColor = "#646464";
+
     constructor(props) {
         super(props);
 
@@ -32,6 +37,7 @@ export default class AnimePage extends React.Component {
                 rating: 48,
                 trailer: ""
             },
+            ratingMode: 0,
             mouseOverRating: 0,
             ratingInterval: 100 / 10 // 100 / <Number of intervals you want>
         };
@@ -66,7 +72,7 @@ export default class AnimePage extends React.Component {
     handleMouseMoveRating = event => {
         let boundingRect = event.currentTarget.getBoundingClientRect();
         let relativeX = event.clientX - boundingRect.left;
-        let relativePercentage = Math.round(Math.round(relativeX / (event.currentTarget.scrollWidth - 1) * 100 / this.state.ratingInterval) * this.state.ratingInterval);
+        let relativePercentage = Math.round(Math.ceil(relativeX / (event.currentTarget.scrollWidth - 1) * 100 / this.state.ratingInterval) * this.state.ratingInterval);
         this.setState({mouseOverRating: relativePercentage});
     };
 
@@ -78,6 +84,18 @@ export default class AnimePage extends React.Component {
         this.setState({ratingMode: 0});
     };
 
+    handleClickRating = () => {
+        let anime = {...this.state.anime};
+        anime.rating = this.state.mouseOverRating;
+        this.setState({anime: anime});
+        RequestUtilities.sendPutRequest("anime/rating", {rating: this.state.mouseOverRating}, true).then(res => {
+            console.log("Hello there");
+        }).catch(err => {
+            console.log(err.response);
+        });
+
+    };
+
     render() {
         if (this.state.anime !== null) {
             let description = this.state.anime.description;
@@ -87,6 +105,20 @@ export default class AnimePage extends React.Component {
                 stars_html.push(
                     <i className="fas fa-star star" key={i}/>
                 );
+            }
+
+            let style = {};
+            if (this.state.ratingMode === 0) {
+                console.log("0");
+                style.backgroundImage = `linear-gradient(to right, ${this.defaultColor} 0% ${this.state.anime.rating}%, ${this.remainderColor} 0% 100%)`;
+                console.log(style);
+            } else {
+                console.log("1");
+                if (this.state.mouseOverRating > this.state.anime.rating) {
+                    style.backgroundImage = `linear-gradient(to right, ${this.overlapColor} 0% ${this.state.anime.rating}%, ${this.currentSelectionColor} ${this.state.anime.rating}% ${this.state.mouseOverRating}%, ${this.remainderColor} 0% 100%)`;
+                } else {
+                    style.backgroundImage = `linear-gradient(to right, ${this.overlapColor} 0% ${this.state.mouseOverRating}%, ${this.defaultColor} ${this.state.mouseOverRating}% ${this.state.anime.rating}%, ${this.remainderColor} 0% 100%)`;
+                }
             }
 
             return (
@@ -134,7 +166,8 @@ export default class AnimePage extends React.Component {
                                             <p className="font-size-20px text-center rating-title">Rating</p>
                                             <p className="rating-vote-number">(Based on 300 votes)</p>
                                             <div className="rating-container">
-                                                <div className="rating" style={{backgroundImage: `linear-gradient(to right, gold 0 ${this.state.ratingMode === 1 ? this.state.mouseOverRating : this.state.anime.rating}%, gray ${this.state.ratingMode === 1 ? this.state.mouseOverRating : this.state.anime.rating}% 100%)`}} title={this.state.ratingMode === 1 ? this.state.mouseOverRating : this.state.anime.rating} onMouseEnter={this.handleMouseEnterRating} onMouseMove={this.handleMouseMoveRating} onMouseLeave={this.handleMouseLeaveRating}>
+                                                {/*<div className="rating" style={{backgroundImage: `linear-gradient(to right,${this.state.ratingMode === 1 ? ` darkorange 0% ${this.state.mouseOverRating}%,` : ""} gold 0 ${this.state.anime.rating}%, gray ${this.state.ratingMode === 1 ? this.state.mouseOverRating : this.state.anime.rating}% 100%)`}} title={this.state.ratingMode === 1 ? this.state.mouseOverRating : this.state.anime.rating} onMouseEnter={this.handleMouseEnterRating} onMouseMove={this.handleMouseMoveRating} onMouseLeave={this.handleMouseLeaveRating} onClick={this.handleClickRating}>*/}
+                                                <div className="rating" style={style} title={this.state.mouseOverRating} onMouseEnter={this.handleMouseEnterRating} onMouseMove={this.handleMouseMoveRating} onMouseLeave={this.handleMouseLeaveRating} onClick={this.handleClickRating}>
                                                     {stars_html}
                                                 </div>
                                             </div>
