@@ -4,12 +4,13 @@ import "./animepage.sass";
 
 import RequestUtilities from "./../../util/RequestUtilities";
 import ReactDOM from "react-dom";
+import Rating from "../rating/Rating";
 
 export default class AnimePage extends React.Component {
 
     defaultColor = "#ffd700";
-    currentSelectionColor = "#ff3b44";
-    overlapColor = "#ff3200";
+    currentSelectionColor = "#ff3200";
+    overlapColor = "#ff3b44";
     remainderColor = "#646464";
 
     constructor(props) {
@@ -37,9 +38,6 @@ export default class AnimePage extends React.Component {
                 rating: 48,
                 trailer: ""
             },
-            ratingMode: 0,
-            mouseOverRating: 0,
-            ratingInterval: 100 / 10 // 100 / <Number of intervals you want>
         };
         // this.getAnimeDetails();
     }
@@ -67,33 +65,6 @@ export default class AnimePage extends React.Component {
             this_el.querySelector(".trailer-container").classList.remove("show");
             this_el.querySelector("#trailer-player").setAttribute("src", "");
         }
-    };
-
-    handleMouseMoveRating = event => {
-        let boundingRect = event.currentTarget.getBoundingClientRect();
-        let relativeX = event.clientX - boundingRect.left;
-        let relativePercentage = Math.round(Math.ceil(relativeX / (event.currentTarget.scrollWidth - 1) * 100 / this.state.ratingInterval) * this.state.ratingInterval);
-        this.setState({mouseOverRating: relativePercentage});
-    };
-
-    handleMouseEnterRating = event => {
-        this.setState({ratingMode: 1});
-    };
-
-    handleMouseLeaveRating = event => {
-        this.setState({ratingMode: 0});
-    };
-
-    handleClickRating = () => {
-        let anime = {...this.state.anime};
-        anime.rating = this.state.mouseOverRating;
-        this.setState({anime: anime});
-        RequestUtilities.sendPutRequest("anime/rating", {rating: this.state.mouseOverRating}, true).then(res => {
-            console.log("Hello there");
-        }).catch(err => {
-            console.log(err.response);
-        });
-
     };
 
     render() {
@@ -166,10 +137,7 @@ export default class AnimePage extends React.Component {
                                             <p className="font-size-20px text-center rating-title">Rating</p>
                                             <p className="rating-vote-number">(Based on 300 votes)</p>
                                             <div className="rating-container">
-                                                {/*<div className="rating" style={{backgroundImage: `linear-gradient(to right,${this.state.ratingMode === 1 ? ` darkorange 0% ${this.state.mouseOverRating}%,` : ""} gold 0 ${this.state.anime.rating}%, gray ${this.state.ratingMode === 1 ? this.state.mouseOverRating : this.state.anime.rating}% 100%)`}} title={this.state.ratingMode === 1 ? this.state.mouseOverRating : this.state.anime.rating} onMouseEnter={this.handleMouseEnterRating} onMouseMove={this.handleMouseMoveRating} onMouseLeave={this.handleMouseLeaveRating} onClick={this.handleClickRating}>*/}
-                                                <div className="rating" style={style} title={this.state.mouseOverRating} onMouseEnter={this.handleMouseEnterRating} onMouseMove={this.handleMouseMoveRating} onMouseLeave={this.handleMouseLeaveRating} onClick={this.handleClickRating}>
-                                                    {stars_html}
-                                                </div>
+                                                <Rating rating={this.state.anime.rating} intervals={10} stars={5}/>
                                             </div>
                                         </div>
                                     </div>
