@@ -64,6 +64,11 @@ export default class Topbar extends React.Component {
         ModalWindow.openModal("login-modal");
     };
 
+    handleRegisterClick = () => {
+        console.log("Hello there");
+        ModalWindow.openModal("register-modal");
+    };
+
     componentDidMount() {
         let this_el = ReactDOM.findDOMNode(this);
 
@@ -125,7 +130,7 @@ export default class Topbar extends React.Component {
                                     this.props.is_logged_in ?
                                         ""
                                         :
-                                        < li className="user-dropdown-option"><i className="fas fa-user-plus"/><span className="user-dropdown-option-text">Register</span></li>
+                                        < li className="user-dropdown-option" onClick={this.handleRegisterClick}><i className="fas fa-user-plus"/><span className="user-dropdown-option-text">Register</span></li>
                                 }
                             </ul>
                         </div>
