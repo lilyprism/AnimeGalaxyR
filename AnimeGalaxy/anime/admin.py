@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Anime, Genre, Season
+from .models import Anime, Genre, Season, UserAnimes
 
 
 @admin.register(Genre)
@@ -23,9 +23,15 @@ class AnimeAdmin(admin.ModelAdmin):
 		}),
 		('Configurações Avançadas', {
 			'classes': ('wide',),
-			'fields' : ('genres', 'image', 'thumbnail'),
+			'fields' : ('genres', 'image', 'thumbnail', 'trailer'),
 		})
 	)
+
+
+@admin.register(UserAnimes)
+class UserAnimesAdmin(admin.ModelAdmin):
+	list_filter = ['anime', 'user']
+	list_per_page = 20
 
 
 @admin.register(Season)

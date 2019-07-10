@@ -4,10 +4,12 @@ from typing import List
 from django.core.cache import cache
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
+from django.views.decorators.vary import vary_on_cookie
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_haystack.viewsets import HaystackViewSet
 from haystack.query import SearchQuerySet
 from rest_framework import status
+from rest_framework.exceptions import ValidationError
 from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.permissions import BasePermission
 from rest_framework.response import Response
@@ -15,7 +17,7 @@ from rest_framework.throttling import BaseThrottle
 
 from main.paginators import AnimeListResultsSetPagination
 from main.views import BaseMVS
-from .models import Anime, Genre
+from .models import Anime, Genre, UserAnimes
 from .serializers import AnimeSearchSerializer, AnimeSerializer, ExtraAnimeSerializer, GenreSerializer
 
 
@@ -26,6 +28,34 @@ class AnimeView(BaseMVS):
 	serializer_class = AnimeSerializer
 	throttle_classes: List[BaseThrottle] = []
 	permission_classes: List[BasePermission] = []
+
+	@method_decorator(cache_page(60 * 1))
+	@method_decorator(vary_on_cookie)
+	def retrieve(self, request, pk=None, *args, **kwargs):
+		if request.user.id:
+			self.queryset = UserAnimes.objects.get_or_create(user=request.user, anime_id=pk)[0]
+			data = self.serializer_class(self.queryset.anime, context={"request": request}).data
+			data["user_rating"] = self.queryset.rating
+			return Response(data, status=status.HTTP_200_OK)
+		return super(AnimeView, self).retrieve(request, *args, **kwargs)
+
+	def vote_anime_rating(self, request, pk=None, *args, **kwargs):
+		if not request.user.id:
+			return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+		rating = request.POST.get("rating")
+		if not rating:
+			raise ValidationError("Rating should not be null!")
+
+		obj = UserAnimes.objects.get_or_create(user=request.user, anime_id=pk)[0]
+
+		if obj.rating == rating:
+			raise ValidationError("Rating is equal to current rating!")
+
+		obj.rating = rating
+		obj.save()
+
+		return Response(status=status.HTTP_200_OK)
 
 	@method_decorator(cache_page(60 * 1))
 	def list(self, request, *args, **kwargs):

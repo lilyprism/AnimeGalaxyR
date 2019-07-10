@@ -80,15 +80,13 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-	# Internationalization Middleware
-	'django.middleware.locale.LocaleMiddleware',
-
 	# Security Middleware
 	'corsheaders.middleware.CorsMiddleware',
 
 	# Default Security Middleware
-	'django.middleware.security.SecurityMiddleware',
 	'django.contrib.sessions.middleware.SessionMiddleware',
+	'django.middleware.locale.LocaleMiddleware',
+	'django.middleware.security.SecurityMiddleware',
 	'django.middleware.common.CommonMiddleware',
 	'django.middleware.csrf.CsrfViewMiddleware',
 	'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -215,9 +213,9 @@ HAYSTACK_CONNECTIONS = {
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
-LANGUAGE_CODE = 'pt'
+LANGUAGE_CODE = os.getenv('LANGUAGE_CODE', 'en')
 
-TIME_ZONE = 'Europe/Lisbon'
+TIME_ZONE = os.getenv('TIME_ZONE', 'Europe/Lisbon')
 
 USE_I18N = True
 
@@ -291,6 +289,7 @@ JET_SIDE_MENU_ITEMS = [
 			{'name': 'main.customuser', 'label': _('Users')},
 			{'name': 'comment.usercommentratings', 'label': _('User Comments')},
 			{'name': 'episode.userepisodes', 'label': _('User Episodes')},
+			{'name': 'anime.useranimes', 'label': _('User Animes')},
 		]
 	},
 ]

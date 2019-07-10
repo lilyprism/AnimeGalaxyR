@@ -2,7 +2,7 @@ from django.db.models import Count, Sum
 from drf_haystack.serializers import HaystackSerializerMixin
 from rest_framework import serializers
 
-from .models import Anime, Genre, Season
+from .models import Anime, Genre, Season, UserAnimes
 
 
 class GenreSerializer(serializers.ModelSerializer):
@@ -14,12 +14,17 @@ class GenreSerializer(serializers.ModelSerializer):
 class AnimeSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Anime
-		fields = ('id', 'name', 'genres', 'image', 'thumbnail', 'description', 'views')
+		fields = ('id', 'name', 'genres', 'image', 'thumbnail', 'description', 'trailer', 'views', 'rating')
 
 	name = serializers.CharField(source="__str__")
 	genres = GenreSerializer(many=True)
 	image = serializers.SerializerMethodField()
 	views = serializers.SerializerMethodField()
+	rating = serializers.SerializerMethodField()
+
+	def get_rating(self, instance: Anime):
+		rated = UserAnimes.objects.filter(rating__isnull=False)
+		return {"number": rated.aggregate(Sum("rating")).get("rating__sum", 0) or 0, "votes": rated.count()}
 
 	def get_views(self, instance: Anime):
 		count = instance.seasons.aggregate(Sum("episodes__views"))
@@ -94,3 +99,11 @@ class SimpleSeasonSerializer(serializers.ModelSerializer):
 		fields = ['number', 'anime']
 
 	anime = GenrelessAnimeSerializer()
+
+
+class UserAnimeSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = UserAnimes
+		fields = ['anime', 'rating']
+
+	anime = AnimeSerializer()

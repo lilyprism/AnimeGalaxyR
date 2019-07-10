@@ -3,13 +3,13 @@ import os
 from ckeditor.fields import RichTextField
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
-from django.core.validators import MinValueValidator
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.db.models import Model
 
 from Utils.FileUtils import unique_filename
-
 # File Storage
+from main.models import CustomUser
 
 anime_storage = FileSystemStorage(location=os.path.join(settings.MEDIA_ROOT, 'animes'), base_url=os.path.join(settings.MEDIA_URL, 'animes'))
 thumb_storage = FileSystemStorage(location=os.path.join(settings.MEDIA_ROOT, 'thumbs'), base_url=os.path.join(settings.MEDIA_URL, 'thumbs'))
@@ -39,10 +39,28 @@ class Anime(Model):
 	name = models.CharField(max_length=200, null=False, blank=False, unique=True, verbose_name="Nome")
 	image = models.ImageField(storage=anime_storage, null=False, blank=False, default='default.jpg', verbose_name="Imagem", upload_to=unique_filename)
 	thumbnail = models.ImageField(storage=thumb_storage, null=False, blank=False, default='default.jpg', verbose_name="Thumbnail", upload_to=unique_filename)
+	trailer = models.URLField(max_length=200, null=False, blank=False, verbose_name="Trailer", default="https://www.youtube.com/embed/l_98K4_6UQ0")
 	description = RichTextField(null=False, blank=False, verbose_name="Descrição")
 
 	def __str__(self) -> str:
 		return f"{self.name}"
+
+
+class UserAnimes(Model):
+	# Meta Configuration
+	class Meta:
+		verbose_name = "Animes de Utilizador"
+		unique_together = ['user', 'anime']
+
+	def __str__(self):
+		return f"{self.user} - {self.anime}"
+
+	# Model Relations
+	user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, verbose_name='Utilizador', related_name='user_animes', null=False, blank=False)
+	anime = models.ForeignKey(Anime, on_delete=models.CASCADE, verbose_name='Anime', related_name='user_animes', null=False, blank=False)
+
+	# Model Fields
+	rating = models.IntegerField(null=True, blank=True, validators=[MinValueValidator(0), MaxValueValidator(10)])
 
 
 class Season(Model):
