@@ -1,12 +1,13 @@
 import React from 'react';
 import ReactDOM from "react-dom";
 
-import "./sass/cardlayout.sass";
+import "./cardlayout.sass";
 
-import HomeEpisodeCard from "./home/HomeEpisodeCard";
-import HomeAnimeCard from "./home/HomeAnimeCard";
-import AnimeListCard from "./animelist/AnimeListCard";
-import SearchAnimeCard from "./search/SearchAnimeCard";
+import HomeEpisodeCard from "./../home/HomeEpisodeCard";
+import HomeAnimeCard from "./../home/HomeAnimeCard";
+import AnimeListCard from "./../animelist/AnimeListCard";
+import SearchAnimeCard from "./../search/SearchAnimeCard";
+import AnimePageEpisodeCard from "./../animepage/AnimePageEpisodeCard";
 
 export default class CardLayout extends React.Component {
 
@@ -49,11 +50,15 @@ export default class CardLayout extends React.Component {
                     cards.push(
                         <SearchAnimeCard className={`card card-sm-${this.props.sm} card-md-${this.props.md} card-l-${this.props.l} card-xl-${this.props.xl}`} item={this.props.items[i]} is_logged_in={this.props.is_logged_in} key={this.props.items[i].id} updateHeight={this.updateHeight}/>
                     );
+                } else if (this.props.type === 5) {
+                    cards.push(
+                        <AnimePageEpisodeCard className={`card card-sm-${this.props.sm} card-md-${this.props.md} card-l-${this.props.l} card-xl-${this.props.xl}`} item={this.props.items[i]} is_logged_in={this.props.is_logged_in} key={this.props.items[i].id} updateHeight={this.updateHeight}/>
+                    );
                 }
             }
 
             return (
-                <div className={`card-layout ${this.props.animate ? "h-0 overflow-hidden" : ""}`} onLoad={this.props.animate ? this.updateHeight : () => {
+                <div className={`card-layout${this.props.animate ? " h-0 overflow-hidden" : ""}`} onLoad={this.props.animate ? this.updateHeight : () => {
                 }}>
                     {cards}
                 </div>
