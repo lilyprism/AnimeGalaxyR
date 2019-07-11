@@ -23,7 +23,7 @@ export default class AnimePageEpisodeCard extends React.Component {
 
     render() {
         return (
-            <div className={`${this.props.className} home-episode-card`}>
+            <div className={`${this.props.className} animepage-episode-card`}>
                 <Link to={`/v/${this.props.item.id}`}>
                     <div className="card-image-container">
                         <img className="card-img" src={this.props.item.season.anime.image} alt="Episode"/>
@@ -40,18 +40,12 @@ export default class AnimePageEpisodeCard extends React.Component {
                     {
                         this.props.is_logged_in ?
                             <div className="card-episode-options">
-                                <span onClick={this.favEpisode}><i className={`card-option fas fa-heart fa-fw ${this.state.item.favorite ? "active" : ""}`}/></span>
-                                <span onClick={this.addEpisodeToWatchLater}><i className={`card-option fas fa-clock fa-fw ${this.state.item.watch_later ? "active" : ""}`}/></span>
+                                <span className="seen-checkmark"><i className={`card-option fas fa-check fa-fw ${this.state.item.favorite ? "active" : ""}`}/></span>
                             </div>
                             :
                             ""
                     }
 
-                    <div className="filler">
-                        <Link to={`/v/${this.props.item.id}`}>
-                            <div className="h-100 w-100"/>
-                        </Link>
-                    </div>
                     <Link to={`/v/${this.props.item.id}`}>
                         <div className="card-episode-info">
                             <div className="card-episode-name">

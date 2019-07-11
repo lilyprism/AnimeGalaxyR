@@ -1,6 +1,6 @@
 @import ./../sass/colors
 
-.home-episode-card
+.animepage-episode-card
 	position: relative
 	width: 100%
 
@@ -39,9 +39,6 @@
 					padding: 2px 25px 2px 12px
 					transition: background-color 0.3s
 
-		.filler
-			flex-grow: 1
-
 		.card-episode-options
 			position: absolute
 			top: 0
@@ -53,8 +50,9 @@
 			.card-option
 				cursor: pointer
 
-			.card-option.active
-				color: $color_assets_5
+			.seen-checkmark
+				font-size: 20px
+				color: #00ee00
 	
 		.card-episode-info
 			.card-episode-name
@@ -87,7 +85,7 @@
 		left: 0
 		background: linear-gradient(to top, $color_assets_1, rgba($color_assets_1, 0))
 
-.home-episode-card:hover
+.animepage-episode-card:hover
 	.card-body
 		.card-episode-number-container
 			.card-episode-number
@@ -95,9 +93,6 @@
 
 		.card-episode-options
 			opacity: 1
-
-			.card-option:hover
-				color: $color_assets_5
 
 	.card-play-icon
 		opacity: 1
