@@ -3,7 +3,7 @@ import React from 'react';
 import "./search.sass";
 
 import RequestUtilities from "./../../util/RequestUtilities";
-import CardLayout from "../CardLayout";
+import CardLayout from "./../cardlayout/CardLayout";
 
 export default class Search extends React.Component {
 
