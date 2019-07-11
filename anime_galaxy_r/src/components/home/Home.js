@@ -1,11 +1,11 @@
 import React from 'react';
+import {Link} from "react-router-dom";
 
 import "./home.sass";
 
 import RequestUtilities from "./../../util/RequestUtilities";
 import Carousel from "./Carousel";
-import CardLayout from "./../CardLayout";
-import {Link} from "react-router-dom";
+import CardLayout from "./../cardlayout/CardLayout";
 
 export default class Home extends React.Component {
 
