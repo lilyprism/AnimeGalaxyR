@@ -8,7 +8,6 @@ import Home from "./home/Home";
 import Sidebar from "./Sidebar";
 import Topbar from "./topbar/Topbar";
 import EpisodePage from "./episodepage/EpisodePage";
-import OldAnimePage from "./animepage/OldAnimePage";
 import LoginModal from "./login/LoginModal";
 import RequestUtilities from "./../util/RequestUtilities";
 import RegisterModal from "./register/RegisterModal";
@@ -195,7 +194,7 @@ export default class App extends React.Component {
                                 }/>
                                 <Route exact path="/anime/:id" render={
                                     props =>
-                                        <AnimePage {...props}/>
+                                        <AnimePage {...props} is_logged_in={this.state.is_logged_in}/>
                                 }/>
                                 <Route exact path="/profile" render={
                                     props =>
