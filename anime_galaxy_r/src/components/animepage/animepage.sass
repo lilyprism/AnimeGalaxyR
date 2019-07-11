@@ -14,7 +14,7 @@
 		z-index: 20
 
 		.trailer-container-overlay
-			position: absolute
+			position: fixed
 			top: 0
 			right: 0
 			bottom: 0
@@ -25,12 +25,16 @@
 		.trailer
 			position: relative
 			width: 70%
-			height: 70%
+			height: 0
+			padding-bottom: calc(9/16 * 70%)
 			z-index: 29
 
 			iframe
+				position: absolute
 				width: 100%
 				height: 100%
+				top: 0
+				left: 0
 
 		&.show
 			display: flex
@@ -38,7 +42,6 @@
 			align-items: center
 
 	.anime-details
-
 		.anime-thumbnail
 			position: relative
 			height: 300px
@@ -170,12 +173,25 @@
 						justify-content: center
 						font-size: 26px
 
-						.rating
-							display: inline-flex
-							-webkit-background-clip: text
-							-webkit-text-fill-color: transparent
-							cursor: pointer
+	.seasons
+		display: flex
+		flex-wrap: wrap
+		margin-bottom: -1px
+		margin-right: -1px
 
-					.rating
-						display: block
-						background-color: gold
+		.season
+			display: flex
+			//flex-grow: 1
+			justify-content: center
+			align-items: center
+			text-align: center
+			//width: calc(100% / 7 - 7px / 6)
+			background: $color_assets_1
+			padding: 15px 30px
+			transition: background-color 0.3s
+			cursor: pointer
+			margin-bottom: 1px
+			margin-right: 1px
+
+		.season:hover, .season.active
+			background-color: $color_assets_5
