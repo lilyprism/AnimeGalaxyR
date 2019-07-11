@@ -236,7 +236,7 @@ export default class AnimePage extends React.Component {
                     <div className="gradient-container">
                         <div className="breakpoint-container">
                             <div className="spacer"/>
-                            <div className="anime-details">
+                            <div className="anime-details-thumbnail">
                                 <div className="anime-thumbnail" style={{backgroundImage: `url(${this.state.anime.thumbnail})`}}>
                                     <div className="breadcrumbs">
                                         <p><Link to={"/"}>Home</Link> > <Link to={"/anime"}>Anime</Link> > {this.state.anime.name}</p>
