@@ -27,6 +27,28 @@ class Genre(Model):
 		return self.name
 
 
+class Person(Model):
+	class Meta:
+		verbose_name = "Pessoa"
+
+	# Model Fields
+	name = models.CharField(max_length=150, null=False, blank=False, unique=True, verbose_name="Nome")
+
+	def __str__(self):
+		return self.name
+
+
+class Studio(Model):
+	class Meta:
+		verbose_name = "Estúdio"
+
+	# Model Fields
+	name = models.CharField(max_length=150, null=False, blank=False, unique=True, verbose_name="Nome")
+
+	def __str__(self):
+		return self.name
+
+
 class Anime(Model):
 	# Meta configurations
 	class Meta:
@@ -34,6 +56,9 @@ class Anime(Model):
 
 	# Model relations
 	genres = models.ManyToManyField(Genre, verbose_name="Géneros", related_name="animes", blank=False)
+	author = models.ForeignKey(Person, verbose_name="Autor", related_name="anime_authors", blank=False, on_delete=models.CASCADE)
+	director = models.ForeignKey(Person, verbose_name="Diretor", related_name="anime_directors", blank=False, on_delete=models.CASCADE)
+	studio = models.ForeignKey(Studio, verbose_name="Estúdio", related_name="anime_studios", blank=False, on_delete=models.CASCADE)
 
 	# Model fields
 	name = models.CharField(max_length=200, null=False, blank=False, unique=True, verbose_name="Nome")
@@ -60,7 +85,7 @@ class UserAnimes(Model):
 	anime = models.ForeignKey(Anime, on_delete=models.CASCADE, verbose_name='Anime', related_name='user_animes', null=False, blank=False)
 
 	# Model Fields
-	rating = models.IntegerField(null=True, blank=True, validators=[MinValueValidator(0), MaxValueValidator(10)])
+	rating = models.IntegerField(null=True, blank=True, validators=[MinValueValidator(100), MaxValueValidator(100)])
 
 
 class Season(Model):

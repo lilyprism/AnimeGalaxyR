@@ -275,6 +275,8 @@ JET_SIDE_MENU_ITEMS = [
 	{
 		'label': _('General'),
 		'items': [
+			{'name': 'anime.person', 'label': _('Person')},
+			{'name': 'anime.studio', 'label': _('Studio')},
 			{'name': 'anime.anime', 'label': _('Animes')},
 			{'name': 'anime.season', 'label': _('Seasons')},
 			{'name': 'episode.episode', 'label': _('Episodes')},

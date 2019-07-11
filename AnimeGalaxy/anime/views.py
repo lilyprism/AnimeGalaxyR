@@ -1,6 +1,7 @@
 from random import randint
 from typing import List
 
+from django.core import exceptions
 from django.core.cache import cache
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
@@ -11,6 +12,7 @@ from haystack.query import SearchQuerySet
 from rest_framework import status
 from rest_framework.exceptions import ValidationError
 from rest_framework.filters import OrderingFilter, SearchFilter
+from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import BasePermission
 from rest_framework.response import Response
 from rest_framework.throttling import BaseThrottle
@@ -29,9 +31,12 @@ class AnimeView(BaseMVS):
 	throttle_classes: List[BaseThrottle] = []
 	permission_classes: List[BasePermission] = []
 
-	@method_decorator(cache_page(60 * 1))
+	@method_decorator(cache_page(1))
 	@method_decorator(vary_on_cookie)
 	def retrieve(self, request, pk=None, *args, **kwargs):
+
+		get_object_or_404(Anime, id=pk)
+
 		if request.user.id:
 			self.queryset = UserAnimes.objects.get_or_create(user=request.user, anime_id=pk)[0]
 			data = self.serializer_class(self.queryset.anime, context={"request": request}).data
@@ -40,19 +45,32 @@ class AnimeView(BaseMVS):
 		return super(AnimeView, self).retrieve(request, *args, **kwargs)
 
 	def vote_anime_rating(self, request, pk=None, *args, **kwargs):
+		if pk < 0:
+			raise ValidationError("Invalid ID")
+
 		if not request.user.id:
 			return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
-		rating = request.POST.get("rating")
+		rating = request.data.get("rating")
 		if not rating:
 			raise ValidationError("Rating should not be null!")
+
+		try:
+			rating = int(rating)
+		except ValueError:
+			raise ValidationError("Rating should be a number!")
 
 		obj = UserAnimes.objects.get_or_create(user=request.user, anime_id=pk)[0]
 
 		if obj.rating == rating:
-			raise ValidationError("Rating is equal to current rating!")
+			return Response(status=status.HTTP_200_OK)
 
 		obj.rating = rating
+
+		try:
+			obj.clean_fields()
+		except exceptions.ValidationError as err:
+			raise ValidationError(err.messages[0])
 		obj.save()
 
 		return Response(status=status.HTTP_200_OK)

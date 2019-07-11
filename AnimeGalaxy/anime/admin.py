@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Anime, Genre, Season, UserAnimes
+from .models import Anime, Genre, Person, Season, Studio, UserAnimes
 
 
 @admin.register(Genre)
@@ -19,7 +19,7 @@ class AnimeAdmin(admin.ModelAdmin):
 
 	fieldsets = (
 		('Configurações Gerais', {
-			'fields': ('name', 'description')
+			'fields': ('name', 'description', 'author', 'director', 'studio',)
 		}),
 		('Configurações Avançadas', {
 			'classes': ('wide',),
@@ -32,6 +32,16 @@ class AnimeAdmin(admin.ModelAdmin):
 class UserAnimesAdmin(admin.ModelAdmin):
 	list_filter = ['anime', 'user']
 	list_per_page = 20
+
+
+@admin.register(Person)
+class PersonAdmin(admin.ModelAdmin):
+	pass
+
+
+@admin.register(Studio)
+class StudioAdmin(admin.ModelAdmin):
+	pass
 
 
 @admin.register(Season)

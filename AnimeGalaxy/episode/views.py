@@ -11,7 +11,7 @@ from rest_framework.response import Response
 from rest_framework.throttling import BaseThrottle
 
 from anime.models import Anime
-from main.paginators import HomeResultsSetPagination, StandardResultsSetPagination
+from main.paginators import HomeResultsSetPagination
 from main.views import BaseMVS
 from .models import Episode, UserEpisodes
 from .serializers import EpisodeCreateSerializer, EpisodeLikeSerializer, MultiEpisodeSerializer, PlaylistSerializer, SeasonEpisodeSerializer, SingleEpisodeSerializer
@@ -56,14 +56,7 @@ class EpisodesView(BaseMVS):
 
 	@method_decorator(cache_page(60 * 1))
 	def episodes(self, request, pk=None, *args, **kwargs):
-		self.pagination_class = StandardResultsSetPagination
 		queryset = get_object_or_404(Anime, id=pk).seasons.order_by("-number")
-
-		page = self.paginate_queryset(queryset)
-		if page is not None:
-			serializer = SeasonEpisodeSerializer(page, context={"request": request}, many=True)
-			return self.get_paginated_response(serializer.data)
-
 		serializer = SeasonEpisodeSerializer(queryset, context={"request": request}, many=True)
 		return Response(serializer.data, status.HTTP_200_OK)
 

@@ -1,4 +1,4 @@
-from django.db.models import Count, Sum
+from django.db.models import Avg, Count, Sum
 from drf_haystack.serializers import HaystackSerializerMixin
 from rest_framework import serializers
 
@@ -23,8 +23,8 @@ class AnimeSerializer(serializers.ModelSerializer):
 	rating = serializers.SerializerMethodField()
 
 	def get_rating(self, instance: Anime):
-		rated = UserAnimes.objects.filter(rating__isnull=False)
-		return {"number": rated.aggregate(Sum("rating")).get("rating__sum", 0) or 0, "votes": rated.count()}
+		rated = UserAnimes.objects.filter(rating__isnull=False, anime_id=instance.id)
+		return {"number": rated.aggregate(Avg("rating")).get("rating__avg", 0) or 0, "votes": rated.count()}
 
 	def get_views(self, instance: Anime):
 		count = instance.seasons.aggregate(Sum("episodes__views"))
@@ -107,3 +107,9 @@ class UserAnimeSerializer(serializers.ModelSerializer):
 		fields = ['anime', 'rating']
 
 	anime = AnimeSerializer()
+
+
+class UserAnimeSimpleSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = UserAnimes
+		fields = ['rating', 'anime', 'user']
