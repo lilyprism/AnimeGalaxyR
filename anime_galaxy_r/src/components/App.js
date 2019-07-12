@@ -116,6 +116,8 @@ export default class App extends React.Component {
     componentDidMount() {
         this.handleScrollAndResize();
         this.handleKonamiCode();
+
+        window.addEventListener("resize", this.handleScrollAndResize);
     }
 
     handleKonamiCode() {
@@ -138,24 +140,24 @@ export default class App extends React.Component {
     }
 
     //This function is responsible for adding the events needed to handle sticky-like behaviours in the website
-    handleScrollAndResize() {
+    handleScrollAndResize = () => {
+        let container_el = document.querySelector(".main-container");
         let topbar_el = document.querySelector(".topbar");
         let sidebar_el = document.querySelector(".sidebar");
         let banner_el = document.querySelector(".banner-top");
-        document.addEventListener("scroll", function (event) {
-            //Setting the topbar top style property to the position of the banner + the banner's height
-            topbar_el.style.top = `${Math.max(banner_el.getBoundingClientRect().top + banner_el.scrollHeight, 0)}px`;
-            //Setting the sidebar top style property to the position of the topbar plus the topbar's height
-            sidebar_el.style.top = `${topbar_el.getBoundingClientRect().top + topbar_el.scrollHeight}px`;
-        });
 
-        window.addEventListener("resize", function (event) {
-            //Setting the topbar top style property to the position of the banner + the banner's height
-            topbar_el.style.top = `${Math.max(banner_el.getBoundingClientRect().top + banner_el.scrollHeight, 0)}px`;
-            //Setting the sidebar top style property to the position of the topbar plus the topbar's height
-            sidebar_el.style.top = `${topbar_el.getBoundingClientRect().top + topbar_el.scrollHeight}px`;
-        });
-    }
+        console.log(`ScrollTop: ${container_el.scrollTop}`);
+        console.log(`ScrollHeight: ${banner_el.scrollHeight}`);
+
+        if (container_el.scrollTop > banner_el.scrollHeight) {
+            topbar_el.style.top = container_el.scrollTop + "px";
+            sidebar_el.style.top = container_el.scrollTop + topbar_el.scrollHeight + "px";
+        } else {
+            topbar_el.style.top = "";
+            sidebar_el.style.top = "";
+        }
+        sidebar_el.style.height = `calc(100vh - ${sidebar_el.getBoundingClientRect().top}px)`;
+    };
 
     setSearch = search => {
         this.setState({search: search});
@@ -163,59 +165,61 @@ export default class App extends React.Component {
 
     render() {
         return (
-            <Router>
-                <header className="page-header" onKeyPress={event => this.keyToClick(event)}>
-                    <div className="banner-top">
-                        <div className="breakpoint-container h-100 d-flex align-items-center">
-                            <div className="banner-logo-container">
-                                <img src="/images/banner_logo.webp" alt="Banner Logo" className="banner-logo"/>
+            <div className="main-container" onScroll={this.handleScrollAndResize}>
+                <Router>
+                    <header className="page-header" onKeyPress={event => this.keyToClick(event)}>
+                        <div className="banner-top">
+                            <div className="breakpoint-container h-100 d-flex align-items-center">
+                                <div className="banner-logo-container">
+                                    <img src="/images/banner_logo.webp" alt="Banner Logo" className="banner-logo"/>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <Topbar setSearch={this.setSearch} is_logged_in={this.state.is_logged_in} logout={this.logout}/>
-                </header>
-                <Sidebar/>
-                <div className="container" onKeyPress={event => this.keyToClick(event)}>
-                    <div className="content-wrapper" onClick={App.hideSidebar}>
-                        <div className="overlay"/>
-                        <div className={this.state.search.length >= 3 ? "d-none" : ""}>
-                            <Switch>
-                                <Route exact path="/" render={
-                                    props =>
-                                        <Home {...props} is_logged_in={this.state.is_logged_in}/>
-                                }/>
-                                <Route path="/v/:id" render={
-                                    props =>
-                                        <EpisodePage {...props} is_logged_in={this.state.is_logged_in}/>
-                                }/>
-                                <Route exact path="/anime" render={
-                                    props =>
-                                        <AnimeList {...props}/>
-                                }/>
-                                <Route exact path="/anime/:id" render={
-                                    props =>
-                                        <AnimePage {...props} is_logged_in={this.state.is_logged_in}/>
-                                }/>
-                                <Route exact path="/profile" render={
-                                    props =>
-                                        <Profile {...props} is_logged_in={this.state.is_logged_in} self={true}/>
-                                }/>
-                                <Route exact path="/user/:id" render={
-                                    props =>
-                                        <Profile {...props} is_logged_in={this.state.is_logged_in} self={false}/>
-                                }/>
-                            </Switch>
+                        <Topbar setSearch={this.setSearch} is_logged_in={this.state.is_logged_in} logout={this.logout}/>
+                    </header>
+                    <Sidebar/>
+                    <div className="container" onKeyPress={event => this.keyToClick(event)}>
+                        <div className="content-wrapper" onClick={App.hideSidebar}>
+                            <div className="overlay"/>
+                            <div className={this.state.search.length >= 3 ? "d-none" : ""}>
+                                <Switch>
+                                    <Route exact path="/" render={
+                                        props =>
+                                            <Home {...props} is_logged_in={this.state.is_logged_in}/>
+                                    }/>
+                                    <Route path="/v/:id" render={
+                                        props =>
+                                            <EpisodePage {...props} is_logged_in={this.state.is_logged_in}/>
+                                    }/>
+                                    <Route exact path="/anime" render={
+                                        props =>
+                                            <AnimeList {...props}/>
+                                    }/>
+                                    <Route exact path="/anime/:id" render={
+                                        props =>
+                                            <AnimePage {...props} is_logged_in={this.state.is_logged_in}/>
+                                    }/>
+                                    <Route exact path="/profile" render={
+                                        props =>
+                                            <Profile {...props} is_logged_in={this.state.is_logged_in} self={true}/>
+                                    }/>
+                                    <Route exact path="/user/:id" render={
+                                        props =>
+                                            <Profile {...props} is_logged_in={this.state.is_logged_in} self={false}/>
+                                    }/>
+                                </Switch>
+                            </div>
+                            <div className={this.state.search.length >= 3 ? "" : "d-none"}>
+                                <Search search={this.state.search}/>
+                            </div>
+                            <Footer/>
                         </div>
-                        <div className={this.state.search.length >= 3 ? "" : "d-none"}>
-                            <Search search={this.state.search}/>
-                        </div>
-                        <Footer/>
                     </div>
-                </div>
-                <ToastsContainer store={ToastsStore}/>
-                {!this.state.is_logged_in ? <LoginModal element_id="login-modal" login={this.login}/> : ""}
-                {!this.state.is_logged_in ? <RegisterModal element_id="register-modal" register={this.register}/> : ""}
-            </Router>
+                    <ToastsContainer store={ToastsStore}/>
+                    {!this.state.is_logged_in ? <LoginModal element_id="login-modal" login={this.login}/> : ""}
+                    {!this.state.is_logged_in ? <RegisterModal element_id="register-modal" register={this.register}/> : ""}
+                </Router>
+            </div>
         );
     }
 

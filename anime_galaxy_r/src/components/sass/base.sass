@@ -9,6 +9,11 @@
 	border: 0
 	font-family: 'Roboto', sans-serif
 	word-wrap: break-word
+	-webkit-tap-highlight-color: transparent
+	overscroll-behavior: auto
+
+body
+	overflow: hidden
 
 html, body, #app
 	min-width: $min-page-width
@@ -18,6 +23,10 @@ html, body, #app
 #app
 	display: flex
 	flex-direction: column
+
+.main-container
+	overflow: auto
+	position: relative
 
 img
 	display: block
