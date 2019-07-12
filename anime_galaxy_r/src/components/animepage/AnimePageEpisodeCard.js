@@ -9,38 +9,32 @@ export default class AnimePageEpisodeCard extends React.Component {
         super(props);
 
         this.state = {
-            item: this.props.item
-        }
-    }
-
-
-    componentDidUpdate(prevProps, prevState, snapshot) {
-        if (this.props.item !== prevProps.item) {
-            this.setState({item: this.props.item});
-            console.log("Hey");
+            isMouseOver: false,
+            loadGif: false
         }
     }
 
     render() {
         return (
-            <div className={`${this.props.className} animepage-episode-card`}>
+            <div className={`${this.props.className} animepage-episode-card`} onMouseEnter={() => this.setState({loadGif: true, isMouseOver: true})} onMouseLeave={() => this.setState({isMouseOver: false})}>
                 <Link to={`/v/${this.props.item.id}`}>
                     <div className="card-image-container">
-                        <img className="card-img" src={this.props.item.season.anime.image} alt="Episode"/>
+                        <img className="card-img" src={this.props.item.image} alt="Episode"/>
+                        {this.state.loadGif ? <img className={`card-gif${this.state.isMouseOver ? " show" : ""}`} src={this.props.item.gif} alt="Episode Preview"/> : ""}
                     </div>
                 </Link>
                 <div className="card-body">
                     <div className="card-episode-top-container">
                         <div className="card-episode-number-container">
                             <div className="card-episode-number">
-                                {`T${this.state.item.season.number} E${this.state.item.number}`}
+                                {`Ep ${this.props.item.number}`}
                             </div>
                         </div>
                     </div>
                     {
                         this.props.is_logged_in ?
                             <div className="card-episode-options">
-                                <span className="seen-checkmark"><i className={`card-option fas fa-check fa-fw ${this.state.item.favorite ? "active" : ""}`}/></span>
+                                <span className="seen-checkmark"><i className={`card-option fas fa-check fa-fw ${this.props.item.favorite ? "active" : ""}`}/></span>
                             </div>
                             :
                             ""
@@ -49,7 +43,7 @@ export default class AnimePageEpisodeCard extends React.Component {
                     <Link to={`/v/${this.props.item.id}`}>
                         <div className="card-episode-info">
                             <div className="card-episode-name">
-                                {this.props.item.season.anime.name}
+                                {this.props.anime.name}
                             </div>
                         </div>
                     </Link>
