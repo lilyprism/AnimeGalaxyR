@@ -10,7 +10,7 @@ class EpisodeAdmin(admin.ModelAdmin):
 
 	fieldsets = (
 		('Configurações Gerais', {
-			'fields': ('season', 'number', 'blogger_url')
+			'fields': ('season', 'number', 'blogger_url', 'image', 'gif')
 		}),
 	)
 

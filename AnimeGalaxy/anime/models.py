@@ -10,6 +10,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from Utils.FileUtils import unique_filename
 # File Storage
+from main.fields import NonStrippingCharField
 from main.models import CustomUser
 
 anime_storage = FileSystemStorage(location=os.path.join(settings.MEDIA_ROOT, 'animes'), base_url=os.path.join(settings.MEDIA_URL, 'animes'))
@@ -96,14 +97,14 @@ class Season(Model):
 		verbose_name_plural = _("Seasons")
 
 	def __str__(self):
-		return f"{self.anime} - T{self.number}" if not self.name else f"{self.anime}{self.name}"
+		return f"{self.anime}" if self.anime.seasons.count() <= 1 else f"{self.anime} {self.number}" if not self.name else f"{self.anime}{self.name}"
 
 	# Model Relations
 	anime = models.ForeignKey(Anime, on_delete=models.CASCADE, verbose_name=_("Anime"), related_name="seasons", null=False, blank=False)
 
 	# Model Fields
 	number = models.IntegerField(default=1, null=False, validators=[MinValueValidator(0)], verbose_name=_("Season Number"))
-	name = models.CharField(max_length=150, default=None, null=True, blank=True, verbose_name=_("Name"))
+	name = NonStrippingCharField(max_length=150, default=None, null=True, blank=True, verbose_name=_("Name"))
 	complete = models.BooleanField(default=True, null=False, verbose_name=_("Completed"))
 
 

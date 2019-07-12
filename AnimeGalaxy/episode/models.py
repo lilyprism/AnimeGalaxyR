@@ -10,7 +10,6 @@ from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from rest_framework.compat import MinValueValidator
 
-from Utils.FileUtils import unique_filename
 from anime.models import Season
 from main.helpers import get_sources_from_url
 from main.models import CustomUser
@@ -33,8 +32,8 @@ class Episode(Model):
 	number = models.FloatField(default=1, null=False, blank=False, validators=[MinValueValidator(0)], verbose_name=_("Episode Number"))
 	views = models.IntegerField(default=0, null=False, validators=[MinValueValidator(0)], verbose_name=_("Views"))
 	blogger_url = models.URLField(max_length=1500, null=False, blank=False, verbose_name=_("URL"))
-	gif = models.ImageField(storage=gif_storage, null=False, blank=False, default='default.jpg', verbose_name=_("Gif"), upload_to=unique_filename)
-	image = models.ImageField(storage=gif_thumb_storage, null=False, blank=False, default='default.jpg', verbose_name=_("Thumbnail"), upload_to=unique_filename)
+	gif = models.ImageField(storage=gif_storage, null=False, blank=False, default='default.jpg', verbose_name=_("Gif"))
+	image = models.ImageField(storage=gif_thumb_storage, null=False, blank=False, default='default.jpg', verbose_name=_("Thumbnail"))
 
 	# Hidden Model fields
 	added = models.DateTimeField(default=timezone.now, editable=False)

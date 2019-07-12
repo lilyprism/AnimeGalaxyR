@@ -80,7 +80,7 @@ class UrlView(BaseMVS):
 		if not requested_episode:
 			return Response(status=status.HTTP_404_NOT_FOUND)
 
-		episodes = Episode.objects.filter(season=requested_episode.season, number__gte=requested_episode.number).order_by("number")[:12]
+		episodes = Episode.objects.filter(season=requested_episode.season, number__gte=requested_episode.number).order_by("number")[:2]
 		serializer = PlaylistSerializer(episodes, many=True, context={"request": request})
 		return Response(serializer.data, status=status.HTTP_200_OK)
 

@@ -25,6 +25,7 @@ feedparser = "*"
 psycopg2 = "*"
 python-dotenv = "*"
 ffmpeg-python = "*"
+django-celery = "==3.2.2"
 
 [requires]
 python_version = "3.6"

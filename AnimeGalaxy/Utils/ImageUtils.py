@@ -15,9 +15,11 @@ def resize_image(image: InMemoryUploadedFile, size: Tuple[int, int] = (100, 100)
 
 	output = BytesIO()
 
-	if not im.format == "GIF":
+	if im.format == "GIF":
+		im.save(output, format='webp', optimize=True, quality=60, save_all=True, minimize_size=True, duration=100, lossless=False, method=2)
+	else:
 		im = ImageOps.fit(im, size, ANTIALIAS)
-	im.save(output, format='webp', optimize=True, quality=85, save_all=True)
+		im.save(output, format='webp', optimize=True, quality=85, save_all=True, minimize_size=True)
 	output.seek(0)
 
 	return output
@@ -37,12 +39,13 @@ def resize_in_memory_uploaded_image(image: InMemoryUploadedFile, size: Tuple[int
 def get_gif_from_url(url) -> InMemoryUploadedFile:
 	out, _ = (
 		ffmpeg
-			.input(url, ss='00:13:50', t=5)
+			.input(url, ss='00:13:50', t=10)
 			.filter("crop", 255, 360)
-			.filter("fps", 3)
+			.filter("fps", 5)
 			.output('pipe:', format='gif')
 			.global_args('-loglevel', 'error')
 			.global_args('-y')
+			.global_args('-r', '1')
 			.run(capture_stdout=True)
 	)
 

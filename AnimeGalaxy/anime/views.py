@@ -3,9 +3,9 @@ from typing import List
 
 from django.core import exceptions
 from django.core.cache import cache
+from django.db.models import Prefetch
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
-from django.views.decorators.vary import vary_on_cookie
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_haystack.viewsets import HaystackViewSet
 from haystack.query import SearchQuerySet
@@ -19,7 +19,7 @@ from rest_framework.throttling import BaseThrottle
 
 from main.paginators import AnimeListResultsSetPagination
 from main.views import BaseMVS
-from .models import Anime, Genre, UserAnimes
+from .models import Anime, Genre, Season, UserAnimes
 from .serializers import AnimeSearchSerializer, AnimeSerializer, ExtraAnimeSerializer, GenreSerializer
 
 
@@ -31,18 +31,20 @@ class AnimeView(BaseMVS):
 	throttle_classes: List[BaseThrottle] = []
 	permission_classes: List[BasePermission] = []
 
-	@method_decorator(cache_page(1))
-	@method_decorator(vary_on_cookie)
+	# @method_decorator(cache_page(1))
+	# @method_decorator(vary_on_cookie)
 	def retrieve(self, request, pk=None, *args, **kwargs):
 
-		get_object_or_404(Anime, id=pk)
+		obj = get_object_or_404(Anime.objects.prefetch_related(Prefetch('seasons', queryset=Season.objects.order_by("number"))), id=pk)
 
 		if request.user.id:
 			self.queryset = UserAnimes.objects.get_or_create(user=request.user, anime_id=pk)[0]
-			data = self.serializer_class(self.queryset.anime, context={"request": request}).data
+			data = self.serializer_class(obj, context={"request": request}).data
 			data["user_rating"] = self.queryset.rating
 			return Response(data, status=status.HTTP_200_OK)
-		return super(AnimeView, self).retrieve(request, *args, **kwargs)
+
+		data = self.serializer_class(obj, context={"request": request}).data
+		return Response(data, status=status.HTTP_200_OK)
 
 	def vote_anime_rating(self, request, pk=None, *args, **kwargs):
 		if pk < 0:

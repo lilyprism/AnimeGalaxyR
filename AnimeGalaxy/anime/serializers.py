@@ -1,5 +1,4 @@
 from django.db.models import Avg, Count, Sum
-from django.utils.translation import ugettext_lazy as _
 from drf_haystack.serializers import HaystackSerializerMixin
 from rest_framework import serializers
 
@@ -20,7 +19,7 @@ class SeasonSerializer(serializers.ModelSerializer):
 	name = serializers.SerializerMethodField()
 
 	def get_name(self, instance: Season):
-		return _("Temporada") + " " + str(instance.name if instance.name else instance.number)
+		return instance.__str__()
 
 
 class AnimeSerializer(serializers.ModelSerializer):

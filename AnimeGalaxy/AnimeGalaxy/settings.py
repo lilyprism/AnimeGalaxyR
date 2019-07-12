@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 import datetime
 import os
 
+import djcelery
 from django.utils.translation import ugettext_lazy as _
 from dotenv import load_dotenv
 
@@ -71,12 +72,14 @@ INSTALLED_APPS = [
 	# Haystack
 	'haystack',
 
-	'main.apps.MainConfig',
-	'anime.apps.AnimeConfig',
-	'episode.apps.EpisodeConfig',
-	'comment.apps.CommentConfig',
+	# Celery
+	'djcelery',
 
-	'report.apps.ReportConfig',
+	'main',
+	'anime',
+	'episode',
+	'comment',
+	'report',
 ]
 
 MIDDLEWARE = [
@@ -305,6 +308,11 @@ MEDIA_URL = '/media/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 LOCALE_PATHS = [os.path.join(BASE_DIR, 'locale'), ]
+
+# Celery configuration
+BROKER_URL = 'amqp://guest:guest@localhost:5672//'
+
+djcelery.setup_loader()
 
 # Databse Logging
 LOG_DB = False
