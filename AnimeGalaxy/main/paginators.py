@@ -14,3 +14,8 @@ class HomeResultsSetPagination(PageNumberPagination):
 class AnimeListResultsSetPagination(PageNumberPagination):
 	page_size = 24
 	template = None
+
+
+class EpisodeResultsSetPagination(PageNumberPagination):
+	page_size = 12
+	template = None

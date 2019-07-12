@@ -24,6 +24,7 @@ djangorestframework-jwt = "*"
 feedparser = "*"
 psycopg2 = "*"
 python-dotenv = "*"
+ffmpeg-python = "*"
 
 [requires]
 python_version = "3.6"

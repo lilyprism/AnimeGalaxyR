@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "8a501f700a81c9e482bc7235c565539885592329599038d6ef7a7d88d5a28739"
+            "sha256": "609f10866950a7373369186c68229d40a5d3013c11c5515ed6a91ae5b0a9677f"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -153,6 +153,20 @@
             ],
             "index": "pypi",
             "version": "==5.2.1"
+        },
+        "ffmpeg-python": {
+            "hashes": [
+                "sha256:65225db34627c578ef0e11c8b1eb528bb35e024752f6f10b78c011f6f64c4127",
+                "sha256:ac441a0404e053f8b6a1113a77c0f452f1cfc62f6344a769475ffdc0f56c23c5"
+            ],
+            "index": "pypi",
+            "version": "==0.2.0"
+        },
+        "future": {
+            "hashes": [
+                "sha256:67045236dcfd6816dc439556d009594abf643e5eb48992e36beac09c2ca659b8"
+            ],
+            "version": "==0.17.1"
         },
         "idna": {
             "hashes": [

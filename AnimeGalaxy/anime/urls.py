@@ -12,5 +12,5 @@ urlpatterns = [
 	path('watched', views.AnimeView.as_view({"get": "watched"}), name="watched-anime"),
 	path('<int:pk>', views.AnimeView.as_view({"get": "retrieve"}), name="get-anime"),
 	path('<int:pk>/vote', views.AnimeView.as_view({"post": "vote_anime_rating"}), name="vote-anime"),
-	path('<int:pk>/episodes', episode_views.EpisodesView.as_view({"get": "episodes"}), name="episodes-anime"),
+	path('season/<int:pk>/episodes', episode_views.EpisodesView.as_view({"get": "episodes"}), name="episodes-anime"),
 ]

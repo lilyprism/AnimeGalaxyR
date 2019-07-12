@@ -1,4 +1,5 @@
 from django.db.models import Avg, Count, Sum
+from django.utils.translation import ugettext_lazy as _
 from drf_haystack.serializers import HaystackSerializerMixin
 from rest_framework import serializers
 
@@ -11,16 +12,28 @@ class GenreSerializer(serializers.ModelSerializer):
 		fields = ['id', 'name']
 
 
+class SeasonSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = Season
+		fields = ['id', 'name']
+
+	name = serializers.SerializerMethodField()
+
+	def get_name(self, instance: Season):
+		return _("Temporada") + " " + str(instance.name if instance.name else instance.number)
+
+
 class AnimeSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Anime
-		fields = ('id', 'name', 'genres', 'image', 'thumbnail', 'description', 'trailer', 'views', 'rating')
+		fields = ('id', 'name', 'genres', 'image', 'thumbnail', 'description', 'trailer', 'views', 'rating', 'seasons')
 
 	name = serializers.CharField(source="__str__")
 	genres = GenreSerializer(many=True)
 	image = serializers.SerializerMethodField()
 	views = serializers.SerializerMethodField()
 	rating = serializers.SerializerMethodField()
+	seasons = SeasonSerializer(many=True)
 
 	def get_rating(self, instance: Anime):
 		rated = UserAnimes.objects.filter(rating__isnull=False, anime_id=instance.id)
