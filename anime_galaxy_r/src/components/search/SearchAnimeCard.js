@@ -10,8 +10,8 @@ export default class SearchAnimeCard extends React.Component {
         let description = taglessDesc.substring(0, taglessDesc.substring(0, 150).lastIndexOf(" ")).trim() + "...";
 
         return (
-            <Link to={`/anime/${this.props.item.id}`}>
-                <div className={`${this.props.className} search-anime-card`}>
+            <div className={`${this.props.className} search-anime-card`} onClick={() => this.props.setSearch("")}>
+                <Link to={`/anime/${this.props.item.id}`}>
                     <div className="card-image-container">
                         <img className="card-img" src={this.props.item.image} alt="Anime"/>
                     </div>
@@ -46,8 +46,8 @@ export default class SearchAnimeCard extends React.Component {
                         </div>
                     </div>
                     <div className="card-gradient-overlay"/>
-                </div>
-            </Link>
+                </Link>
+            </div>
         );
     }
 

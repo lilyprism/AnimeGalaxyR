@@ -12,6 +12,41 @@ export default class Search extends React.Component {
 
         this.state = {
             results: [],
+            placeholder_results: [
+                {
+                    "id": -1,
+                    "name": "",
+                    "genres": [],
+                    "image": "/images/card_placeholder.webp",
+                    "description": "",
+                    "views": 0,
+                    "episodes": 0
+                }, {
+                    "id": -2,
+                    "name": "",
+                    "genres": [],
+                    "image": "/images/card_placeholder.webp",
+                    "description": "",
+                    "views": 0,
+                    "episodes": 0
+                }, {
+                    "id": -3,
+                    "name": "",
+                    "genres": [],
+                    "image": "/images/card_placeholder.webp",
+                    "description": "",
+                    "views": 0,
+                    "episodes": 0
+                }, {
+                    "id": -4,
+                    "name": "",
+                    "genres": [],
+                    "image": "/images/card_placeholder.webp",
+                    "description": "",
+                    "views": 0,
+                    "episodes": 0
+                }
+            ],
             searching: true
         };
         if (this.props.search.length >= 3) {
@@ -31,7 +66,7 @@ export default class Search extends React.Component {
         this.setState({searching: true});
         RequestUtilities.sendGetRequest(`anime/search?text=${this.props.search}`).then(res => {
             this.setState({results: res.data, searching: false});
-            console.log(res.data);
+            console.log(JSON.stringify(res.data));
         }).catch(err => {
             this.setState({searching: false});
             console.log("Error searching anime");
@@ -71,7 +106,7 @@ export default class Search extends React.Component {
                             </h2>
                             <div className="spacer"/>
                             <div className=".search-results">
-                                <CardLayout type={4} items={this.state.results} xl={4} l={3} md={2} sm={2}/>
+                                <CardLayout type={4} setSearch={this.props.setSearch} items={this.state.results} xl={4} l={3} md={2} sm={2}/>
                             </div>
                             <div className="spacer"/>
                         </div>

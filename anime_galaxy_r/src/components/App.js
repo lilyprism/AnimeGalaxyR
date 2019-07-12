@@ -146,9 +146,6 @@ export default class App extends React.Component {
         let sidebar_el = document.querySelector(".sidebar");
         let banner_el = document.querySelector(".banner-top");
 
-        console.log(`ScrollTop: ${container_el.scrollTop}`);
-        console.log(`ScrollHeight: ${banner_el.scrollHeight}`);
-
         if (container_el.scrollTop > banner_el.scrollHeight) {
             topbar_el.style.top = container_el.scrollTop + "px";
             sidebar_el.style.top = container_el.scrollTop + topbar_el.scrollHeight + "px";
@@ -175,7 +172,7 @@ export default class App extends React.Component {
                                 </div>
                             </div>
                         </div>
-                        <Topbar setSearch={this.setSearch} is_logged_in={this.state.is_logged_in} logout={this.logout}/>
+                        <Topbar search={this.state.search} setSearch={this.setSearch} is_logged_in={this.state.is_logged_in} logout={this.logout}/>
                     </header>
                     <Sidebar/>
                     <div className="container" onKeyPress={event => this.keyToClick(event)}>
@@ -210,7 +207,7 @@ export default class App extends React.Component {
                                 </Switch>
                             </div>
                             <div className={this.state.search.length >= 3 ? "" : "d-none"}>
-                                <Search search={this.state.search}/>
+                                <Search search={this.state.search} setSearch={this.setSearch}/>
                             </div>
                             <Footer/>
                         </div>

@@ -181,13 +181,17 @@ export default class AnimePage extends React.Component {
     }
 
     componentWillReceiveProps(nextProps, nextContext) {
-        if (nextProps.is_logged_in !== this.props.is_logged_in) {
-            this.getAnimeDetails();
+        if (nextProps.is_logged_in !== this.props.is_logged_in || nextProps.match !== this.props.match) {
+            this.getAnimeDetails(nextProps.match.params.id);
         }
     }
 
-    getAnimeDetails = () => {
-        RequestUtilities.sendGetRequest(`anime/${this.props.match.params.id}`, App.isLoggedIn()).then(res => {
+    getAnimeDetails = (id) => {
+        console.log("Getting Anime Details: " + id);
+        if (id === undefined) {
+            id = this.props.match.params.id;
+        }
+        RequestUtilities.sendGetRequest(`anime/${id}`, App.isLoggedIn()).then(res => {
             this.setState({anime: res.data, current_season: res.data.seasons[0]}, () => {
                 console.log(res.data);
                 this.getEpisodes();

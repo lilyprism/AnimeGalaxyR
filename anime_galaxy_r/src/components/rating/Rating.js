@@ -15,7 +15,7 @@ export default class Rating extends React.Component {
             isMouseOver: false,
 
             starColor: this.props.starColor != null ? this.props.starColor : "#ffd700",
-            hoverColor: this.props.hoverColor != null ? this.props.hoverColor : "#ff3200",
+            hoverColor: this.props.hoverColor != null ? this.props.hoverColor : "#ff7700",
             overlapColor: this.props.overlapColor != null ? this.props.overlapColor : "#ff3b44",
             remainderColor: this.props.remainderColor != null ? this.props.remainderColor : "#646464",
         };
