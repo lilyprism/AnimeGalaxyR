@@ -363,7 +363,7 @@ export default class AnimeList extends React.Component {
                         <div className="results-container">
                             <CardLayout type={3} items={this.state.items} xl={4} l={3} md={2} sm={2}/>
                             <div className="spacer"/>
-                            <PaginationControls page={this.state.page} previous={this.state.previous} next={this.state.next} setPage={this.setPage}/>
+                            <PaginationControls page={this.state.page} previous={this.state.previous} next={this.state.next} setPage={this.setPage} perPage={24}/>
                             {/*{*/}
                             {/*    max_pages > 1 ?*/}
                             {/*        <div className="pagination-controls">*/}
