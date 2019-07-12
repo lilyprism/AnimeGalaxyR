@@ -115,7 +115,7 @@ export default class Carousel extends React.Component {
                         return (
                             <li style={{order: item.order, backgroundImage: `url(${item.image})`}} key={index} className={`carousel-list-item ${this.state.isMoving ? this.state.isMoving : ""}`}>
                                 <Link to={`anime/${item.id}`}>
-                                    <span className="carousel-list-item-play"><i className="fas fa-play fa-fw"/></span>
+                                    <span className="carousel-list-item-play"><i className="fas fa-play"/></span>
                                 </Link>
                                 <div className="carousel-list-item-title">
                                     <span className="carousel-list-title-text">{item.name}</span>
