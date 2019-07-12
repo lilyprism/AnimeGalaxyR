@@ -98,10 +98,10 @@ export default class Rating extends React.Component {
         }
 
         if (!this.state.isMouseOver) {
-            if (this.state.newRating != null) {
+            if (this.state.newRating != null && !this.props.readOnly) {
                 if (this.state.newRating > this.state.rating) {
-                    style.backgroundImage = `linear-gradient(to right, ${this.state.starColor} 0% ${this.state.rating}%, ${this.state.hoverColor} ${this.state.rating}% ${this.state.newRating}%, ${this.state.remainderColor} 0% 100%)`;
-                    // style.backgroundImage = `linear-gradient(to right, ${this.state.overlapColor} 0% ${this.state.rating}%, ${this.state.hoverColor} ${this.state.rating}% ${this.state.newRating}%, ${this.state.remainderColor} 0% 100%)`;
+                    // style.backgroundImage = `linear-gradient(to right, ${this.state.starColor} 0% ${this.state.rating}%, ${this.state.hoverColor} ${this.state.rating}% ${this.state.newRating}%, ${this.state.remainderColor} 0% 100%)`;
+                    style.backgroundImage = `linear-gradient(to right, ${this.state.overlapColor} 0% ${this.state.rating}%, ${this.state.hoverColor} ${this.state.rating}% ${this.state.newRating}%, ${this.state.remainderColor} 0% 100%)`;
                 } else {
                     style.backgroundImage = `linear-gradient(to right, ${this.state.overlapColor} 0% ${this.state.newRating}%, ${this.state.starColor} ${this.state.newRating}% ${this.state.rating}%, ${this.state.remainderColor} 0% 100%)`;
                 }
