@@ -1,42 +1,28 @@
-@import ../sass/page-units
+@import ./../sass/page-units
+@import ./../sass/colors
 
-.player-episodes-container
-	flex-shrink: 1
-	display: flex
-	flex-wrap: wrap
-	padding-bottom: 20px
+.episode-page
+	margin-top: 65px
 
-.player-misc-wrapper
-	width: 75%
-	height: 100%
-
-	@media (max-width: $breakpoint-l - 1)
+	.player-container
+		position: relative
 		width: 100%
-		padding: 0
+		height: 0
+		padding-bottom: 9/16 * 100%
+		background-color: $color_assets_1
+		margin: 0 auto
 
-.right-episode-page-container
-	position: relative
-	width: 25%
-	padding-bottom: calc(9 / (16 / 3) * 25%)
-	height: 0
+		@media (min-width: $breakpoint-l)
+			width: 75%
+			padding-bottom: 9/16 * 75%
 
-	@media (max-width: $breakpoint-l - 1)
-		width: 100%
-		padding: 0
-		max-height: 500px
-		margin-top: 25px
-		height: auto
-		overflow-y: hidden
+		.player
+			position: absolute
+			top: 0
+			left: 0
+			width: 100%
+			height: 100%
 
-.video-loading-container
-	width: 100%
-	padding-bottom: 9/16 * 100%
-	background: black
-
-#player-container.theater-mode
-	position: fixed
-	z-index: 9
-	top: 0
-	bottom: 0
-	left: 0
-	right: 0
+			#episode-player
+				height: 100% !important
+				width: 100% !important
