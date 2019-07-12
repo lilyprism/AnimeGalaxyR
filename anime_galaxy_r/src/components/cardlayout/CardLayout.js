@@ -52,7 +52,7 @@ export default class CardLayout extends React.Component {
                     );
                 } else if (this.props.type === 5) {
                     cards.push(
-                        <AnimePageEpisodeCard className={`card card-sm-${this.props.sm} card-md-${this.props.md} card-l-${this.props.l} card-xl-${this.props.xl}`} item={this.props.items[i]} is_logged_in={this.props.is_logged_in} key={this.props.items[i].id} updateHeight={this.updateHeight}/>
+                        <AnimePageEpisodeCard className={`card card-sm-${this.props.sm} card-md-${this.props.md} card-l-${this.props.l} card-xl-${this.props.xl}`} item={this.props.items[i]} is_logged_in={this.props.is_logged_in} key={this.props.items[i].id} updateHeight={this.updateHeight} anime={this.props.anime}/>
                     );
                 }
             }
