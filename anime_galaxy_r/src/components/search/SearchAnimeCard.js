@@ -1,6 +1,7 @@
 import React from 'react';
 
 import "./searchanimecard.sass";
+import {Link} from "react-router-dom";
 
 export default class SearchAnimeCard extends React.Component {
 
@@ -9,42 +10,44 @@ export default class SearchAnimeCard extends React.Component {
         let description = taglessDesc.substring(0, taglessDesc.substring(0, 150).lastIndexOf(" ")).trim() + "...";
 
         return (
-            <div className={`${this.props.className} search-anime-card`}>
-                <div className="card-image-container">
-                    <img className="card-img" src={this.props.item.image} alt="Anime"/>
-                </div>
-                <div className="card-body">
-                    <div className="card-top-container">
-                        <div className="card-top-info-container">
-                            <div className="card-anime-episodes">
-                                {`${this.props.item.episodes} Eps`}
+            <Link to={`/anime/${this.props.item.id}`}>
+                <div className={`${this.props.className} search-anime-card`}>
+                    <div className="card-image-container">
+                        <img className="card-img" src={this.props.item.image} alt="Anime"/>
+                    </div>
+                    <div className="card-body">
+                        <div className="card-top-container">
+                            <div className="card-top-info-container">
+                                <div className="card-anime-episodes">
+                                    {`${this.props.item.episodes} Eps`}
+                                </div>
+                                <div className="card-anime-views">
+                                    <i className="fas fa-eye fa-fw"/> {`${this.props.item.views}`}
+                                </div>
                             </div>
-                            <div className="card-anime-views">
-                                <i className="fas fa-eye fa-fw"/> {`${this.props.item.views}`}
+                        </div>
+                        <div className="card-anime-info">
+                            <div className="card-anime-name">
+                                {this.props.item.name}
                             </div>
                         </div>
                     </div>
-                    <div className="card-anime-info">
-                        <div className="card-anime-name">
-                            {this.props.item.name}
+                    <div className="card-hover-desc">
+                        <div className="anime-genres">
+                            {this.props.item.genres.slice(0, 3).map((genre, index) => {
+                                return (
+                                    <div key={genre.id} className="anime-genre"> {genre.name}</div>
+                                )
+                            })}
+                        </div>
+                        <div className="anime-desc">
+                            <div className="anime-desc-text" dangerouslySetInnerHTML={{__html: description}}>
+                            </div>
                         </div>
                     </div>
+                    <div className="card-gradient-overlay"/>
                 </div>
-                <div className="card-hover-desc">
-                    <div className="anime-genres">
-                        {this.props.item.genres.slice(0, 3).map((genre, index) => {
-                            return (
-                                <div key={genre.id} className="anime-genre"> {genre.name}</div>
-                            )
-                        })}
-                    </div>
-                    <div className="anime-desc">
-                        <div className="anime-desc-text" dangerouslySetInnerHTML={{__html: description}}>
-                        </div>
-                    </div>
-                </div>
-                <div className="card-gradient-overlay"/>
-            </div>
+            </Link>
         );
     }
 
