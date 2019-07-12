@@ -8,6 +8,7 @@ import Rating from "../rating/Rating";
 import App from "../App";
 import CardLayout from "../cardlayout/CardLayout";
 import {Link} from "react-router-dom";
+import PaginationControls from "../paginationcontrols/PaginationControls";
 
 export default class AnimePage extends React.Component {
 
@@ -16,21 +17,25 @@ export default class AnimePage extends React.Component {
 
         this.state = {
             anime: {
-                name: "Fairy Tail",
-                description: "Ola",
+                name: "",
+                description: "",
                 image: "http://via.placeholder.com/255x360",
                 thumbnail: "http://via.placeholder.com/1920x1080",
                 seasons: [
                     {
+                        id: 0,
                         number: 1,
                         name: "Season 1"
                     }, {
+                        id: 1,
                         number: 2,
                         name: "Season 2"
                     }, {
+                        id: 2,
                         number: 3,
                         name: "Season 3"
                     }, {
+                        id: 3,
                         number: 4,
                         name: "Season 4"
                     }
@@ -167,15 +172,35 @@ export default class AnimePage extends React.Component {
                 }
             ],
             current_season: 0,
-            current_page: 1
+            current_page: 1,
+            count: 0,
+            previous: null,
+            next: null
         };
         this.getAnimeDetails();
     }
 
+    componentWillReceiveProps(nextProps, nextContext) {
+        if (nextProps.is_logged_in !== this.props.is_logged_in) {
+            this.getAnimeDetails();
+        }
+    }
+
     getAnimeDetails = () => {
         RequestUtilities.sendGetRequest(`anime/${this.props.match.params.id}`, App.isLoggedIn()).then(res => {
-            this.setState({anime: res.data});
+            this.setState({anime: res.data, current_season: res.data.seasons[0]}, () => {
+                console.log(res.data);
+                this.getEpisodes();
+            });
+        });
+    };
+
+    getEpisodes = () => {
+        RequestUtilities.sendGetRequest(`anime/season/${this.state.current_season.id}/episodes?page=${this.state.current_page}`).then(res => {
             console.log(res.data);
+            this.setState({episodes: res.data.results, count: res.data.count, previous: res.data.previous, next: res.data.next});
+        }).catch(err => {
+            console.log(err.response);
         });
     };
 
@@ -201,24 +226,39 @@ export default class AnimePage extends React.Component {
         if (this.props.is_logged_in) {
             RequestUtilities.sendPostRequest(`anime/${this.state.anime.id}/vote`, {rating: rating}, true).then(res => {
                 console.log(res.data);
-                let animeRating = {...this.state.anime.rating};
-                let anime = {...this.state.anime};
-
-                if (anime.user_rating != null) {
-                    animeRating.number -= anime.user_rating / animeRating.votes;
-                } else {
-                    animeRating.votes += 1;
-                }
-                animeRating.number = animeRating.number + rating / animeRating.votes;
-
-                anime.rating = animeRating;
-                anime.user_rating = rating;
-                this.setState({anime: anime});
             }).catch(err => {
                 console.log(err.response);
             });
+
+            let animeRating = {...this.state.anime.rating};
+            let anime = {...this.state.anime};
+
+            if (anime.user_rating != null) {
+                animeRating.number -= anime.user_rating / animeRating.votes;
+            } else {
+                animeRating.votes += 1;
+            }
+            animeRating.number = animeRating.number + rating / animeRating.votes;
+
+            anime.rating = animeRating;
+            anime.user_rating = rating;
+            this.setState({anime: anime});
         }
     };
+
+    setPage = page => {
+        if (page > 0) {
+            this.setState({current_page: page}, () => {
+                this.getEpisodes();
+            });
+        }
+    };
+
+    handleSeasonClick = season => {
+        this.setState({current_season: season}, () => {
+            this.getEpisodes();
+        });
+    }
 
     render() {
         if (this.state.anime !== null) {
@@ -250,6 +290,17 @@ export default class AnimePage extends React.Component {
                                         <div className="anime-image-description">
                                             <div className="anime-image-container">
                                                 <img className="anime-image" src={this.state.anime.image} alt="Anime"/>
+                                                <div className="anime-image-overlay">
+                                                    <div className="anime-option">
+                                                        <i className="fa fas fa-heart"/>
+                                                    </div>
+                                                    <div className="anime-option">
+                                                        <i className="fa fas fa-bell"/>
+                                                    </div>
+                                                    <div className="anime-option">
+                                                        <i className="fa fas fa-calendar-alt"/>
+                                                    </div>
+                                                </div>
                                             </div>
                                             <div className="anime-description-title">
                                                 <h2 className="anime-title">
@@ -265,13 +316,16 @@ export default class AnimePage extends React.Component {
                                         </div>
                                     </div>
                                     <div className="anime-details-right">
-                                        <div className="anime-details-rating">
-                                            <p className="font-size-20px text-center rating-title">Rating</p>
-                                            <p className="rating-vote-number">(Based on {this.state.anime.rating.votes} votes)</p>
-                                            <div className="rating-container">
-                                                <Rating readOnly={!this.props.is_logged_in} rating={this.state.anime.rating.number} newRating={this.state.anime.user_rating} intervals={10} stars={5} onClick={this.sendVote}/>
+                                        <div className="anime-details-rating-container">
+                                            <div className="anime-details-rating">
+                                                <p className="font-size-20px text-center rating-title">Rating</p>
+                                                <p className="rating-vote-number">(Based on {this.state.anime.rating.votes} votes)</p>
+                                                <div className="rating-container">
+                                                    <Rating readOnly={!this.props.is_logged_in} rating={this.state.anime.rating.number} newRating={this.state.anime.user_rating} intervals={10} stars={5} onClick={this.sendVote}/>
+                                                </div>
                                             </div>
                                         </div>
+                                        <button className="mini-bordered-btn">Ver mais</button>
                                     </div>
                                 </div>
                             </div>
@@ -290,7 +344,7 @@ export default class AnimePage extends React.Component {
                             <div className="seasons">
                                 {this.state.anime.seasons.map((season, index) => {
                                     return (
-                                        <div className={`season${index === this.state.current_season ? " active" : ""}`}>
+                                        <div className={`season${season.id === this.state.current_season.id ? " active" : ""}`} key={season.id} onClick={() => this.handleSeasonClick(season)}>
                                             <span className="season-name">{season.name}</span>
                                         </div>
                                     );
@@ -298,9 +352,10 @@ export default class AnimePage extends React.Component {
                             </div>
                             <div className="spacer"/>
                             <div className="anime-episodes-container">
-                                <CardLayout items={this.state.episodes} type={5} xl={4} l={4} md={2} sm={2} is_logged_in={this.props.is_logged_in} animate={false}/>
+                                <CardLayout items={this.state.episodes} anime={this.state.anime} type={5} xl={4} l={4} md={2} sm={2} is_logged_in={this.props.is_logged_in} animate={false}/>
                             </div>
                             <div className="spacer"/>
+                            <PaginationControls count={this.state.count} previous={this.state.previous} next={this.state.next} page={this.state.current_page} perPage={12} setPage={this.setPage}/>
                         </div>
                     </div>
                 </div>
