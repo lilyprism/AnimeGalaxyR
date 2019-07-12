@@ -8,11 +8,21 @@
 		position: relative
 		width: 100%
 		padding-bottom: calc(360/255 * 100%)
+		overflow: hidden
 
 		.card-img
 			position: absolute
 			width: 100%
 			height: auto
+
+		.card-gif
+			display: none
+			position: absolute
+			width: 100%
+			height: auto
+
+		.card-gif.show
+			display: block
 
 	.card-body
 		position: absolute
@@ -24,6 +34,7 @@
 		flex-direction: column
 		justify-content: space-between
 		z-index: 1
+		overflow: hidden
 
 		.card-episode-top-container
 			display: flex
@@ -96,8 +107,9 @@
 		.card-episode-options
 			opacity: 1
 
-			.card-option:hover
-				color: $color_assets_5
-
 	.card-play-icon
 		opacity: 1
+
+.card-option:hover
+	color: $color_assets_5
+

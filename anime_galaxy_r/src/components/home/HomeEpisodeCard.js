@@ -13,7 +13,9 @@ export default class HomeEpisodeCard extends React.Component {
         super(props);
 
         this.state = {
-            item: this.props.item
+            item: this.props.item,
+            isMouseOver: false,
+            loadGif: false
         }
     }
 
@@ -61,11 +63,14 @@ export default class HomeEpisodeCard extends React.Component {
         let time = moment(this.props.item.added);
         time.locale("pt");
 
+        console.log("Hello there");
+
         return (
-            <div className={`${this.props.className} home-episode-card`}>
+            <div className={`${this.props.className} home-episode-card`} onMouseEnter={() => this.setState({loadGif: true, isMouseOver: true})} onMouseLeave={() => this.setState({isMouseOver: false})}>
                 <Link to={`/v/${this.props.item.id}`}>
                     <div className="card-image-container">
-                        <img className="card-img" src={this.props.item.season.anime.image} alt="Episode"/>
+                        <img className="card-img" src={this.props.item.image} alt="Episode"/>
+                        {this.state.loadGif ? <img className={`card-gif${this.state.isMouseOver ? " show" : ""}`} src={this.props.item.gif} alt="Episode Preview"/> : ""}
                     </div>
                 </Link>
                 <div className="card-body">
