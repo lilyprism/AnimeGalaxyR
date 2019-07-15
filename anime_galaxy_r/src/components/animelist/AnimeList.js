@@ -1,10 +1,12 @@
 import React from 'react';
+import ReactDOM from "react-dom";
 
 import "./animelist.sass";
-import CardLayout from "../cardlayout/CardLayout";
-import RequestUtilities from "../../util/RequestUtilities";
-import * as ReactDOM from "react-dom";
-import PaginationControls from "../paginationcontrols/PaginationControls";
+
+import App from "./../App";
+import RequestUtilities from "./../../util/RequestUtilities";
+import CardLayout from "./../cardlayout/CardLayout";
+import PaginationControls from "./../paginationcontrols/PaginationControls";
 
 export default class AnimeList extends React.Component {
 
@@ -223,6 +225,10 @@ export default class AnimeList extends React.Component {
         this.getGenres();
     }
 
+    componentDidMount() {
+        App.scrollToTop();
+    }
+
     getAnime = () => {
         console.log(`anime/list?ordering=${this.state.ordering}&search=${this.state.search}&page=${this.state.page}${this.state.genre !== "-1" ? `&genres=${this.state.genre}` : ""}`);
         RequestUtilities.sendGetRequest(`anime/list?ordering=${this.state.ordering}&search=${this.state.search}&page=${this.state.page}${this.state.genre !== "-1" ? `&genres=${this.state.genre}` : ""}`).then(res => {
@@ -272,32 +278,7 @@ export default class AnimeList extends React.Component {
         });
     };
 
-    nextPage = () => {
-        let next_page = this.state.page + 1;
-        this.setState({page: next_page}, () => {
-            this.getAnime();
-        });
-    };
-
-    previousPage = () => {
-        let previous_page = this.state.page - 1;
-        this.setState({page: previous_page}, () => {
-            this.getAnime();
-        });
-    };
-
     render() {
-        let max_pages = Math.ceil(this.state.count / 24);
-
-        let page_controls = [];
-        for (let i = Math.max(1, this.state.page - 2); i < this.state.page; i++) {
-            page_controls.push(<div className="pagination-control" tabIndex={0} key={i} onClick={event => this.setPage(i)}>{i}</div>);
-        }
-        page_controls.push(<div className="pagination-control current-page" tabIndex={0} key={this.state.page}>{this.state.page}</div>);
-        for (let i = 0; i < Math.min(2, max_pages - this.state.page); i++) {
-            page_controls.push(<div className="pagination-control" tabIndex={0} key={this.state.page + i + 1} onClick={event => this.setPage(this.state.page + i + 1)}>{this.state.page + i + 1}</div>);
-        }
-
         return (
             <div className="anime-list-container">
                 <div className="border-bottom-red"/>
@@ -356,26 +337,14 @@ export default class AnimeList extends React.Component {
                                 </select>
                             </div>
                             <div className="results-info">
-                                Exibindo {this.state.items.length} resultados de {this.state.count} - Página {this.state.page} de {max_pages}
+                                Exibindo {this.state.items.length} resultados de {this.state.count} - Página {this.state.page} de {Math.ceil(this.state.count / 24)}
                             </div>
                         </div>
                         <div className="spacer"/>
                         <div className="results-container">
                             <CardLayout type={3} items={this.state.items} xl={4} l={3} md={2} sm={2}/>
                             <div className="spacer"/>
-                            <PaginationControls page={this.state.page} previous={this.state.previous} next={this.state.next} setPage={this.setPage} perPage={24}/>
-                            {/*{*/}
-                            {/*    max_pages > 1 ?*/}
-                            {/*        <div className="pagination-controls">*/}
-                            {/*            {this.state.page > 1 ? <div className="pagination-control previous-page-control" onClick={() => this.setPage(1)} tabIndex={0}><i className="fas fa-backward fa-fw"/></div> : <div className="pagination-control previous-page-control disabled"><i className="fas fa-backward fa-fw"/></div>}*/}
-                            {/*            {this.state.previous !== null && this.state.previous !== undefined ? <div className="pagination-control previous-page-control" tabIndex={0} onClick={this.previousPage}><i className="fas fa-caret-left fa-fw"/></div> : <div className="pagination-control previous-page-control pagination-control-disabled"><i className="fas fa-caret-left fa-fw"/></div>}*/}
-                            {/*            {page_controls}*/}
-                            {/*            {this.state.next !== null && this.state.next !== undefined ? <div className="pagination-control next-page-control" tabIndex={0} onClick={this.nextPage}><i className="fas fa-caret-right fa-fw"/></div> : <div className="pagination-control next-page-control pagination-control-disabled"><i className="fas fa-caret-right fa-fw"/></div>}*/}
-                            {/*            {this.state.page < max_pages ? <div className="pagination-control previous-page-control" tabIndex={0} onClick={() => this.setPage(max_pages)}><i className="fas fa-forward fa-fw"/></div> : <div className="pagination-control previous-page-control disabled"><i className="fas fa-forward fa-fw"/></div>}*/}
-                            {/*        </div>*/}
-                            {/*        :*/}
-                            {/*        ""*/}
-                            {/*}*/}
+                            <PaginationControls page={this.state.page} previous={this.state.previous} next={this.state.next} count={this.state.items.length} setPage={this.setPage} perPage={24}/>
                         </div>
                     </div>
                 </div>
