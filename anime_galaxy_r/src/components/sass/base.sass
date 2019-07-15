@@ -12,8 +12,6 @@
 	-webkit-tap-highlight-color: transparent
 	overscroll-behavior: auto
 
-body
-	overflow: hidden
 
 html, body, #app
 	min-width: $min-page-width
@@ -23,10 +21,6 @@ html, body, #app
 #app
 	display: flex
 	flex-direction: column
-
-.main-container
-	overflow: auto
-	position: relative
 
 img
 	display: block
@@ -215,7 +209,7 @@ input[type="submit"]
 	color: $color_assets_2
 	transition: background-color 0.2s, color 0.2s
 
-.bordered-btn:hover
+.bordered-btn:hover, .bordered-btn.active
 	background-color: $color_assets_2
 	color: $color_assets_1
 
@@ -229,7 +223,7 @@ input[type="submit"]
 	color: $color_assets_2
 	transition: background-color 0.2s, color 0.2s
 
-.mini-bordered-btn:hover
+.mini-bordered-btn:hover, .mini-bordered-btn.active
 	background-color: $color_assets_2
 	color: $color_assets_1
 
