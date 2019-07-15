@@ -1,12 +1,13 @@
 import React from 'react';
-
-import './sass/sidebar.sass';
-import {Link, withRouter} from "react-router-dom";
 import * as ReactDOM from "react-dom";
-import App from "./App";
+import {Link, withRouter} from "react-router-dom";
 import {ToastsStore} from "react-toasts";
-import ModalWindow from "./modalwindow/ModalWindow";
-import RequestUtilities from "../util/RequestUtilities";
+
+import './sidebar.sass';
+
+import App from "./../App";
+import RequestUtilities from "./../../util/RequestUtilities";
+import ModalWindow from "./../modalwindow/ModalWindow";
 
 class Sidebar extends React.Component {
 
