@@ -19,7 +19,7 @@ class AnimeAdmin(admin.ModelAdmin):
 
 	fieldsets = (
 		('Configurações Gerais', {
-			'fields': ('name', 'description', 'author', 'director', 'studio',)
+			'fields': ('name', 'description', 'author', 'director', 'studio', 'start_date')
 		}),
 		('Configurações Avançadas', {
 			'classes': ('wide',),

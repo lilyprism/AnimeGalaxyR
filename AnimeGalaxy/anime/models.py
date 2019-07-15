@@ -6,6 +6,7 @@ from django.core.files.storage import FileSystemStorage
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.db.models import Model
+from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
 from Utils.FileUtils import unique_filename
@@ -64,6 +65,7 @@ class Anime(Model):
 
 	# Model fields
 	name = models.CharField(max_length=200, null=False, blank=False, unique=True, verbose_name="Nome")
+	start_date = models.DateField(default=timezone.now, null=False, blank=False, verbose_name=_("Data de Lançamento"))
 	image = models.ImageField(storage=anime_storage, null=False, blank=False, default='default.jpg', verbose_name=_("Image"), upload_to=unique_filename)
 	thumbnail = models.ImageField(storage=thumb_storage, null=False, blank=False, default='default.jpg', verbose_name=_("Thumbnail"), upload_to=unique_filename)
 	trailer = models.URLField(max_length=200, null=False, blank=False, verbose_name=_("Trailer"), default="https://www.youtube.com/embed/l_98K4_6UQ0")

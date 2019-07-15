@@ -40,7 +40,7 @@ def get_gif_from_url(url) -> InMemoryUploadedFile:
 	out, _ = (
 		ffmpeg
 			.input(url, ss='00:13:50', t=10)
-			.filter("crop", 255, 360)
+			.filter("crop", 153, 216)
 			.filter("fps", 5)
 			.output('pipe:', format='gif')
 			.global_args('-loglevel', 'error')
@@ -67,6 +67,7 @@ def get_thumbnail_from_video(url) -> InMemoryUploadedFile:
 	out, _ = (
 		ffmpeg
 			.input(url, ss='00:13:50')
+			.filter("crop", 153, 216)
 			.output('pipe:', vframes=1, format='webp')
 			.global_args('-loglevel', 'error')
 			.global_args('-y')

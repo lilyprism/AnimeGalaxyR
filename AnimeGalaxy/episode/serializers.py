@@ -119,14 +119,14 @@ class PlaylistSerializer(serializers.ModelSerializer):
 	image = serializers.SerializerMethodField()
 	thumbnail = serializers.SerializerMethodField()
 
-	def get_image(self, episode):
-		request = self.context.get('request')
-		image_url = episode.image.url or episode.season.anime.thumbnail
-		return request.build_absolute_uri(image_url)
-
 	def get_thumbnail(self, episode):
 		request = self.context.get('request')
-		image_url = episode.season.anime.image.url
+		image_url = episode.image.url or episode.season.anime.image
+		return request.build_absolute_uri(image_url)
+
+	def get_image(self, episode):
+		request = self.context.get('request')
+		image_url = episode.season.anime.thumbnail.url
 		return request.build_absolute_uri(image_url)
 
 

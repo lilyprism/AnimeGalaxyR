@@ -311,7 +311,7 @@ LOCALE_PATHS = [os.path.join(BASE_DIR, 'locale'), ]
 
 # Celery configuration
 BROKER_URL = 'amqp://guest:guest@localhost:5672//'
-
+CELERYBEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler'
 djcelery.setup_loader()
 
 # Databse Logging
