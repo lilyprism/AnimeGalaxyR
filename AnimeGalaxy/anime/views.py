@@ -3,7 +3,8 @@ from typing import List
 
 from django.core import exceptions
 from django.core.cache import cache
-from django.db.models import Prefetch
+from django.db.models import BooleanField, Case, IntegerField, Sum, Value, When
+from django.db.models.functions import Cast
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
 from django_filters.rest_framework import DjangoFilterBackend
@@ -19,7 +20,7 @@ from rest_framework.throttling import BaseThrottle
 
 from main.paginators import AnimeListResultsSetPagination
 from main.views import BaseMVS
-from .models import Anime, Genre, Season, UserAnimes
+from .models import Anime, Genre, UserAnimes
 from .serializers import AnimeSearchSerializer, AnimeSerializer, ExtraAnimeSerializer, GenreSerializer
 
 
@@ -35,7 +36,11 @@ class AnimeView(BaseMVS):
 	# @method_decorator(vary_on_cookie)
 	def retrieve(self, request, pk=None, *args, **kwargs):
 
-		obj = get_object_or_404(Anime.objects.prefetch_related(Prefetch('seasons', queryset=Season.objects.order_by("number"))), id=pk)
+		obj = get_object_or_404(Anime.objects.annotate(
+				views=Sum("seasons__episodes__views"),
+				completed=Sum(Cast("seasons__complete", IntegerField())),
+				ongoing=Case(When(completed=0, then=Value(False)), default=Value(True), output_field=BooleanField())
+		), id=pk)
 
 		if request.user.id:
 			self.queryset = UserAnimes.objects.get_or_create(user=request.user, anime_id=pk)[0]
@@ -86,12 +91,18 @@ class AnimeView(BaseMVS):
 		self.filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
 		self.filterset_fields = ['genres']
 		self.search_fields = ['^name']
-		self.ordering_fields = ['name', 'id']
+		self.ordering_fields = ['name', 'id', 'views']
 
 		# Enable searching for anime names that start with "special" characters
 		if request.query_params.get("search") == "#":
 			self.search_fields = []
 			self.queryset = Anime.objects.filter(name__iregex=r"^[^a-zA-Z].+")
+
+		# Enable searching for anime names that start with "special" characters
+		if "views" in request.query_params.get("ordering", ""):
+			order = request.query_params.get("ordering", "")
+			order = f"-{order}" if not order.startswith("-") else order[1:]
+			self.queryset = Anime.objects.annotate(views=Sum("seasons__episodes__views")).order_by(order)
 
 		return super(AnimeView, self).list(request, *args, **kwargs)
 
@@ -100,16 +111,28 @@ class AnimeView(BaseMVS):
 		watched_list = cache.get("watched_animes") or []
 
 		if len(watched_list) == 0:
-			queryset = Anime.objects.all().order_by("-id")[:8]
+			queryset = Anime.objects.all().annotate(
+					views=Sum("seasons__episodes__views"),
+					completed=Sum(Cast("seasons__complete", IntegerField())),
+					ongoing=Case(When(completed=0, then=Value(False)), default=Value(True), output_field=BooleanField())
+			).order_by("-views")[:8]
 		else:
-			queryset = Anime.objects.filter(pk__in=watched_list).order_by("-id")[:8]
+			queryset = Anime.objects.filter(pk__in=watched_list).annotate(
+					views=Sum("seasons__episodes__views"),
+					completed=Sum(Cast("seasons__complete", IntegerField())),
+					ongoing=Case(When(completed=0, then=Value(False)), default=Value(True), output_field=BooleanField())
+			).order_by("-views")[:8]
 
 		serializer = AnimeSerializer(queryset, context={"request": request}, many=True)
 		return Response(serializer.data, status.HTTP_200_OK)
 
 	@method_decorator(cache_page(60 * 1))
 	def latest(self, request, *args, **kwargs):
-		queryset = Anime.objects.order_by("-pk")[:8]
+		queryset = Anime.objects.order_by("-pk").annotate(
+				views=Sum("seasons__episodes__views"),
+				completed=Sum(Cast("seasons__complete", IntegerField())),
+				ongoing=Case(When(completed=0, then=Value(False)), default=Value(True), output_field=BooleanField())
+		)[:8]
 		serializer = AnimeSerializer(queryset, context={"request": request}, many=True)
 		return Response(serializer.data, status.HTTP_200_OK)
 

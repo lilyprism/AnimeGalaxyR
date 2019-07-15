@@ -1,4 +1,4 @@
-from django.db.models import Avg, Count, Sum
+from django.db.models import Avg, Count
 from drf_haystack.serializers import HaystackSerializerMixin
 from rest_framework import serializers
 
@@ -54,10 +54,6 @@ class AnimeSerializer(serializers.ModelSerializer):
 		rated = UserAnimes.objects.filter(rating__isnull=False, anime_id=instance.id)
 		return {"number": rated.aggregate(Avg("rating")).get("rating__avg", 0) or 0, "votes": rated.count()}
 
-	def get_views(self, instance: Anime):
-		count = instance.seasons.aggregate(Sum("episodes__views"))
-		return count.get("episodes__views__sum", 0)
-
 	def get_image(self, instance):
 		request = self.context.get('request')
 		image_url = instance.image.url
@@ -69,7 +65,10 @@ class AnimeSerializer(serializers.ModelSerializer):
 		return request.build_absolute_uri(image_url)
 
 	def get_ongoing(self, instance: Anime):
-		return instance.seasons.filter(complete=False).count() > 0
+		return instance.ongoing
+
+	def get_views(self, instance: Anime):
+		return instance.views
 
 
 class ExtraAnimeSerializer(serializers.ModelSerializer):
@@ -84,8 +83,7 @@ class ExtraAnimeSerializer(serializers.ModelSerializer):
 	episodes = serializers.SerializerMethodField()
 
 	def get_views(self, instance: Anime):
-		count = instance.seasons.aggregate(Sum("episodes__views"))
-		return count.get("episodes__views__sum", 0)
+		return instance.views
 
 	def get_episodes(self, instance: Anime):
 		count = instance.seasons.aggregate(Count("episodes"))
