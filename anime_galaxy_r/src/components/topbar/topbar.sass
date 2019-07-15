@@ -4,6 +4,12 @@
 .topbar
 	position: absolute
 	z-index: 20
+	height: 65px
+	display: flex
+	justify-content: center
+	align-items: center
+	width: 100%
+	background-color: rgba($background-color, 0.8)
 
 	@media (max-width: $breakpoint-sm - 1)
 		top: 0
@@ -20,12 +26,11 @@
 	@media (min-width: $breakpoint-xl)
 		top: 240px
 
-	height: 65px
-	display: flex
-	justify-content: center
-	align-items: center
-	width: 100%
-	background-color: rgba($background-color, 0.8)
+.topbar.fixed
+	position: fixed
+	top: 0
+	left: 0
+	margin-right: 5px
 
 .topbar-container
 	height: 65px

@@ -30,6 +30,15 @@ export default class App extends React.Component {
         };
         App.app_instance = this;
         RequestUtilities.setAppInstance(this);
+
+        document.addEventListener("scroll", this.handleScrollAndResize);
+        window.addEventListener("resize", this.handleScrollAndResize);
+    }
+
+    componentDidMount() {
+        this.handleScrollAndResize();
+        this.handleKonamiCode();
+
     }
 
     static isLoggedIn() {
@@ -67,6 +76,19 @@ export default class App extends React.Component {
 
     static loseFocus() {
         document.activeElement.blur();
+    }
+
+    static scrollToTop(animated = false) {
+        let document_el = document.documentElement;
+        if (animated) {
+            if (document_el.scrollTop > 0) {
+                console.log(Math.max(document_el.scrollTop - 25, 0));
+                document_el.scrollTop = Math.max(document_el.scrollTop - Math.max(25, document_el.scrollTop * 0.05), 0);
+                setTimeout(() => App.scrollToTop(), 10);
+            }
+        } else {
+            document_el.scrollTop = 0;
+        }
     }
 
     login = (username, password) => {
@@ -113,13 +135,6 @@ export default class App extends React.Component {
         }
     };
 
-    componentDidMount() {
-        this.handleScrollAndResize();
-        this.handleKonamiCode();
-
-        window.addEventListener("resize", this.handleScrollAndResize);
-    }
-
     handleKonamiCode() {
         let code = ["ArrowUp", "ArrowUp", "ArrowDown", "ArrowDown", "ArrowLeft", "ArrowRight", "ArrowLeft", "ArrowRight", "b", "a"];
 
@@ -141,17 +156,17 @@ export default class App extends React.Component {
 
     //This function is responsible for adding the events needed to handle sticky-like behaviours in the website
     handleScrollAndResize = () => {
-        let container_el = document.querySelector(".main-container");
+        let document_el = document.documentElement;
         let topbar_el = document.querySelector(".topbar");
         let sidebar_el = document.querySelector(".sidebar");
         let banner_el = document.querySelector(".banner-top");
 
-        if (container_el.scrollTop > banner_el.scrollHeight) {
-            topbar_el.style.top = container_el.scrollTop + "px";
-            sidebar_el.style.top = container_el.scrollTop + topbar_el.scrollHeight + "px";
+        if (document_el.scrollTop > banner_el.scrollHeight) {
+            topbar_el.classList.add("fixed");
+            sidebar_el.classList.add("fixed");
         } else {
-            topbar_el.style.top = "";
-            sidebar_el.style.top = "";
+            topbar_el.classList.remove("fixed");
+            sidebar_el.classList.remove("fixed");
         }
         sidebar_el.style.height = `calc(100vh - ${sidebar_el.getBoundingClientRect().top}px)`;
     };
@@ -162,61 +177,59 @@ export default class App extends React.Component {
 
     render() {
         return (
-            <div className="main-container" onScroll={this.handleScrollAndResize}>
-                <Router>
-                    <header className="page-header" onKeyPress={event => this.keyToClick(event)}>
-                        <div className="banner-top">
-                            <div className="breakpoint-container h-100 d-flex align-items-center">
-                                <div className="banner-logo-container">
-                                    <img src="/images/banner_logo.webp" alt="Banner Logo" className="banner-logo"/>
-                                </div>
+            <Router>
+                <header className="page-header" onKeyPress={event => this.keyToClick(event)}>
+                    <div className="banner-top">
+                        <div className="breakpoint-container h-100 d-flex align-items-center">
+                            <div className="banner-logo-container">
+                                <img src="/images/banner_logo.webp" alt="Banner Logo" className="banner-logo"/>
                             </div>
-                        </div>
-                        <Topbar search={this.state.search} setSearch={this.setSearch} is_logged_in={this.state.is_logged_in} logout={this.logout}/>
-                    </header>
-                    <Sidebar/>
-                    <div className="container" onKeyPress={event => this.keyToClick(event)}>
-                        <div className="content-wrapper" onClick={App.hideSidebar}>
-                            <div className="overlay"/>
-                            <div className={this.state.search.length >= 3 ? "d-none" : ""}>
-                                <Switch>
-                                    <Route exact path="/" render={
-                                        props =>
-                                            <Home {...props} is_logged_in={this.state.is_logged_in}/>
-                                    }/>
-                                    <Route path="/v/:id" render={
-                                        props =>
-                                            <EpisodePage {...props} is_logged_in={this.state.is_logged_in}/>
-                                    }/>
-                                    <Route exact path="/anime" render={
-                                        props =>
-                                            <AnimeList {...props}/>
-                                    }/>
-                                    <Route exact path="/anime/:id" render={
-                                        props =>
-                                            <AnimePage {...props} is_logged_in={this.state.is_logged_in}/>
-                                    }/>
-                                    <Route exact path="/profile" render={
-                                        props =>
-                                            <Profile {...props} is_logged_in={this.state.is_logged_in} self={true}/>
-                                    }/>
-                                    <Route exact path="/user/:id" render={
-                                        props =>
-                                            <Profile {...props} is_logged_in={this.state.is_logged_in} self={false}/>
-                                    }/>
-                                </Switch>
-                            </div>
-                            <div className={this.state.search.length >= 3 ? "" : "d-none"}>
-                                <Search search={this.state.search} setSearch={this.setSearch}/>
-                            </div>
-                            <Footer/>
                         </div>
                     </div>
-                    <ToastsContainer store={ToastsStore}/>
-                    {!this.state.is_logged_in ? <LoginModal element_id="login-modal" login={this.login}/> : ""}
-                    {!this.state.is_logged_in ? <RegisterModal element_id="register-modal" register={this.register}/> : ""}
-                </Router>
-            </div>
+                    <Topbar search={this.state.search} setSearch={this.setSearch} is_logged_in={this.state.is_logged_in} logout={this.logout}/>
+                </header>
+                <Sidebar/>
+                <div className="container" onKeyPress={event => this.keyToClick(event)}>
+                    <div className="content-wrapper" onClick={App.hideSidebar}>
+                        <div className="overlay"/>
+                        <div className={this.state.search.length >= 3 ? "d-none" : ""}>
+                            <Switch>
+                                <Route exact path="/" render={
+                                    props =>
+                                        <Home {...props} is_logged_in={this.state.is_logged_in}/>
+                                }/>
+                                <Route path="/v/:id" render={
+                                    props =>
+                                        <EpisodePage {...props} is_logged_in={this.state.is_logged_in}/>
+                                }/>
+                                <Route exact path="/anime" render={
+                                    props =>
+                                        <AnimeList {...props}/>
+                                }/>
+                                <Route exact path="/anime/:id" render={
+                                    props =>
+                                        <AnimePage {...props} is_logged_in={this.state.is_logged_in}/>
+                                }/>
+                                <Route exact path="/profile" render={
+                                    props =>
+                                        <Profile {...props} is_logged_in={this.state.is_logged_in} self={true}/>
+                                }/>
+                                <Route exact path="/user/:id" render={
+                                    props =>
+                                        <Profile {...props} is_logged_in={this.state.is_logged_in} self={false}/>
+                                }/>
+                            </Switch>
+                        </div>
+                        <div className={this.state.search.length >= 3 ? "" : "d-none"}>
+                            <Search search={this.state.search} setSearch={this.setSearch}/>
+                        </div>
+                        <Footer/>
+                    </div>
+                </div>
+                <ToastsContainer store={ToastsStore}/>
+                {!this.state.is_logged_in ? <LoginModal element_id="login-modal" login={this.login}/> : ""}
+                {!this.state.is_logged_in ? <RegisterModal element_id="register-modal" register={this.register}/> : ""}
+            </Router>
         );
     }
 
