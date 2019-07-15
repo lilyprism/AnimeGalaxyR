@@ -1,14 +1,15 @@
 import React from 'react';
+import ReactDOM from "react-dom";
+import {Link} from "react-router-dom";
 
 import "./animepage.sass";
 
+import App from "./../App";
 import RequestUtilities from "./../../util/RequestUtilities";
-import ReactDOM from "react-dom";
-import Rating from "../rating/Rating";
-import App from "../App";
-import CardLayout from "../cardlayout/CardLayout";
-import {Link} from "react-router-dom";
-import PaginationControls from "../paginationcontrols/PaginationControls";
+import CardLayout from "./../cardlayout/CardLayout";
+import PaginationControls from "./../paginationcontrols/PaginationControls";
+import Rating from "./../rating/Rating";
+import AnimeInfoTable from "./AnimeInfoTable";
 
 export default class AnimePage extends React.Component {
 
@@ -54,7 +55,11 @@ export default class AnimePage extends React.Component {
                     }
                 ],
                 rating: 48,
-                trailer: ""
+                trailer: "",
+                author: {id: -1, name: ""},
+                director: {id: -1, name: ""},
+                studio: {id: -1, name: ""},
+                views: 0,
             },
             episodes: [
                 {
@@ -250,6 +255,22 @@ export default class AnimePage extends React.Component {
         }
     };
 
+    handleSeeMoreClick = event => {
+        let this_el = ReactDOM.findDOMNode(this);
+
+        if (this_el instanceof HTMLElement) {
+            let table_container_el = this_el.querySelector(".anime-info-table-container");
+
+            event.currentTarget.classList.toggle("active");
+            if (this.state.see_more) {
+                table_container_el.style.height = "";
+            } else {
+                table_container_el.style.height = `${table_container_el.scrollHeight}px`;
+            }
+            this.setState({see_more: !this.state.see_more});
+        }
+    };
+
     setPage = page => {
         if (page > 0) {
             this.setState({current_page: page}, () => {
@@ -259,10 +280,10 @@ export default class AnimePage extends React.Component {
     };
 
     handleSeasonClick = season => {
-        this.setState({current_season: season}, () => {
+        this.setState({current_season: season, current_page: 1}, () => {
             this.getEpisodes();
         });
-    }
+    };
 
     render() {
         if (this.state.anime !== null) {
@@ -329,9 +350,12 @@ export default class AnimePage extends React.Component {
                                                 </div>
                                             </div>
                                         </div>
-                                        <button className="mini-bordered-btn">Ver mais</button>
+                                        <button className="mini-bordered-btn" onClick={this.handleSeeMoreClick}>Ver mais</button>
                                     </div>
                                 </div>
+                            </div>
+                            <div className="anime-info-table-container">
+                                <AnimeInfoTable anime={this.state.anime}/>
                             </div>
                             <div className="spacer"/>
                         </div>
@@ -356,7 +380,12 @@ export default class AnimePage extends React.Component {
                             </div>
                             <div className="spacer"/>
                             <div className="anime-episodes-container">
-                                <CardLayout items={this.state.episodes} anime={this.state.anime} type={5} xl={4} l={4} md={2} sm={2} is_logged_in={this.props.is_logged_in} animate={false}/>
+                                {
+                                    this.state.episodes.length > 0 ?
+                                        <CardLayout items={this.state.episodes} anime={this.state.anime} type={5} xl={4} l={4} md={2} sm={2} is_logged_in={this.props.is_logged_in} animate={false}/>
+                                        :
+                                        <p>Sem episódios</p>
+                                }
                             </div>
                             <div className="spacer"/>
                             <PaginationControls count={this.state.count} previous={this.state.previous} next={this.state.next} page={this.state.current_page} perPage={12} setPage={this.setPage}/>
