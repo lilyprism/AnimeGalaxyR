@@ -13,6 +13,10 @@ export default class EpisodePage extends React.Component {
         };
     }
 
+    getPlaylist = () => {
+
+    };
+
     render() {
         return (
             <div className="episode-page">
@@ -22,7 +26,7 @@ export default class EpisodePage extends React.Component {
                         <div className="player-container">
                             {
                                 this.state.episode === null ?
-                                    <ReactJWPlayer playerId={"episode-player"} className="player" playerScript="https://cdn.jwplayer.com/libraries/7OxfLofq.js" aspectRatio={"16:9"}/>
+                                    <ReactJWPlayer playerId={"episode-player"} className="player" playerScript="https://cdn.jwplayer.com/libraries/7OxfLofq.js" aspectRatio={"16:9"} playlist={`${process.env.REACT_APP_API_URL}/episode/playlist/${this.props.match.params.id}`}/>
                                     :
                                     ""
                             }
