@@ -8,12 +8,24 @@ from .models import Episode, UserEpisodes
 class SingleEpisodeSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Episode
-		fields = ['id', 'season', 'number', 'views', 'liked', 'likes', 'dislikes']
+		fields = ['id', 'season', 'number', 'views', 'liked', 'likes', 'dislikes', 'gif', 'image']
 
 	season = SeasonSerializer()
 	liked = serializers.SerializerMethodField()
 	likes = serializers.SerializerMethodField()
 	dislikes = serializers.SerializerMethodField()
+	gif = serializers.SerializerMethodField()
+	image = serializers.SerializerMethodField()
+
+	def get_image(self, episode):
+		request = self.context.get('request')
+		image_url = episode.image.url
+		return request.build_absolute_uri(image_url)
+
+	def get_gif(self, episode):
+		request = self.context.get('request')
+		image_url = episode.gif.url
+		return request.build_absolute_uri(image_url)
 
 	def get_likes(self, instance):
 		return UserEpisodes.objects.filter(episode_id=instance.id, liked=True).count()
@@ -33,11 +45,23 @@ class SingleEpisodeSerializer(serializers.ModelSerializer):
 class MultiEpisodeSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Episode
-		fields = ['id', 'number', 'added', 'favorite', 'watch_later', 'season']
+		fields = ['id', 'number', 'added', 'favorite', 'watch_later', 'season', 'gif', 'image']
 
 	season = SimpleSeasonSerializer()
 	favorite = serializers.SerializerMethodField()
 	watch_later = serializers.SerializerMethodField()
+	gif = serializers.SerializerMethodField()
+	image = serializers.SerializerMethodField()
+
+	def get_image(self, episode):
+		request = self.context.get('request')
+		image_url = episode.image.url
+		return request.build_absolute_uri(image_url)
+
+	def get_gif(self, episode):
+		request = self.context.get('request')
+		image_url = episode.gif.url
+		return request.build_absolute_uri(image_url)
 
 	def get_favorite(self, instance):
 		request = self.context.get("request", None)
@@ -61,7 +85,20 @@ class MultiEpisodeSerializer(serializers.ModelSerializer):
 class SimpleMultiEpisodeSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Episode
-		fields = ['id', 'number']
+		fields = ['id', 'number', 'gif', 'image']
+
+	gif = serializers.SerializerMethodField()
+	image = serializers.SerializerMethodField()
+
+	def get_image(self, episode):
+		request = self.context.get('request')
+		image_url = episode.image.url
+		return request.build_absolute_uri(image_url)
+
+	def get_gif(self, episode):
+		request = self.context.get('request')
+		image_url = episode.gif.url
+		return request.build_absolute_uri(image_url)
 
 
 class EpisodeCreateSerializer(serializers.ModelSerializer):
@@ -82,14 +119,14 @@ class PlaylistSerializer(serializers.ModelSerializer):
 	image = serializers.SerializerMethodField()
 	thumbnail = serializers.SerializerMethodField()
 
+	def get_thumbnail(self, episode):
+		request = self.context.get('request')
+		image_url = episode.image.url or episode.season.anime.image
+		return request.build_absolute_uri(image_url)
+
 	def get_image(self, episode):
 		request = self.context.get('request')
 		image_url = episode.season.anime.thumbnail.url
-		return request.build_absolute_uri(image_url)
-
-	def get_thumbnail(self, episode):
-		request = self.context.get('request')
-		image_url = episode.season.anime.image.url
 		return request.build_absolute_uri(image_url)
 
 

@@ -12,6 +12,13 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 import datetime
 import os
 
+import djcelery
+from django.utils.translation import ugettext_lazy as _
+from dotenv import load_dotenv
+
+# Load all dotenv configurations to system environment variables
+load_dotenv(verbose=True, override=True)
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -65,12 +72,14 @@ INSTALLED_APPS = [
 	# Haystack
 	'haystack',
 
-	'main.apps.MainConfig',
-	'anime.apps.AnimeConfig',
-	'episode.apps.EpisodeConfig',
-	'comment.apps.CommentConfig',
+	# Celery
+	'djcelery',
 
-	'report.apps.ReportConfig',
+	'main',
+	'anime',
+	'episode',
+	'comment',
+	'report',
 ]
 
 MIDDLEWARE = [
@@ -78,15 +87,15 @@ MIDDLEWARE = [
 	'corsheaders.middleware.CorsMiddleware',
 
 	# Default Security Middleware
-	'django.middleware.security.SecurityMiddleware',
 	'django.contrib.sessions.middleware.SessionMiddleware',
+	'django.middleware.locale.LocaleMiddleware',
+	'django.middleware.security.SecurityMiddleware',
 	'django.middleware.common.CommonMiddleware',
 	'django.middleware.csrf.CsrfViewMiddleware',
 	'django.contrib.auth.middleware.AuthenticationMiddleware',
 	'django.contrib.messages.middleware.MessageMiddleware',
 	'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
-	# Cache Middleware
 ]
 
 ROOT_URLCONF = 'AnimeGalaxy.urls'
@@ -207,9 +216,9 @@ HAYSTACK_CONNECTIONS = {
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
-LANGUAGE_CODE = 'pt-pt'
+LANGUAGE_CODE = os.getenv('LANGUAGE_CODE', 'en')
 
-TIME_ZONE = 'Europe/Lisbon'
+TIME_ZONE = os.getenv('TIME_ZONE', 'Europe/Lisbon')
 
 USE_I18N = True
 
@@ -230,6 +239,66 @@ CKEDITOR_CONFIGS = {
 	}
 }
 
+# Admin dashboard configuration
+JET_INDEX_DASHBOARD = 'Admin.dashboard.CustomIndexDashboard'
+JET_SIDE_MENU_COMPACT = True
+JET_THEMES = [
+	{
+		'theme': 'default',  # theme folder name
+		'color': '#47bac1',  # color of the theme's button in user menu
+		'title': _('Default')  # theme title
+	},
+	{
+		'theme': 'green',
+		'color': '#44b78b',
+		'title': _('Green')
+	},
+	{
+		'theme': 'light-green',
+		'color': '#2faa60',
+		'title': _('Light Green')
+	},
+	{
+		'theme': 'light-violet',
+		'color': '#a464c4',
+		'title': _('Light Violet')
+	},
+	{
+		'theme': 'light-blue',
+		'color': '#5EADDE',
+		'title': _('Light Blue')
+	},
+	{
+		'theme': 'light-gray',
+		'color': '#222',
+		'title': _('Light Gray')
+	}
+]
+JET_SIDE_MENU_ITEMS = [
+	{
+		'label': _('General'),
+		'items': [
+			{'name': 'anime.person', 'label': _('Person')},
+			{'name': 'anime.studio', 'label': _('Studio')},
+			{'name': 'anime.anime', 'label': _('Animes')},
+			{'name': 'anime.season', 'label': _('Seasons')},
+			{'name': 'episode.episode', 'label': _('Episodes')},
+			{'name': 'comment.comment', 'label': _('Comments')},
+			{'name': 'anime.genre', 'label': _('Genres')},
+			{'name': 'report.report', 'label': _('Reports')},
+		]
+	},
+	{
+		'label': _('User Related'),
+		'items': [
+			{'name': 'main.customuser', 'label': _('Users')},
+			{'name': 'comment.usercommentratings', 'label': _('User Comments')},
+			{'name': 'episode.userepisodes', 'label': _('User Episodes')},
+			{'name': 'anime.useranimes', 'label': _('User Animes')},
+		]
+	},
+]
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
@@ -238,6 +307,12 @@ MEDIA_URL = '/media/'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+LOCALE_PATHS = [os.path.join(BASE_DIR, 'locale'), ]
+
+# Celery configuration
+BROKER_URL = 'amqp://guest:guest@localhost:5672//'
+CELERYBEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler'
+djcelery.setup_loader()
 
 # Databse Logging
 LOG_DB = False

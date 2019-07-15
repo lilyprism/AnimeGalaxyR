@@ -1,0 +1,268 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: 1 1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-07-11 10:17+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Rúben Ferreira <rubenferreira695@gmail.com>\n"
+"Language-Team: PORTUGUESE <LL@li.org>\n"
+"Language: Portuguese\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: .\Admin\dashboard.py:21
+msgid "Quick Links"
+msgstr "Atalhos"
+
+#: .\Admin\dashboard.py:24
+msgid "Return to site"
+msgstr "Voltar ao Site"
+
+#: .\Admin\dashboard.py:29
+msgid "Change password"
+msgstr "Mudar Password"
+
+#: .\Admin\dashboard.py:34
+msgid "Log out"
+msgstr "Sair"
+
+#: .\Admin\dashboard.py:46
+msgid "Applications"
+msgstr "Aplicações"
+
+#: .\Admin\dashboard.py:51
+msgid "Recent Actions"
+msgstr "Ações Recentes"
+
+#: .\AnimeGalaxy\settings.py:246
+msgid "Default"
+msgstr "Padrão"
+
+#: .\AnimeGalaxy\settings.py:251
+msgid "Green"
+msgstr "Verde"
+
+#: .\AnimeGalaxy\settings.py:256
+msgid "Light Green"
+msgstr "Verde Claro"
+
+#: .\AnimeGalaxy\settings.py:261
+msgid "Light Violet"
+msgstr "Violeta Claro"
+
+#: .\AnimeGalaxy\settings.py:266
+msgid "Light Blue"
+msgstr "Azul Claro"
+
+#: .\AnimeGalaxy\settings.py:271
+msgid "Light Gray"
+msgstr "Cinzento"
+
+#: .\AnimeGalaxy\settings.py:276
+msgid "General"
+msgstr "Geral"
+
+#: .\AnimeGalaxy\settings.py:278 .\anime\models.py:33
+msgid "Person"
+msgstr "Pessoa"
+
+#: .\AnimeGalaxy\settings.py:279 .\anime\models.py:44 .\anime\models.py:62
+msgid "Studio"
+msgstr "Estúdio"
+
+#: .\AnimeGalaxy\settings.py:280
+msgid "Animes"
+msgstr "Animes"
+
+#: .\AnimeGalaxy\settings.py:281 .\anime\models.py:96
+msgid "Seasons"
+msgstr "Temporadas"
+
+#: .\AnimeGalaxy\settings.py:282 .\episode\models.py:23
+msgid "Episodes"
+msgstr "Episódios"
+
+#: .\AnimeGalaxy\settings.py:283 .\comment\models.py:19
+msgid "Comments"
+msgstr "Comentários"
+
+#: .\AnimeGalaxy\settings.py:284 .\anime\models.py:59
+msgid "Genres"
+msgstr "Géneros"
+
+#: .\AnimeGalaxy\settings.py:285
+msgid "Reports"
+msgstr "Reports"
+
+#: .\AnimeGalaxy\settings.py:289
+msgid "User Related"
+msgstr "Utilizadores"
+
+#: .\AnimeGalaxy\settings.py:291
+msgid "Users"
+msgstr "Utilizadores"
+
+#: .\AnimeGalaxy\settings.py:292 .\comment\models.py:37
+msgid "User Comments"
+msgstr "Comentários de Utilizador"
+
+#: .\AnimeGalaxy\settings.py:293 .\episode\models.py:54
+msgid "User Episodes"
+msgstr "Episódios de Utilizador"
+
+#: .\AnimeGalaxy\settings.py:294 .\anime\models.py:78
+#, fuzzy
+#| msgid "Animes"
+msgid "User Animes"
+msgstr "Animes"
+
+#. Translators: Admin Site Header
+#: .\AnimeGalaxy\urls.py:23
+msgid "Administration"
+msgstr "Administração"
+
+#. Translators: Admin Site Title
+#: .\AnimeGalaxy\urls.py:25
+msgid "Site Administration"
+msgstr "Administração do Site"
+
+#: .\anime\models.py:22
+#, fuzzy
+#| msgid "Genres"
+msgid "Genre"
+msgstr "Géneros"
+
+#: .\anime\models.py:25 .\anime\models.py:36 .\anime\models.py:47
+#: .\anime\models.py:106
+msgid "Name"
+msgstr "Nome"
+
+#: .\anime\models.py:56 .\anime\models.py:86 .\anime\models.py:102
+#, fuzzy
+#| msgid "Animes"
+msgid "Anime"
+msgstr "Animes"
+
+#: .\anime\models.py:60
+msgid "Author"
+msgstr "Autor"
+
+#: .\anime\models.py:61
+msgid "Director"
+msgstr "Diretor"
+
+#: .\anime\models.py:66
+msgid "Image"
+msgstr "Avatar"
+
+#: .\anime\models.py:67
+msgid "Thumbnail"
+msgstr "Wallpaper"
+
+#: .\anime\models.py:68
+msgid "Trailer"
+msgstr "Trailer"
+
+#: .\anime\models.py:69
+msgid "Description"
+msgstr "Descrição"
+
+#: .\anime\models.py:85
+#, fuzzy
+#| msgid "Users"
+msgid "User"
+msgstr "Utilizadores"
+
+#: .\anime\models.py:95 .\anime\serializers.py:23 .\episode\models.py:22
+#, fuzzy
+#| msgid "Seasons"
+msgid "Season"
+msgstr "Temporada"
+
+#: .\anime\models.py:105
+#, fuzzy
+#| msgid "Seasons"
+msgid "Season Number"
+msgstr "Número de Temporada"
+
+#: .\anime\models.py:107
+msgid "Completed"
+msgstr "Completo"
+
+#: .\comment\models.py:15
+#, fuzzy
+#| msgid "Comments"
+msgid "Comment"
+msgstr "Comentário"
+
+#: .\comment\models.py:24
+msgid "Content"
+msgstr "Conteúdo"
+
+#: .\comment\models.py:36
+#, fuzzy
+#| msgid "User Comments"
+msgid "User Comment"
+msgstr "Comentários de Utilizador"
+
+#: .\comment\models.py:44
+msgid "Comentário Gostado"
+msgstr "Comentário Gostado"
+
+#: .\episode\models.py:19
+#, fuzzy
+#| msgid "Episodes"
+msgid "Episode"
+msgstr "Episódios"
+
+#: .\episode\models.py:26
+#, fuzzy
+#| msgid "Episodes"
+msgid "Episode Number"
+msgstr "Episódios"
+
+#: .\episode\models.py:27
+msgid "Views"
+msgstr "Visualizações"
+
+#: .\episode\models.py:28
+msgid "URL"
+msgstr "Link"
+
+#: .\episode\models.py:53
+#, fuzzy
+#| msgid "User Episodes"
+msgid "User Episode"
+msgstr "Episódios de Utilizador"
+
+#: .\episode\models.py:62
+msgid "Video Liked"
+msgstr "Video Gostado"
+
+#: .\episode\models.py:63
+msgid "Video Favorite"
+msgstr "Video Favorito"
+
+#: .\episode\models.py:64
+msgid "View Later"
+msgstr "Ver Depois"
+
+#: .\main\models.py:15
+msgid "Avatar"
+msgstr "Avatar"
+
+#: .\report\models.py:8
+msgid "Classifier"
+msgstr "Classificador"
+
+#: .\report\models.py:9
+msgid "Information"
+msgstr "Informação"

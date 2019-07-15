@@ -10,11 +10,11 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.throttling import BaseThrottle
 
-from anime.models import Anime
-from main.paginators import HomeResultsSetPagination, StandardResultsSetPagination
+from anime.models import Season
+from main.paginators import EpisodeResultsSetPagination, HomeResultsSetPagination
 from main.views import BaseMVS
 from .models import Episode, UserEpisodes
-from .serializers import EpisodeCreateSerializer, EpisodeLikeSerializer, MultiEpisodeSerializer, PlaylistSerializer, SeasonEpisodeSerializer, SingleEpisodeSerializer
+from .serializers import EpisodeCreateSerializer, EpisodeLikeSerializer, MultiEpisodeSerializer, PlaylistSerializer, SimpleMultiEpisodeSerializer, SingleEpisodeSerializer
 
 
 class EpisodesView(BaseMVS):
@@ -56,15 +56,15 @@ class EpisodesView(BaseMVS):
 
 	@method_decorator(cache_page(60 * 1))
 	def episodes(self, request, pk=None, *args, **kwargs):
-		self.pagination_class = StandardResultsSetPagination
-		queryset = get_object_or_404(Anime, id=pk).seasons.order_by("-number")
+		self.pagination_class = EpisodeResultsSetPagination
+		queryset = get_object_or_404(Season, id=pk).episodes.order_by("-number")
 
 		page = self.paginate_queryset(queryset)
 		if page is not None:
-			serializer = SeasonEpisodeSerializer(page, context={"request": request}, many=True)
+			serializer = SimpleMultiEpisodeSerializer(page, context={"request": request}, many=True)
 			return self.get_paginated_response(serializer.data)
 
-		serializer = SeasonEpisodeSerializer(queryset, context={"request": request}, many=True)
+		serializer = SimpleMultiEpisodeSerializer(page, context={"request": request}, many=True)
 		return Response(serializer.data, status.HTTP_200_OK)
 
 
@@ -80,7 +80,7 @@ class UrlView(BaseMVS):
 		if not requested_episode:
 			return Response(status=status.HTTP_404_NOT_FOUND)
 
-		episodes = Episode.objects.filter(season=requested_episode.season, number__gte=requested_episode.number).order_by("number")[:12]
+		episodes = Episode.objects.filter(season=requested_episode.season, number__gte=requested_episode.number).order_by("number")[:2]
 		serializer = PlaylistSerializer(episodes, many=True, context={"request": request})
 		return Response(serializer.data, status=status.HTTP_200_OK)
 

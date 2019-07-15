@@ -13,8 +13,17 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+import os
+
 from django.contrib import admin
 from django.urls import include, path
+from django.utils.translation import ugettext_lazy as _
+
+# Translators: Admin Site Header
+admin.site.site_header = _("Administration")
+# Translators: Admin Site Title
+admin.site.site_title = _("Site Administration")
+admin.site.site_url = os.getenv("SITE_URL", "http://localhost")
 
 urlpatterns = [
 	path('api/', include('main.urls')),
