@@ -5,7 +5,7 @@ import {ToastsContainer, ToastsStore} from "react-toasts";
 import './sass/base.sass';
 
 import Home from "./home/Home";
-import Sidebar from "./Sidebar";
+import Sidebar from "./sidebar/Sidebar";
 import Topbar from "./topbar/Topbar";
 import EpisodePage from "./episodepage/EpisodePage";
 import LoginModal from "./login/LoginModal";
