@@ -1,4 +1,4 @@
-from django.db.models import Avg, Count
+from django.db.models import Avg
 from drf_haystack.serializers import HaystackSerializerMixin
 from rest_framework import serializers
 
@@ -86,8 +86,7 @@ class ExtraAnimeSerializer(serializers.ModelSerializer):
 		return instance.views
 
 	def get_episodes(self, instance: Anime):
-		count = instance.seasons.aggregate(Count("episodes"))
-		return count.get("episodes__count", 0)
+		return instance.episodes
 
 	def get_image(self, instance):
 		request = self.context.get('request')

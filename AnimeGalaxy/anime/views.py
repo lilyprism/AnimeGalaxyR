@@ -3,7 +3,7 @@ from typing import List
 
 from django.core import exceptions
 from django.core.cache import cache
-from django.db.models import BooleanField, Case, IntegerField, Sum, Value, When
+from django.db.models import BooleanField, Case, Count, IntegerField, Sum, Value, When
 from django.db.models.functions import Cast
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
@@ -93,16 +93,21 @@ class AnimeView(BaseMVS):
 		self.search_fields = ['^name']
 		self.ordering_fields = ['name', 'id', 'views']
 
+		self.queryset = Anime.objects.annotate(
+				views=Sum("seasons__episodes__views"),
+				episodes=Count("seasons__episodes")
+		)
+
 		# Enable searching for anime names that start with "special" characters
 		if request.query_params.get("search") == "#":
 			self.search_fields = []
-			self.queryset = Anime.objects.filter(name__iregex=r"^[^a-zA-Z].+")
+			self.queryset = self.queryset.filter(name__iregex=r"^[^a-zA-Z].+")
 
 		# Enable searching for anime names that start with "special" characters
 		if "views" in request.query_params.get("ordering", ""):
 			order = request.query_params.get("ordering", "")
 			order = f"-{order}" if not order.startswith("-") else order[1:]
-			self.queryset = Anime.objects.annotate(views=Sum("seasons__episodes__views")).order_by(order)
+			self.queryset = self.queryset.order_by(order)
 
 		return super(AnimeView, self).list(request, *args, **kwargs)
 
