@@ -1,3 +1,4 @@
+from django.db.models import Count, Sum
 from haystack import indexes
 
 from .models import Anime
@@ -12,4 +13,7 @@ class AnimeIndex(indexes.SearchIndex, indexes.Indexable):
 
 	def index_queryset(self, using=None):
 		"""Used when the entire index for model is updated."""
-		return self.get_model().objects.all()
+		return self.get_model().objects.annotate(
+				views=Sum("seasons__episodes__views"),
+				episodes=Count("seasons__episodes")
+		)

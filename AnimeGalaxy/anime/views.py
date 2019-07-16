@@ -3,7 +3,7 @@ from typing import List
 
 from django.core import exceptions
 from django.core.cache import cache
-from django.db.models import BooleanField, Case, Count, IntegerField, Sum, Value, When
+from django.db.models import BooleanField, Case, Count, IntegerField, Prefetch, Sum, Value, When
 from django.db.models.functions import Cast
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
@@ -20,7 +20,7 @@ from rest_framework.throttling import BaseThrottle
 
 from main.paginators import AnimeListResultsSetPagination
 from main.views import BaseMVS
-from .models import Anime, Genre, UserAnimes
+from .models import Anime, Genre, Season, UserAnimes
 from .serializers import AnimeSearchSerializer, AnimeSerializer, ExtraAnimeSerializer, GenreSerializer
 
 
@@ -36,7 +36,10 @@ class AnimeView(BaseMVS):
 	# @method_decorator(vary_on_cookie)
 	def retrieve(self, request, pk=None, *args, **kwargs):
 
-		obj = get_object_or_404(Anime.objects.annotate(
+		obj = get_object_or_404(Anime.objects
+			.select_related("author", "director", "studio")
+			.prefetch_related("genres", Prefetch("seasons", queryset=Season.objects.all().order_by("number")))
+			.annotate(
 				views=Sum("seasons__episodes__views"),
 				completed=Sum(Cast("seasons__complete", IntegerField())),
 				ongoing=Case(When(completed=0, then=Value(False)), default=Value(True), output_field=BooleanField())

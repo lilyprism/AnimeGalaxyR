@@ -83,10 +83,10 @@ class ExtraAnimeSerializer(serializers.ModelSerializer):
 	episodes = serializers.SerializerMethodField()
 
 	def get_views(self, instance: Anime):
-		return instance.views
+		return instance.views if hasattr(instance, "views") else 0
 
 	def get_episodes(self, instance: Anime):
-		return instance.episodes
+		return instance.episodes if hasattr(instance, "episodes") else 0
 
 	def get_image(self, instance):
 		request = self.context.get('request')
