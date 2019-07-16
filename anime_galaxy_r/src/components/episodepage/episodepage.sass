@@ -4,25 +4,104 @@
 .episode-page
 	margin-top: 65px
 
+	.player-ad-container
+		display: flex
+		flex-wrap: wrap-reverse
+
+	.player-area
+		width: 100%
+		flex-grow: 1
+
+		@media (min-width: $breakpoint-l)
+			width: 75%
+
+	.side-container
+		width: 100%
+		min-height: 100px
+		padding: 0 0 10px 0
+
+		@media (min-width: $breakpoint-l)
+			padding: 0 0 0 10px
+			width: 25%
+
+	.side
+		display: flex
+		justify-content: center
+		align-items: center
+		height: 100%
+		width: 100%
+		background-color: $color_assets_1
+
+		.adblock-message
+			text-align: center
+
+			@media (min-width: $breakpoint-l)
+				transform: rotateZ(-60deg)
+
 	.player-container
 		position: relative
 		width: 100%
 		height: 0
 		padding-bottom: 9/16 * 100%
 		background-color: $color_assets_1
-		margin: 0 auto
 
-		@media (min-width: $breakpoint-l)
-			width: 75%
-			padding-bottom: 9/16 * 75%
+		//@media (min-width: $breakpoint-l)
+		//	width: 75%
+		//	padding-bottom: 9/16 * 75%
 
 		.player
-			position: absolute
-			top: 0
-			left: 0
 			width: 100%
 			height: 100%
 
-			#episode-player
-				height: 100% !important
-				width: 100% !important
+		.episode-name
+			position: absolute
+			bottom: 0
+			width: 100%
+			padding: 20px
+			font-size: 24px
+			text-align: center
+
+		.episode-name.hide
+			display: none
+
+	.episode-player-options
+		width: 100%
+		background-color: $color_assets_1
+		padding: 20px
+
+		//@media (min-width: $breakpoint-l)
+		//	width: 75%
+
+		display: flex
+		justify-content: space-between
+
+		& > *
+			width: calc(100% / 3)
+
+		.episode-views-container
+			display: flex
+			align-items: center
+
+		.anime-name-container
+			display: flex
+			align-items: center
+			justify-content: center
+
+		.like-dislike-container
+			display: flex
+			justify-content: flex-end
+
+		.icon-circle
+			padding: 5px
+			background-color: $color_assets_2
+			border-radius: 50%
+
+		.like-icon, .dislike-icon
+			color: $color_assets_1
+
+		.like-number
+			margin-right: 10px
+
+		.like-number, .dislike-number
+			padding: 5px
+

@@ -1,4 +1,5 @@
 @import ./../sass/colors
+@import ./../sass/page-units
 
 .home-episode-card
 	position: relative
@@ -72,6 +73,9 @@
 				padding: 0 10px
 				text-align: center
 				font-size: 25px
+
+				@media (max-width: $breakpoint-md - 1)
+					font-size: 18px
 
 			.card-episode-time
 				padding: 10px 0 20px 0

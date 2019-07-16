@@ -32,7 +32,7 @@ export default class AnimeInfoTable extends React.Component {
                     </div>
                     <div className="anime-info-table-cell">
                         <div className="anime-info-table-cell-content">
-                            Visualizações: {this.props.anime.views}
+                            Visualizações: {this.props.anime.views != null ? this.props.anime.views.toString().replace(/(\d+?)(?=(\d{3})+(?!\d)|$)/g, "$&,").slice(0, -1) : ""}
                         </div>
                     </div>
                     <div className="anime-info-table-cell">

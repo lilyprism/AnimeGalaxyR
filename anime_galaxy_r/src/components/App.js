@@ -38,7 +38,6 @@ export default class App extends React.Component {
     componentDidMount() {
         this.handleScrollAndResize();
         this.handleKonamiCode();
-
     }
 
     static isLoggedIn() {

@@ -270,7 +270,7 @@ export default class Home extends React.Component {
         return (
             <div className="home">
                 <div className={`home-carousel`}>
-                    <Carousel items={this.state.watched_anime} cycle={this.state.watched_anime.length > 0}/>
+                    <Carousel items={this.state.watched_anime} cycle={true}/>
                 </div>
                 <div className="border-bottom-red"/>
                 <div className="gradient-container">

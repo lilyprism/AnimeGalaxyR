@@ -1,13 +1,32 @@
 import React from 'react';
-import {Link} from "react-router-dom";
 import * as ReactDOM from "react-dom";
+import {Link} from "react-router-dom";
 
 import './topbar.sass';
 
-import App from "../App";
-import ModalWindow from "../modalwindow/ModalWindow.js";
+import App from "./../App";
+import ModalWindow from "./../modalwindow/ModalWindow.js";
 
 export default class Topbar extends React.Component {
+
+    componentDidMount() {
+        let this_el = ReactDOM.findDOMNode(this);
+
+        if (this_el instanceof HTMLElement) {
+            let search_input_container = this_el.querySelector(".search-input-container");
+            let search_icon = this_el.querySelector(".search-icon");
+            let user_area = this_el.querySelector(".user-area");
+
+            document.addEventListener("mousedown", event => {
+                if (!search_input_container.contains(event.target) && !search_icon.contains(event.target)) {
+                    this.toggleSearchBar("hide");
+                }
+                if (!user_area.contains(event.target)) {
+                    this.toggleUserDropdown(false);
+                }
+            });
+        }
+    }
 
     toggleSidebar = () => {
         let sidebar_el = document.querySelector(".sidebar");
@@ -52,11 +71,19 @@ export default class Topbar extends React.Component {
         }
     };
 
-    toggleUserDropdown = () => {
+    toggleUserDropdown = (action) => {
         let this_el = ReactDOM.findDOMNode(this);
 
         if (this_el instanceof HTMLElement) {
-            this_el.querySelector(".user-dropdown").classList.toggle("open");
+            if (action === undefined || action === null) {
+                this_el.querySelector(".user-dropdown").classList.toggle("open");
+            } else {
+                if (action) {
+                    this_el.querySelector(".user-dropdown").classList.add("open");
+                } else {
+                    this_el.querySelector(".user-dropdown").classList.remove("open");
+                }
+            }
         }
     };
 
@@ -69,31 +96,25 @@ export default class Topbar extends React.Component {
         ModalWindow.openModal("register-modal");
     };
 
-    componentDidMount() {
+    setSearchInput = value => {
         let this_el = ReactDOM.findDOMNode(this);
 
         if (this_el instanceof HTMLElement) {
-            let search_input_container = this_el.querySelector(".search-input-container");
-            let search_icon = this_el.querySelector(".search-icon");
-
-            document.addEventListener("mousedown", event => {
-                if (!search_input_container.contains(event.target) && !search_icon.contains(event.target)) {
-                    this.toggleSearchBar("hide");
-                }
-            });
+            this_el.querySelector(".search-input").value = value;
         }
-    }
+    };
 
     render() {
         return (
             <nav className="topbar">
                 <div className="topbar-container breakpoint-container">
                     <div className="logo-burger-container">
-                        <i className="fas fa-bars fa-17x icon" role="button" aria-label="Sidebar button toggler" onClick={this.toggleSidebar} tabIndex="1"/>
+                        <i className="fas fa-bars fa-17x icon burger-icon" role="button" aria-label="Sidebar button toggler" onClick={this.toggleSidebar} tabIndex="1"/>
                         <Link to="/" tabIndex="3"
                               onClick={
                                   () => {
                                       this.props.setSearch("");
+                                      this.setSearchInput("");
                                       App.hideSidebar();
                                       App.loseFocus();
                                   }
@@ -115,7 +136,7 @@ export default class Topbar extends React.Component {
                             <i className="fas fa-search fa-17x"/>
                         </div>
                     </div>
-                    <div className="user-area cursor-pointer" onClick={this.toggleUserDropdown}>
+                    <div className="user-area cursor-pointer" onClick={event => this.toggleUserDropdown()}>
                         <img className="user-badge-avatar circle" src="/images/avatar.webp" alt="User Area Avatar"/>
                         <i className="fas fa-caret-down"/>
                         <div className="user-dropdown">

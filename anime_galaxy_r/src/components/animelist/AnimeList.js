@@ -324,6 +324,8 @@ export default class AnimeList extends React.Component {
                                     <option value="-name" className="fas">Ordem Alfabética &nbsp;&#xf0d7;</option>
                                     <option value="-id" className="fas">Data de Lançamento &nbsp;&#xf0d8;</option>
                                     <option value="id" className="fas">Data de Lançamento &nbsp;&#xf0d7;</option>
+                                    <option value="views" className="fas">Views &nbsp;&#xf0d8;</option>
+                                    <option value="-views" className="fas">Views &nbsp;&#xf0d7;</option>
                                 </select>
                                 <select name="genres" aria-label="Genre filter" className="anime-list-genres-select" defaultValue={""} onChange={event => {
                                     this.setState({genre: event.target.value}, () => {

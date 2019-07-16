@@ -1,4 +1,5 @@
 @import ./../sass/colors
+@import ./../sass/page-units
 
 .home-anime-card
 	position: relative
@@ -26,6 +27,7 @@
 			transition: top 0.5s
 			z-index: 1
 			background-color: $color_assets_1
+			overflow: auto
 
 	.card-body
 		flex-grow: 1
@@ -43,6 +45,9 @@
 			.card-anime-name
 				padding: 0 10px 10px 10px
 
+				@media (max-width: $breakpoint-md - 1)
+					font-size: 18px
+
 	.card-gradient-overlay
 		position: absolute
 		top: 0
@@ -56,7 +61,6 @@
 			top: 0
 
 	.card-hover-desc
-		display: flex
 		flex-direction: column
 
 		.anime-genres

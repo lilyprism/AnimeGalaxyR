@@ -22,7 +22,7 @@ export default class SearchAnimeCard extends React.Component {
                                     {`${this.props.item.episodes} Eps`}
                                 </div>
                                 <div className="card-anime-views">
-                                    <i className="fas fa-eye fa-fw"/> {`${this.props.item.views}`}
+                                    <i className="fas fa-eye fa-fw"/> {this.props.item.views != null ? this.props.item.views.toString().replace(/(\d+?)(?=(\d{3})+(?!\d)|$)/g, "$&,").slice(0, -1) : ""}
                                 </div>
                             </div>
                         </div>
